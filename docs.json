@@ -4,8 +4,8 @@
   "name": "Lation Scripts Docs",
   "colors": {
     "primary": "#d83533",
-    "light": "#07C983",
-    "dark": "#15803D"
+    "light": "#d83533",
+    "dark": "#d83533"
   },
   "favicon": "/favicon.svg",
   "navigation": {
