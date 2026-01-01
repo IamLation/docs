@@ -4,11 +4,30 @@ icon: "database"
 description: "A log of all version updates completed for Weed Growing"
 ---
 
-<Update label="03/12/2025" description="v3.0.7">
+<Update label="v3.0.10" description="May 14, 2025">
+  Update GetPlayerInventory\
+  Slight refactor of admin.lua file(s)\
+  Add 'house' column table in lation_weed for additional compat when needed\
+  Add qs-housing support (qs-housing must be ensured before lation_weed)\
+  Add character set and collation in database table(s)\
+  Add getLevelData export(s)\
+  Add new locale(s)
+</Update>
+
+<Update label="v3.0.9" description="Mar 21, 2025">
+  Fix item merging adding metadata to non-metadata items
+</Update>
+
+<Update label="v3.0.8" description="Mar 17, 2025">
+  Fixed item merging bug between stashes, etc\
+  Improved ProgressBar function for QBCore
+</Update>
+
+<Update label="v3.0.7" description="Mar 12, 2025">
   ox_inventory only: ability to merge metadata items (water & fertilizer)
 </Update>
 
-<Update label="02/05/2025" description="v3.0.6">
+<Update label="v3.0.6" description="Feb 5, 2025">
   Add notification to server console if sql files are missing\
   Fix tables displaying on other clients after being picked up\
   Update to new version checking API\
@@ -16,7 +35,7 @@ description: "A log of all version updates completed for Weed Growing"
   Removed "max" health variable from joint config to eliminate confusion
 </Update>
 
-<Update label="01/17/2025" description="v3.0.5">
+<Update label="v3.0.5" description="Jan 17, 2025">
   New empty function PlantSpawned(entity)\
   Prop placement speed variable in config\
   Missing CanCarry check when picking up table\
@@ -26,7 +45,7 @@ description: "A log of all version updates completed for Weed Growing"
   Incorrect default install/item data for qb/qs-inventory
 </Update>
 
-<Update label="12/10/2024" description="v3.0.4">
+<Update label="v3.0.4" description="Dec 10, 2024">
   Ensure plants minimum quality level is 1 (not 0)\
   Will not show stats menu option if all stats are disabled\
   Added ability to customize what actions can be done on portable tables (rolling or bagging or both)\
@@ -41,22 +60,22 @@ description: "A log of all version updates completed for Weed Growing"
   Updated SeedPlanted, PlantFed, PlantWatered, PlantDeleted & PlantHarvested functions to include plant data
 </Update>
 
-<Update label="11/07/2024" description="v3.0.3">
+<Update label="v3.0.3" description="Nov 7 2024">
   Fix plants still showing up on other clients after being destroyed
 </Update>
 
-<Update label="11/01/2024" description="v3.0.2">
+<Update label="v3.0.2" description="Nov 1, 2024">
   Fix missing source
 </Update>
 
-<Update label="11/01/2024" description="v3.0.1">
+<Update label="v3.0.1" description="Nov 1, 2024">
   Fix double notify when cant carry during rolling/bagging\
   Fix weed bagging giving joints instead\
   Fix missing level check when using weed table\
   Add 3 new translations
 </Update>
 
-<Update label="10/31/2024" description="v3.0.0">
+<Update label="v3.0.0" description="Oct 31, 2024">
   Added built-in experience & leveling system with statistics\
   Added optional metadata feature (for water, fertilizer, buds & more)\
   Added new bagging option like rolling (includes new items for bagging)\
