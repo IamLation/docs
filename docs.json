@@ -23,7 +23,6 @@
             "group": "Weed Growing",
             "icon": "seedling",
             "pages": [
-              "",
               "weed-growing/install",
               "weed-growing/exports",
               "weed-growing/faqs"
