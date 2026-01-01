@@ -1,6 +1,6 @@
 {
   "$schema": "https://mintlify.com/docs.json",
-  "theme": "mint",
+  "theme": "maple",
   "name": "Lation Scripts Docs",
   "colors": {
     "primary": "#d83533",
@@ -9,20 +9,6 @@
   },
   "favicon": "/favicon.svg",
   "navigation": {
-    "global": {
-      "anchors": [
-        {
-          "anchor": "Store",
-          "icon": "bag-shopping",
-          "href": "https://lationscripts.com/"
-        },
-        {
-          "anchor": "Blog",
-          "icon": "book-blank",
-          "href": "https://lationscripts.com/blog"
-        }
-      ]
-    },
     "tabs": [
       {
         "tab": "Guides",
@@ -119,5 +105,8 @@
   },
   "appearance": {
     "default": "system"
+  },
+  "background": {
+    "decoration": "grid"
   }
 }
