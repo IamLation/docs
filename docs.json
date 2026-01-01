@@ -20,10 +20,12 @@
             ]
           },
           {
-            "group": "Customization",
+            "group": "Weed Growing",
+            "icon": "seedling",
             "pages": [
-              "essentials/settings",
-              "essentials/navigation"
+              "weed-growing/install",
+              "weed-growing/exports",
+              "weed-growing/faqs"
             ]
           },
           {
