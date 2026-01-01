@@ -24,7 +24,15 @@
             "icon": "seedling",
             "pages": [
               "weed-growing/install",
-              "weed-growing/exports",
+              {
+                "group": "Exports",
+                "icon": "code",
+                "pages": [
+                  "weed-growing/exports/shared",
+                  "weed-growing/exports/client",
+                  "weed-growing/exports/server"
+                ]
+              },
               "weed-growing/faqs",
               "weed-growing/changelog"
             ]
@@ -44,26 +52,6 @@
               "ai-tools/cursor",
               "ai-tools/claude-code",
               "ai-tools/windsurf"
-            ]
-          }
-        ]
-      },
-      {
-        "tab": "API reference",
-        "groups": [
-          {
-            "group": "API documentation",
-            "pages": [
-              "api-reference/introduction"
-            ]
-          },
-          {
-            "group": "Endpoint examples",
-            "pages": [
-              "api-reference/endpoint/get",
-              "api-reference/endpoint/create",
-              "api-reference/endpoint/delete",
-              "api-reference/endpoint/webhook"
             ]
           }
         ]

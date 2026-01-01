@@ -1,5 +1,14 @@
 ---
 title: "FAQs"
 icon: "comment-question"
+description: "Solutions to frequently asked questions"
 ---
 
+<AccordionGroup>
+  <Accordion title="It says I don’t have water or fertilizer">
+    Go to `lation_weed/config/config.lua` line 15, is metadata set to true? If so, this is why. You cannot spawn the water or fertilizer item(s) if you have metadata enabled. The items must be purchased from the “Smoke on the Water” supply shop, then try again.
+  </Accordion>
+  <Accordion title="I don’t get the joint or bag items when rolling or bagging">
+    Go to `lation_weed/config/config.lua` line 15, is metadata set to true? If so, this is why. You cannot spawn the bud item(s) if you have metadata enabled. The items must be properly grown & harvested from a plant. Grow a plant, harvest it, then try again.
+  </Accordion>
+</AccordionGroup>
