@@ -1,11 +1,11 @@
 {
   "$schema": "https://mintlify.com/docs.json",
-  "theme": "maple",
+  "theme": "mint",
   "name": "Lation Scripts Docs",
   "colors": {
     "primary": "#d83533",
     "light": "#d83533",
-    "dark": "#d83533"
+    "dark": "#eb4a47"
   },
   "favicon": "/favicon.svg",
   "navigation": {
@@ -83,10 +83,7 @@
       }
     ]
   },
-  "logo": {
-    "light": "/logo/light.svg",
-    "dark": "/logo/dark.svg"
-  },
+  "logo": "/logo/light.svg",
   "navbar": {
     "links": [
       {
