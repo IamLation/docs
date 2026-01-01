@@ -107,6 +107,6 @@
     "default": "system"
   },
   "background": {
-    "decoration": "grid"
+    "decoration": "gradient"
   }
 }
