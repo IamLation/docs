@@ -9,6 +9,15 @@
   },
   "favicon": "/favicon.png",
   "navigation": {
+    "global": {
+      "products": [
+        {
+          "product": "Test",
+          "icon": "seedling",
+          "href": "https://lationscripts.com/product/weed-growing"
+        }
+      ]
+    },
     "tabs": [
       {
         "tab": "Guides",
