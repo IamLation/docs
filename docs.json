@@ -20,6 +20,16 @@
           "tab": "Discord",
           "icon": "comment-dots",
           "href": "https://discord.gg/9EbY4nM5uu"
+        },
+        {
+          "tab": "Github",
+          "icon": "code-branch",
+          "href": "https://github.com/iamlation"
+        },
+        {
+          "tab": "Youtube",
+          "icon": "play",
+          "href": "https://www.youtube.com/@LationScripts"
         }
       ]
     },
