@@ -4,13 +4,29 @@ description: "All exports available on the client"
 icon: "user"
 ---
 
-### OpenShop
+### openLabShop
 
-Opens the “Smoke on the Water” supply shop.
+Opens the lab dealer menu showing available labs.
 
 ```javascript
-exports.lation_weed:OpenShop()
+exports.lation_coke:openLabShop()
 ```
+
+### isInsideLab
+
+Returns `true` or `false` if the player is inside a lab and the lab ID.
+
+```javascript
+isInside, labId = exports.lation_coke:isInsideLab()
+```
+
+<ResponseField name="isInside" type="boolean">
+  True or false if player is inside a lab.
+</ResponseField>
+
+<ResponseField name="labId" type="number">
+  If isInside is true, returns the labId. If false, returns nil.
+</ResponseField>
 
 <Note>
   Looking for an export we don't have listed here? Contact us and we'll do what we can!
