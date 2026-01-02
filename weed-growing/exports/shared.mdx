@@ -4,3 +4,30 @@ description: "All exports available on the client and server"
 icon: "share-all"
 ---
 
+### GetPlayerData
+
+Retrieves player data. Optionally, you can pass a string to get a specific piece of data.
+
+<Tabs>
+  <Tab title="Client">
+    ```javascript
+    exports.lation_weed:GetPlayerData(key)
+    ```
+
+    <ParamField path="key" type="string">
+      The specific player data field you want to retrieve (e.g., `"level"`, `"exp"`, `"plants_grown"`). If omitted, returns a table with all player data.
+    </ParamField>
+  </Tab>
+  <Tab title="Server">
+    ```javascript
+    exports.lation_weed:GetPlayerData(source, key)
+    ```
+
+    <ParamField path="source" type="string" required>
+      The source (_player ID_) to retrieve data from.
+    </ParamField>
+    <ParamField path="key" type="string">
+      The specific player data field you want to retrieve (e.g., `"level"`, `"exp"`, `"plants_grown"`). If omitted, returns a table with all player data.
+    </ParamField>
+  </Tab>
+</Tabs>
