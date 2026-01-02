@@ -42,36 +42,36 @@
             "group": "Coke",
             "icon": "snowflake",
             "pages": [
-              "weed-growing-copied-1/install",
+              "coke/install",
               {
                 "group": "Exports",
                 "icon": "code",
                 "pages": [
-                  "weed-growing-copied-1/exports/shared",
-                  "weed-growing-copied-1/exports/client",
-                  "weed-growing-copied-1/exports/server"
+                  "coke/exports/shared",
+                  "coke/exports/client",
+                  "coke/exports/server"
                 ]
               },
-              "weed-growing-copied-1/faqs",
-              "weed-growing-copied-1/changelog"
+              "coke/faqs",
+              "coke/changelog"
             ]
           },
           {
             "group": "Meth",
             "icon": "syringe",
             "pages": [
-              "weed-growing-copied-2/install",
+              "meth/install",
               {
                 "group": "Exports",
                 "icon": "code",
                 "pages": [
-                  "weed-growing-copied-2/exports/shared",
-                  "weed-growing-copied-2/exports/client",
-                  "weed-growing-copied-2/exports/server"
+                  "meth/exports/shared",
+                  "meth/exports/client",
+                  "meth/exports/server"
                 ]
               },
-              "weed-growing-copied-2/faqs",
-              "weed-growing-copied-2/changelog"
+              "meth/faqs",
+              "meth/changelog"
             ]
           }
         ]
