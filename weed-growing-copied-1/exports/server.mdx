@@ -24,6 +24,22 @@ exports.lation_coke:addPlayerData(source, type, amount)
   The amount to add to the specified data type.
 </ParamField>
 
+### buyLab
+
+Purchase a lab for a given player.
+
+```javascript
+exports.lation_coke:buyLab(source, labId)
+```
+
+<ParamField path="source" type="string" required>
+  The source (_player ID_) buying the lab.
+</ParamField>
+
+<ParamField path="labId" type="number" required>
+  The lab ID being purchased.
+</ParamField>
+
 <Note>
   Looking for an export we don’t have listed here? Contact us and we’ll do what we can!
 </Note>
