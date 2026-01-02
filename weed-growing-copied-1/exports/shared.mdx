@@ -1,0 +1,149 @@
+---
+title: "Shared"
+description: "All exports available on the client and server"
+icon: "share-all"
+---
+
+### getPlayerData
+
+Retrieves player data. Optionally, you can pass a string to get a specific piece of data.
+
+<Tabs>
+  <Tab title="Client">
+    ```javascript
+    exports.lation_coke:getPlayerData(key)
+    ```
+
+    <ParamField path="key" type="string">
+      The specific player data field you want to retrieve (e.g., `"level"`, `"exp"`, `"gas_inputs"`). If omitted, returns a table with all player data.
+    </ParamField>
+  </Tab>
+  <Tab title="Server">
+    ```javascript
+    exports.lation_coke:getPlayerData(source, key)
+    ```
+
+    <ParamField path="source" type="string" required>
+      The source (_player ID_) to retrieve data from.
+    </ParamField>
+    <ParamField path="key" type="string">
+      The specific player data field you want to retrieve (e.g., `"level"`, `"exp"`, `"plants_grown"`). If omitted, returns a table with all player data.
+    </ParamField>
+  </Tab>
+</Tabs>
+
+<ResponseExample>
+
+```json console
+{
+    "gas_inputs": "{\"min\":34,\"max\":38}",
+    "leaves": 0,
+    "level": 1,
+    "grown": 0,
+    "cement": 0,
+    "inside": 1,
+    "bricks": 0,
+    "exp": 0,
+    "cement_inputs": "{\"min\":97,\"max\":101}",
+    "identifier": "ABC12345"
+}
+```
+
+</ResponseExample>
+
+### getPlantData
+
+Retrieves plant data for a given plant ID.
+
+<Tabs>
+  <Tab title="Client">
+    ```javascript
+    exports.lation_coke:getPlantData(plantId)
+    ```
+
+    <ParamField path="plantId" type="number" required>
+      The plant ID you want to retrieve data for.
+    </ParamField>
+  </Tab>
+  <Tab title="Server">
+    ```javascript
+    exports.lation_coke:getPlantData(plantId)
+    ```
+
+    <ParamField path="plantId" type="number" required>
+      The plant ID you want to retrieve data for.
+    </ParamField>
+  </Tab>
+</Tabs>
+
+<ResponseExample>
+
+```json console
+{
+    "owner": "ABC12345",
+    "stage": 1,
+    "update": 171635,
+    "x": 1350.879272,
+    "growth": 1.14,
+    "thirst": 84.08,
+    "id": 101511836,
+    "yield": 100.0,
+    "bucket": 0,
+    "y": -612.723877,
+    "z": 73.479668,
+    "hunger": 83.95,
+    "group": 5
+}
+```
+
+</ResponseExample>
+
+### getTableData
+
+Retrieves table data for a given table ID.
+
+<Tabs>
+  <Tab title="Client">
+    ```javascript
+    exports.lation_coke:getTableData(tableId)
+    ```
+
+    <ParamField path="tableId" type="number" required>
+      The table ID you want to retrieve data for.
+    </ParamField>
+  </Tab>
+  <Tab title="Server">
+    text
+
+    ```javascript
+    exports.lation_coke:getTableData(tableId)
+    ```
+
+    <ParamField path="tableId" type="number" required>
+      The table ID you want to retrieve data for.
+    </ParamField>
+  </Tab>
+</Tabs>
+
+<ResponseExample>
+
+```json console
+{
+    "purity": 0,
+    "heading": 355.017578,
+    "id": 603244469,
+    "y": -614.915161,
+    "x": 1351.867676,
+    "stage": 0,
+    "bucket": 0,
+    "duration": 0,
+    "owner": "ABC12345",
+    "z": 73.454597
+}
+```
+
+</ResponseExample>
+
+<Note>
+  Looking for an export we don't have listed here? Contact us and we'll do what we can!
+</Note>

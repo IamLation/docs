@@ -39,20 +39,21 @@
             ]
           },
           {
-            "group": "Writing content",
+            "group": "Cocaine",
+            "icon": "snowflake",
             "pages": [
-              "essentials/markdown",
-              "essentials/code",
-              "essentials/images",
-              "essentials/reusable-snippets"
-            ]
-          },
-          {
-            "group": "AI tools",
-            "pages": [
-              "ai-tools/cursor",
-              "ai-tools/claude-code",
-              "ai-tools/windsurf"
+              "weed-growing-copied-1/install",
+              {
+                "group": "Exports",
+                "icon": "code",
+                "pages": [
+                  "weed-growing-copied-1/exports/shared",
+                  "weed-growing-copied-1/exports/client",
+                  "weed-growing-copied-1/exports/server"
+                ]
+              },
+              "weed-growing-copied-1/faqs",
+              "weed-growing-copied-1/changelog"
             ]
           }
         ]
