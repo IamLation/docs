@@ -4,3 +4,22 @@ description: "All exports available on the server"
 icon: "database"
 ---
 
+### AddPlayerData
+
+Adds an amount to a player’s specified data field.
+
+```javascript
+exports.lation_weed:AddPlayerData(source, type, amount)
+```
+
+<ParamField path="source" type="string" required>
+  The source (_player ID_) to add data too.
+</ParamField>
+
+<ParamField path="type" type="string" required>
+  The data type to modify (e.g., `"exp"`, `"joints_rolled"`, `"plants_grown"`).
+</ParamField>
+
+<ParamField path="amount" type="number" required>
+  The amount to add to the specified data type.
+</ParamField>
