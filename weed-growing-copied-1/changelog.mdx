@@ -4,96 +4,63 @@ icon: "server"
 description: "A chronological log of every release, feature addition, and bug fix"
 ---
 
-<Update label="v3.0.10" description="May 14, 2025">
-  Update GetPlayerInventory\
-  Slight refactor of admin.lua file(s)\
-  Add 'house' column table in lation_weed for additional compat when needed\
-  Add qs-housing support (qs-housing must be ensured before lation_weed)\
-  Add character set and collation in database table(s)\
+<Update label="v1.1.0" description="Nov 12, 2025">
+  Fixed cutting a coke/crack brick more than one\
+  Missing locale added\
+  Fixed labs mistakenly using table dispatch settings\
+  Fixed edge case .sql query error on older MariaDB versions\
+  Added two new steps in portable tables for cooking & cutting\
+  Empty "CompletedCook" function added in server/functions\
+  New exports.lation_coke:buyLab(source, labId) added\
+  Changed lab routing buckets to static id's and not random
+</Update>
+
+<Update label="v1.0.9" description="Jun 30, 2025">
+  Maintenance update for upcoming release
+</Update>
+
+<Update label="v1.0.8" description="May 8, 2025">
+  Fix view camera permission not working as expected\
+  Add a backend system to manage the situation in which a player logs out in a lab, but reconnects in a different location (ensure they don't end up back in a routing bucket if not needed, etc)\
   Add getLevelData export(s)\
-  Add new locale(s)
+  Add character set and collation to lation_coke_labs.sql
 </Update>
 
-<Update label="v3.0.9" description="Mar 21, 2025">
-  Fix item merging adding metadata to non-metadata items
+<Update label="v1.0.7" description="Apr 3, 2025">
+  Added /resetbucket command\
+  Fixed opening stash on qb-inventory\
+  Change shop to auto-detect inventory metadata key
 </Update>
 
-<Update label="v3.0.8" description="Mar 17, 2025">
-  Fixed item merging bug between stashes, etc\
-  Improved ProgressBar function for QBCore
+<Update label="v1.0.6" description="Mar 21, 2025">
+  Fix item merging applying metadata to non-metadata items
 </Update>
 
-<Update label="v3.0.7" description="Mar 12, 2025">
-  ox_inventory only: ability to merge metadata items (water & fertilizer)
+<Update label="v1.0.5" description="Mar 17, 2025">
+  Slight refactor in GetJob function\
+  Increase take_cement animation duration\
+  Added CanOpenSupplyShop empty function\
+  Fixed item merging bug between stashes, etc
 </Update>
 
-<Update label="v3.0.6" description="Feb 5, 2025">
-  Add notification to server console if sql files are missing\
-  Fix tables displaying on other clients after being picked up\
-  Update to new version checking API\
-  Update version notification from Keymaster link to Portal link\
-  Removed "max" health variable from joint config to eliminate confusion
+<Update label="v1.0.4" description="Mar 12, 2025">
+  ox_inventory only: ability to merge metadata items (water, fertilizer, gasoline & cement)
 </Update>
 
-<Update label="v3.0.5" description="Jan 17, 2025">
-  New empty function PlantSpawned(entity)\
-  Prop placement speed variable in config\
-  Missing CanCarry check when picking up table\
-  Same strain showing up multiple times in rolling/bagging menu(s)\
-  Missing ox_core bridge functions\
-  Missing docs link to TextUI settings\
-  Incorrect default install/item data for qb/qs-inventory
+<Update label="v1.0.3" description="Mar 10, 2025">
+  Fix being unable to open stashes on qb-inventory\
+  Fix invalid bucket assignments ending up in other players' labs'\
+  Incorrect dispatch coords when cooking in lab(s)
 </Update>
 
-<Update label="v3.0.4" description="Dec 10, 2024">
-  Ensure plants minimum quality level is 1 (not 0)\
-  Will not show stats menu option if all stats are disabled\
-  Added ability to customize what actions can be done on portable tables (rolling or bagging or both)\
-  Update GetDurabilityType to always return a value (fixes some nil errors on weird framework/inventory combos)\
-  Remove progress bar color names from locales files\
-  Add es, fr & tr translations\
-  Update origen & core inventory CanCarry return values\
-  Remove item removal when metadata reaches 0 (just drop/dump the item)\
-  Fix being unable to interact with table again after certain actions (hitting cancel, missing items, etc)\
-  Update shears inventory image\
-  Updated plant_harvested & new_plant logs to include plant ID\
-  Updated SeedPlanted, PlantFed, PlantWatered, PlantDeleted & PlantHarvested functions to include plant data
+<Update label="v1.0.2" description="Feb 25, 2025">
+  Fix invalid targetId param
 </Update>
 
-<Update label="v3.0.3" description="Nov 7 2024">
-  Fix plants still showing up on other clients after being destroyed
+<Update label="v1.0.1" description="Feb 24, 2025">
+  Fix being unable to collect cement
 </Update>
 
-<Update label="v3.0.2" description="Nov 1, 2024">
-  Fix missing source
-</Update>
-
-<Update label="v3.0.1" description="Nov 1, 2024">
-  Fix double notify when cant carry during rolling/bagging\
-  Fix weed bagging giving joints instead\
-  Fix missing level check when using weed table\
-  Add 3 new translations
-</Update>
-
-<Update label="v3.0.0" description="Oct 31, 2024">
-  Added built-in experience & leveling system with statistics\
-  Added optional metadata feature (for water, fertilizer, buds & more)\
-  Added new bagging option like rolling (includes new items for bagging)\
-  Added optional portable weed table for rolling & bagging\
-  Added new bridge with native QBox & ox_core support\
-  Added ox_lib locales support (looking for contributors, dm me)\
-  Added support for Origen, CodeM & Core inventories\
-  Added option to use "interact" script\
-  Added support for jg-textui, okokTextUI & qbcore textUI\
-  Added support for Fivemanage & Fivemerr logging\
-  Added option to use QBCore or ox_lib progress bar\
-  Added 2 new default strains, Orange Crush & Cosmic Kush\
-  Added lots of small & misc improvements & quality of life changes\
-  Added lots of new open source code to create more options for you\
-  Made rolling (and now bagging) tables much more customizable (choose what strains, etc)\
-  Changed default joint smoking anim to support movement, etc\
-  Refactored config file for ease-of-use & organization\
-  Further improved general security of events throughout\
-  Removed qtarget support\
-  Removed death from low quality (now only dies due to lack of water/fertilizer)
+<Update label="v1.0.0" description="Feb 19, 2025">
+  v1 release day
 </Update>
