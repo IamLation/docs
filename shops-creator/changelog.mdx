@@ -1,0 +1,62 @@
+---
+title: "Changelog"
+icon: "server"
+description: "A chronological log of every release, feature addition, and bug fix"
+---
+
+<Update label="1.1.1" description="Dec 17, 2025">
+  Added automatic custom payment method usage (will treat paymentId as an item and count/remove that item)\
+  Added ability to enable or disable blips per-location\
+  Added blip cleanup (may or may not resolve edge-case blip issues)\
+  Fixed crashing when clicking Import Items button\
+  Fixed showing/hiding blips according to shops job restriction (if any)
+</Update>
+
+<Update label="1.1.0" description="Nov 29, 2025">
+  Added ability to require item(s) to access shop (w/ optional consumption)\
+  Added optional location labels for easier identification\
+  Added visual feedback when invalid metadata is provided\
+  Added custom ped model support in locations modal\
+  Added option to hide "All Items" category in admin UI "Settings" tab\
+  Added basic markdown support in item descriptions (line breaks, bold, italic, etc)\
+  Fixed shopId returning nil in payment functions\
+  Better UX in map blip input fields\
+  Small adjustment to blip creation (no noticeable changes)\
+  Remove single item import (it was a useless option, bulk import is only & default option now)
+</Update>
+
+<Update label="1.0.4" description="Nov 19, 2025">
+  Added jaksam_inventory support\
+  Added smart parsing; you can now paste coords directly into the add/edit locations modal\
+  Fixed being unable to see all items in inventory tab in admin UI on last update\
+  Fixed customer shop UI lag with large item lists\
+  Fixed clicking outside of admin UI causing it to close\
+  More small performance improvements to the inventory tab in the admin UI
+</Update>
+
+<Update label="1.0.3" description="Nov 18, 2025">
+  Fixed bug with single payment method option in shop(s)\
+  Fixed performance issues with large (100+ item) shops\
+  Added pre-purchase conditional hook to allow/reject a purchase with custom logic\
+  Added variable metadata option in hooks (see hooks file)
+</Update>
+
+<Update label="1.0.2" description="Nov 14, 2025">
+  Fixed metadata not applying correctly in some cases\
+  Fixed requiring a license not working on ESX\
+  Added shop name in interaction labels\
+  Added wasabi_banking support for society payment methods\
+  Shops sorted alphabetically in admin panel for consistency\
+  Added the ability to duplicate an existing shop
+</Update>
+
+<Update label="1.0.1" description="Nov 13, 2025">
+  Fixed error with "coords" type locations\
+  Fixed annoying input behavior (blip scale, etc)\
+  Added shopId param to all money related functions\
+  Added server/utils/hooks file for custom logic
+</Update>
+
+<Update label="1.0.0" description="Nov 11, 2025">
+  Initial release
+</Update>

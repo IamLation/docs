@@ -78,18 +78,36 @@
             "group": "Chop Shop",
             "icon": "car",
             "pages": [
-              "meth-copied-1/install",
+              "chop-shop/install",
               {
                 "group": "Exports",
                 "icon": "code",
                 "pages": [
-                  "meth-copied-1/exports/shared",
-                  "meth-copied-1/exports/client",
-                  "meth-copied-1/exports/server"
+                  "chop-shop/exports/shared",
+                  "chop-shop/exports/client",
+                  "chop-shop/exports/server"
                 ]
               },
-              "meth-copied-1/faqs",
-              "meth-copied-1/changelog"
+              "chop-shop/faqs",
+              "chop-shop/changelog"
+            ]
+          },
+          {
+            "group": "Shops Creator",
+            "icon": "bag-shopping",
+            "pages": [
+              "shops-creator/install",
+              {
+                "group": "Exports",
+                "icon": "code",
+                "pages": [
+                  "shops-creator/exports/shared",
+                  "shops-creator/exports/client",
+                  "shops-creator/exports/server"
+                ]
+              },
+              "shops-creator/faqs",
+              "shops-creator/changelog"
             ]
           }
         ]
