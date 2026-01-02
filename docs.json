@@ -24,18 +24,18 @@
             "group": "Weed",
             "icon": "seedling",
             "pages": [
-              "weed-growing/install",
+              "weed/install",
               {
                 "group": "Exports",
                 "icon": "code",
                 "pages": [
-                  "weed-growing/exports/shared",
-                  "weed-growing/exports/client",
-                  "weed-growing/exports/server"
+                  "weed/exports/shared",
+                  "weed/exports/client",
+                  "weed/exports/server"
                 ]
               },
-              "weed-growing/faqs",
-              "weed-growing/changelog"
+              "weed/faqs",
+              "weed/changelog"
             ]
           },
           {
