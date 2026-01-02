@@ -9,6 +9,20 @@
   },
   "favicon": "/favicon.png",
   "navigation": {
+    "global": {
+      "tabs": [
+        {
+          "tab": "Store",
+          "icon": "bag-shopping",
+          "href": "https://lationscripts.com/"
+        },
+        {
+          "tab": "Discord",
+          "icon": "comment-dots",
+          "href": "https://discord.gg/9EbY4nM5uu"
+        }
+      ]
+    },
     "tabs": [
       {
         "tab": "Resources",
