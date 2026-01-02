@@ -128,6 +128,24 @@
               "shops-creator/faqs",
               "shops-creator/changelog"
             ]
+          },
+          {
+            "group": "Money Laundering",
+            "icon": "sack-dollar",
+            "pages": [
+              "money-laundering/install",
+              {
+                "group": "Exports",
+                "icon": "code",
+                "pages": [
+                  "money-laundering/exports/shared",
+                  "money-laundering/exports/client",
+                  "money-laundering/exports/server"
+                ]
+              },
+              "money-laundering/faqs",
+              "money-laundering/changelog"
+            ]
           }
         ]
       }
