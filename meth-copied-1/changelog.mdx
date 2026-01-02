@@ -4,81 +4,65 @@ icon: "server"
 description: "A chronological log of every release, feature addition, and bug fix"
 ---
 
-<Update label="v1.0.14" description="Jul 2, 2025">
+<Update label="2.2.0" description="Sep 8, 2025">
+  Support for ls_bolt_minigame (see: https://lith.store/package/6174416)\
+  Option to hide character names in group menu and show ID instead\
+  Option to disable/remove start chop menu option and use export-only
+</Update>
+
+<Update label="2.1.4" description="Aug 17, 2025">
+  fix(server/groups): player dropped failing to clean up properly
+</Update>
+
+<Update label="2.1.3" description="Jul 21, 2025">
+  Optional "level" requirement for tool/swap shop items\
+  Optional toggle to display "continue chopping?" or not\
+  Group system wrapper functions in server/functions.lua
+</Update>
+
+<Update label="2.1.2" description="Jul 2, 2025">
   Maintenance update for upcoming release
 </Update>
 
-<Update label="v1.0.13" description="Mar 21, 2025">
-  Fix item merging applying metadata to non-metadata items
+<Update label="2.1.1" description="Jun 21, 2025">
+  Fix vehicle finder inconsistencies
 </Update>
 
-<Update label="v1.0.12" description="Mar 17, 2025">
-  Fix item merging bug
+<Update label="2.1.0" description="Jun 15, 2025">
+  Added boneId to VehiclePartRemoved for rewarding custom items per-part removed\
+  Added config option to chop player owned vehicles on/off\
+  Added config option to permanently delete an owned vehicle after chopping\
+  Added automatic backup of deleted vehicles to a SQL file as a safety measure
 </Update>
 
-<Update label="v1.0.11" description="Mar 12, 2025">
-  ox_inventory only: ability to merge metadata items (ammonia, iodine, acetone)
+<Update label="2.0.5" description="May 20, 2025">
+  Fix VehiclePartRemoved function not triggering as expected\
+  Fix easyMode/waypoints not properly removing/setting when entering correct model\
+  Add entityId to VehiclePartRemoved function\
+  Add editable radius for easyMode to config\
+  Add empty function StartedChopping for easier dispatch integration(s)
 </Update>
 
-<Update label="v1.0.10" description="Mar 11, 2025">
-  Fixed enable/disable selling warehouse option\
-  Added show_info toggle in config for tables to hide/show leveling system\
-  Added new version checking API\
-  Updated keymaster link to Portal\
-  Added a console error message if missing .sql files
+<Update label="2.0.4" description="May 16, 2025">
+  Added an "easy mode" option that highlights matching vehicle models nearby\
+  Added a optional "vehicle finder" item that can be used and will show matching vehicles models nearby on GPS/map\
+  Added a couple new commonly spawned models to the default vehicles list\
+  Added a system that will occasionally preference selecting a model nearby the player if possible
 </Update>
 
-<Update label="v1.0.9" description="Dec 2, 2024">
-  Removed leftover debug command (givemethbox)\
-  Fixed police not seeing confiscate option when raiding\
-  Fixed default emergencydispatch implementation
+<Update label="2.0.3" description="May 14, 2025">
+  Fix swap shop not giving correct quantity\
+  Fix both shops not applying metadata if applied in config
 </Update>
 
-<Update label="v1.0.8" description="Nov 12, 2024">
-  Added ability for authorized users to start cooks, view camera & lock/unlock door\
-  Added new export IsAuthorizedUser that returns true/false if player is an authorized user of specified warehouseId\
-  Fix duplicate targets in warehouse\
-  Fix ps-inventory not opening warehouse stash\
-  Fix tables still showing up on other clients after pickup\
-  Disable table & supply run item requirement by default
+<Update label="2.0.2" description="May 13, 2025">
+  Fix SQL error
 </Update>
 
-<Update label="v1.0.7" description="Nov 7, 2024">
-  Added empty function CanBuyWarehouse for custom requirements\
-  Fix rapid XP gain by starting & stopping warehouse cooks repeatedly (kinda was a bandaid using timeout function)\
-  Fix item name typo in qs-inventory.txt\
-  Fix table index is nil for qs-inventory users on ESX
+<Update label="2.0.1" description="May 12, 2025">
+  Add a waypoint to random zone upon correct model entry
 </Update>
 
-<Update label="v1.0.6" description="Oct 22, 2024">
-  Added (mostly complete) CodeM inventory support (see docs)\
-  Added improved Project Sloth inventory support (see docs)\
-  Added config option to disable usage of tables without police\
-  Added config option to display player data (level, etc) in warehouse menu\
-  Fixed getting damaged/affected by tables placed in others' warehouses\
-  Fixed warehouse not giving XP & counting total_produced
-</Update>
-
-<Update label="v1.0.5" description="Oct 16, 2024">
-  Improved handling of chemicals metadata\
-  Delay when picking up tables is now static\
-  Disable police warehouse access if raids is false
-</Update>
-
-<Update label="v1.0.4" description="Oct 15, 2024">
-  Fix invalid lua type in \__data error
-</Update>
-
-<Update label="v1.0.3" description="Oct 15, 2025">
-  Improved support for CodeM Inventory (see docs)\
-  Added missing menu strings to strings.lua\
-  Added new notification when unable to add new authorized user
-</Update>
-
-<Update label="v1.0.2" description="Oct 8, 2024">
-  Add consumable meth
-</Update>
-
-<Update label="v1.0.1" description="Oct 7, 2024">
-  Fix error with police dispatching
+<Update label="2.0.0" description="May 12, 2025">
+  v2 release day
 </Update>
