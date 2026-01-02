@@ -1,6 +1,6 @@
 {
   "$schema": "https://mintlify.com/docs.json",
-  "theme": "maple",
+  "theme": "mint",
   "name": "Lation Scripts Docs",
   "colors": {
     "primary": "#d83533",
