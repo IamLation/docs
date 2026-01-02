@@ -1,0 +1,238 @@
+---
+title: "Shared"
+description: "All exports available on the client and server"
+icon: "share-all"
+---
+
+### getPlayerData
+
+Retrieves player data. Optionally, you can pass a string to get a specific piece of data.
+
+<Tabs>
+  <Tab title="Client">
+    ```javascript
+    exports.lation_coke:getPlayerData(key)
+    ```
+
+    <ParamField path="key" type="string">
+      The specific player data field you want to retrieve (e.g., `"level"`, `"exp"`, `"gas_inputs"`). If omitted, returns a table with all player data.
+    </ParamField>
+  </Tab>
+  <Tab title="Server">
+    ```javascript
+    exports.lation_coke:getPlayerData(source, key)
+    ```
+
+    <ParamField path="source" type="string" required>
+      The source (_player ID_) to retrieve data from.
+    </ParamField>
+    <ParamField path="key" type="string">
+      The specific player data field you want to retrieve (e.g., `"level"`, `"exp"`, `"plants_grown"`). If omitted, returns a table with all player data.
+    </ParamField>
+  </Tab>
+</Tabs>
+
+### getPlantData
+
+Retrieves plant data for a given plant ID.
+
+<Tabs>
+  <Tab title="Client">
+    ```javascript
+    exports.lation_coke:getPlantData(plantId)
+    ```
+
+    <ParamField path="plantId" type="number" required>
+      The plant ID you want to retrieve data for.
+    </ParamField>
+  </Tab>
+  <Tab title="Server">
+    ```javascript
+    exports.lation_coke:getPlantData(plantId)
+    ```
+
+    <ParamField path="plantId" type="number" required>
+      The plant ID you want to retrieve data for.
+    </ParamField>
+  </Tab>
+</Tabs>
+
+### getTableData
+
+Retrieves table data for a given table ID.
+
+<Tabs>
+  <Tab title="Client">
+    ```javascript
+    exports.lation_coke:getTableData(tableId)
+    ```
+
+    <ParamField path="tableId" type="number" required>
+      The table ID you want to retrieve data for.
+    </ParamField>
+  </Tab>
+  <Tab title="Server">
+    ```javascript
+    exports.lation_coke:getTableData(tableId)
+    ```
+
+    <ParamField path="tableId" type="number" required>
+      The table ID you want to retrieve data for.
+    </ParamField>
+  </Tab>
+</Tabs>
+
+### getLabData
+
+Retrieves lab data for a given lab ID.
+
+<Tabs>
+  <Tab title="Client">
+    ```javascript
+    exports.lation_coke:getLabData(labId)
+    ```
+
+    <ParamField path="labId" type="number" required>
+      The lab ID you want to retrieve data for.
+    </ParamField>
+  </Tab>
+  <Tab title="Server">
+    ```javascript
+    exports.lation_coke:getLabData(labId)
+    ```
+
+    <ParamField path="labId" type="number" required>
+      The lab ID you want to retrieve data for.
+    </ParamField>
+  </Tab>
+</Tabs>
+
+### getAllLabs
+
+Retrieves all labs data.
+
+<Tabs>
+  <Tab title="Client">
+    ```javascript
+    exports.lation_coke:getAllLabs()
+    ```
+  </Tab>
+  <Tab title="Server">
+    ```javascript
+    exports.lation_coke:getAllLabs()
+    ```
+  </Tab>
+</Tabs>
+
+### getUserPermissions
+
+Returns a table containing `true` or `false` for each permission the user has in a specific lab.
+
+<Tabs>
+  <Tab title="Client">
+    ```javascript
+    exports.lation_coke:getUserPermissions(labId)
+    ```
+
+    <ParamField path="labId" type="number" required>
+      The lab ID you want to retrieve permissions for.
+    </ParamField>
+  </Tab>
+  <Tab title="Server">
+    ```javascript
+    exports.lation_coke:getUserPermissions(source, labId)
+    ```
+
+    <ParamField path="source" type="string" required>
+      The source (_player ID_) to retrieve data from.
+    </ParamField>
+    <ParamField path="labId" type="number" required>
+      The lab ID you want to retrieve permissions for.
+    </ParamField>
+  </Tab>
+</Tabs>
+
+### isLabAvailable
+
+Returns `true` or `false` if the lab is available for sale.
+
+<Tabs>
+  <Tab title="Client">
+    ```javascript
+    exports.lation_coke:isLabAvailable(labId)
+    ```
+
+    <ParamField path="labId" type="number" required>
+      The lab ID you want to check is available.
+    </ParamField>
+  </Tab>
+  <Tab title="Server">
+    ```javascript
+    exports.lation_coke:isLabAvailable(labId)
+    ```
+
+    <ParamField path="labId" type="number" required>
+      The lab ID you want to check is available.
+    </ParamField>
+  </Tab>
+</Tabs>
+
+### isOwner
+
+Returns `true` or `false` if the player is the owner of the lab.
+
+<Tabs>
+  <Tab title="Client">
+    ```javascript
+    exports.lation_coke:isOwner(labId)
+    ```
+
+    <ParamField path="labId" type="number" required>
+      The lab ID you want to check the player is an owner of.
+    </ParamField>
+  </Tab>
+  <Tab title="Server">
+    ```javascript
+    exports.lation_coke:isOwner(source, labId)
+    ```
+
+    <ParamField path="source" type="string" required>
+      The source (_player ID_) to retrieve data from.
+    </ParamField>
+    <ParamField path="labId" type="number" required>
+      The lab ID you want to check the player is an owner of.
+    </ParamField>
+  </Tab>
+</Tabs>
+
+### isAuthUser
+
+Returns `true` or `false` if the player is an authorized user of the lab.
+
+<Tabs>
+  <Tab title="Client">
+    ```javascript
+    exports.lation_coke:isAuthUser(labId)
+    ```
+
+    <ParamField path="labId" type="number" required>
+      The lab ID you want to check the player is an authorized user of.
+    </ParamField>
+  </Tab>
+  <Tab title="Server">
+    ```javascript
+    exports.lation_coke:isAuthUser(source, labId)
+    ```
+
+    <ParamField path="source" type="string" required>
+      The source (_player ID_) to retrieve data from.
+    </ParamField>
+    <ParamField path="labId" type="number" required>
+      The lab ID you want to check the player is an authorized user of.
+    </ParamField>
+  </Tab>
+</Tabs>
+
+<Note>
+  Looking for an export we don't have listed here? Contact us and we'll do what we can!
+</Note>

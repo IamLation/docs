@@ -1,0 +1,65 @@
+---
+title: "Server"
+description: "All exports available on the server"
+icon: "database"
+---
+
+### **AddPlayerData**
+
+Adds an amount to a player’s specified data field.
+
+```javascript
+exports.lation_meth:AddPlayerData(source, type, amount)
+```
+
+<ParamField path="source" type="string" required>
+  The source (_player ID_) to add data too.
+</ParamField>
+
+<ParamField path="type" type="string" required>
+  The data type to modify (e.g., `"level"`, `"exp"`, etc).
+</ParamField>
+
+<ParamField path="amount" type="number" required>
+  The amount to add to the specified data type.
+</ParamField>
+
+### **GetPlayerWarehouses**
+
+Returns a table containing all warehouses owned by the specified player.
+
+```javascript
+exports.lation_meth:GetPlayerWarehouses(source)
+```
+
+<ParamField path="source" type="string" required>
+  The source (_player ID_) you wish to get currently owned warehouses for.
+</ParamField>
+
+### **GetPlayersInWarehouse**
+
+Returns a table containing all players currently inside a specified warehouse.
+
+```javascript
+exports.lation_meth:GetPlayersInWarehouse(warehouseId)
+```
+
+<ParamField path="warehouseId" type="number" required>
+  The warehouse ID you want to see players are inside of.
+</ParamField>
+
+### **IsWarehouseAvailable**
+
+Returns `true` or `false` if the warehouse is available for sale.
+
+```javascript
+exports.lation_meth:IsWarehouseAvailable(warehouseId)
+```
+
+<ParamField path="warehouseId" type="number" required>
+  The warehouse ID you want to check is available for sale or not.
+</ParamField>
+
+<Note>
+  Looking for an export we don’t have listed here? Contact us and we’ll do what we can!
+</Note>

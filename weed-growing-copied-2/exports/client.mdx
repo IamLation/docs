@@ -1,0 +1,41 @@
+---
+title: "Client"
+description: "All exports available on the client"
+icon: "user"
+---
+
+### **IsInsideWarehouse**
+
+Returns `true` or `false` if the player is inside a warehouse and warehouse ID.
+
+```javascript
+isInside, warehouseId = exports.lation_meth:IsInsideWarehouse()
+```
+
+<ResponseField name="isInside" type="boolean">
+  True or false if player is inside a warehouse.
+</ResponseField>
+
+<ResponseField name="warehouseId" type="number">
+  If isInside is true, returns the warehouseId. If false, returns nil.
+</ResponseField>
+
+### **IsViewingCamera**
+
+Returns `true` or `false` if the player is currently viewing a security camera.
+
+```javascript
+exports.lation_meth:IsViewingCamera()
+```
+
+### **WarehouseShop**
+
+Opens the warehouse shop menu showing available properties for sale.
+
+```javascript
+exports.lation_meth:WarehouseShop()
+```
+
+<Note>
+  Looking for an export we don't have listed here? Contact us and we'll do what we can!
+</Note>

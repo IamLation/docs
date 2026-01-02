@@ -21,7 +21,7 @@
             ]
           },
           {
-            "group": "Weed Growing",
+            "group": "Weed",
             "icon": "seedling",
             "pages": [
               "weed-growing/install",
@@ -39,7 +39,7 @@
             ]
           },
           {
-            "group": "Cocaine",
+            "group": "Coke",
             "icon": "snowflake",
             "pages": [
               "weed-growing-copied-1/install",
@@ -54,6 +54,24 @@
               },
               "weed-growing-copied-1/faqs",
               "weed-growing-copied-1/changelog"
+            ]
+          },
+          {
+            "group": "Meth",
+            "icon": "syringe",
+            "pages": [
+              "weed-growing-copied-2/install",
+              {
+                "group": "Exports",
+                "icon": "code",
+                "pages": [
+                  "weed-growing-copied-2/exports/shared",
+                  "weed-growing-copied-2/exports/client",
+                  "weed-growing-copied-2/exports/server"
+                ]
+              },
+              "weed-growing-copied-2/faqs",
+              "weed-growing-copied-2/changelog"
             ]
           }
         ]
