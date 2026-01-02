@@ -18,7 +18,6 @@
           {
             "group": "Weed",
             "icon": "seedling",
-            "expanded": true,
             "pages": [
               "weed/install",
               {
