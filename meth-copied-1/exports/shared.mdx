@@ -1,0 +1,75 @@
+---
+title: "Shared"
+description: "All exports available on the client and server"
+icon: "share-all"
+---
+
+### **getPlayerData**
+
+Retrieves player data. Optionally, you can pass a string to get a specific piece of data.
+
+<Tabs>
+  <Tab title="Client">
+    ```javascript
+    exports.lation_chopshop:getPlayerData(key)
+    ```
+
+    <ParamField path="key" type="string">
+      The specific player data field you want to retrieve (e.g., `"level"`, `"exp"`, etc). If omitted, returns a table with all player data.
+    </ParamField>
+  </Tab>
+  <Tab title="Server">
+    ```javascript
+    exports.lation_chopshop:getPlayerData(source, key)
+    ```
+
+    <ParamField path="source" type="string" required>
+      The source (_player ID_) to retrieve data from.
+    </ParamField>
+    <ParamField path="key" type="string">
+      The specific player data field you want to retrieve (e.g., `"level"`, `"exp"`, etc). If omitted, returns a table with all player data.
+    </ParamField>
+  </Tab>
+</Tabs>
+
+### **getAssignedModel**
+
+Returns the vehicle model assigned to this player/group.
+
+<Tabs>
+  <Tab title="Client">
+    ```javascript
+    exports.lation_chopshop:getAssignedModel()
+    ```
+  </Tab>
+  <Tab title="Server">
+    ```javascript
+    exports.lation_chopshop:getAssignedModel(source)
+    ```
+
+    <ParamField path="source" type="string" required>
+      The source (_player ID_) to retrieve data from.
+    </ParamField>
+  </Tab>
+</Tabs>
+
+### getLevelData
+
+Returns the experience table data from the `config/shared.lua` file.
+
+<Tabs>
+  <Tab title="Client">
+    ```javascript
+    exports.lation_chopshop:getLevelData()
+    ```
+  </Tab>
+  <Tab title="Server">
+    ```javascript
+    exports.lation_chopshop:getLevelData()
+    ```
+  </Tab>
+</Tabs>
+
+<Note>
+  Looking for an export we don't have listed here? Contact us and we'll do what we can!
+</Note>

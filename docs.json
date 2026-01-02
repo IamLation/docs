@@ -73,6 +73,24 @@
               "meth/faqs",
               "meth/changelog"
             ]
+          },
+          {
+            "group": "Chop Shop",
+            "icon": "car",
+            "pages": [
+              "meth-copied-1/install",
+              {
+                "group": "Exports",
+                "icon": "code",
+                "pages": [
+                  "meth-copied-1/exports/shared",
+                  "meth-copied-1/exports/client",
+                  "meth-copied-1/exports/server"
+                ]
+              },
+              "meth-copied-1/faqs",
+              "meth-copied-1/changelog"
+            ]
           }
         ]
       }
