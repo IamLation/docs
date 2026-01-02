@@ -13,13 +13,8 @@
       {
         "tab": "Resources",
         "icon": "code",
-        "groups": [
-          {
-            "group": "Getting started",
-            "pages": [
-              "index"
-            ]
-          },
+        "pages": [
+          "index",
           {
             "group": "Weed",
             "icon": "seedling",
