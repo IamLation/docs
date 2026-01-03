@@ -1,0 +1,3771 @@
+---
+title: "Previews"
+icon: "eye"
+description: "Preview open source files included with this resource"
+---
+
+<CodeGroup>
+
+```lua config/shared.lua expandable
+return {
+    ----------------------------------------------
+    --        🛠️ Setup the basics below
+    ----------------------------------------------
+
+    setup = {
+        -- Use only if needed, directed by support or know what you're doing
+        -- Notice: enabling debug features will significantly increase resmon
+        -- And should always be disabled in production
+        debug = false,
+        -- Set your interaction system below
+        -- Available options are: 'ox_target', 'qb-target', 'interact' & 'custom'
+        -- 'custom' needs to be added to client/functions.lua
+        interact = 'ox_target',
+        -- Set your notification system below
+        -- Available options are: 'lation_ui', 'ox_lib', 'esx', 'qb', 'okok', 'sd-notify', 'wasabi_notify' & 'custom'
+        -- 'custom' needs to be added to client/functions.lua
+        notify = 'ox_lib',
+        -- Set your progress bar system below
+        -- Available options are: 'lation_ui', 'ox_lib', 'qbcore' & 'custom'
+        -- 'custom' needs to be added to client/functions.lua
+        -- Any custom progress bar must also support animations
+        progress = 'ox_lib',
+        -- Set your minigame (skillcheck) system below
+        -- Available options are: 'lation_ui', 'ox_lib' & 'custom'
+        minigame = 'ox_lib',
+        -- Set your context menu system below
+        -- Available options are: 'lation_ui', 'ox_lib' & 'custom'
+        menu = 'ox_lib',
+        -- Set your alert & input dialog system below
+        -- Available options are: 'lation_ui', 'ox_lib' & 'custom'
+        dialogs = 'ox_lib',
+        -- Do you want to be notified via server console if an update is available?
+        -- True if yes, false if no
+        version = true,
+        -- 'request' option below is how long the client should wait for a model/anim to load
+        -- Do not edit unless you know what you are doing or directed via support member
+        request = 10000,
+        -- Render is the number of units (distance) from the closest object a player
+        -- Must be within in order for the prop to spawn and be visible
+        -- (outside this number/distance the props are deleted until needed again)
+        render = 100,
+        -- Input all your police jobs below for things like dispatch notifications & more
+        police = { 'police', 'sheriff' }
+    },
+
+    ----------------------------------------------
+    --    🌱 Create, edit & manage coca farms
+    ----------------------------------------------
+
+    -- How long (in seconds) cooldown lasts on each plant after searching
+    -- After the cooldown has expired, the plant can be searched again
+    cooldown = 180,
+    -- Limit the maximum amount of coca that can be harvested
+    -- This is per player, per server session - which means once a player
+    -- Has reached this limit, they cannot search for more until the server restarts
+    -- Don't want a limit? Set a super high number!
+    limit = 100,
+    -- Manage your coca farms below
+    farms = {
+        [1] = {
+            -- Do you need the script to spawn the plant props here?
+            spawn = true,
+            -- If spawn = true, what prop do you want to spawn?
+            model = 'coca_growth_3_wild',
+            -- The center-most coords of the zone here
+            center = vec3(2139.1252, 5169.0010, 54.1451),
+            -- The size (radius) of the zone (enable debug to see zone)
+            size = 150,
+            -- What level is required to search plants here?
+            level = 1,
+            -- The item(s) required & optionally removed when planting
+            required = {
+                { item = 'ls_shears', quantity = 1, remove = false },
+                -- Add your own additional items here if desired
+            },
+            -- What item and quantity to reward player upon searching?
+            reward = { item = 'ls_coca_leaf', quantity = { min = 1, max = 1 } },
+            -- A second item to reward, based on a percentage chance
+            -- These are the seeds required to grow & harvest personal coca plants
+            seed = { item = 'ls_coca_seed', quantity = { min = 1, max = 1 }, chance = 5 },
+            -- How much XP to reward upon a search? This is per leaf.
+            -- So if a player finds x3 leaves they'll get 3xp
+            xp = { min = 1, max = 1 },
+            -- Optional blip settings for this farm
+            blip = { enable = true, sprite = 89, color = 1, scale = 0.7, label = 'Coca Field' },
+            -- The coords of each plant to apply an interaction point
+            -- Or, if spawn = true - the coords to spawn each plant
+            coca = {
+                -- If you need help grabbing the exact coords of existing plants
+                -- We recommend using dolu_tool: https://github.com/dolutattoo/dolu_tool/releases/latest
+                [1] = vec3(2179.3621, 5155.1704, 53.9840),
+                [2] = vec3(2172.1982, 5152.0825, 53.1408),
+                [3] = vec3(2177.6487, 5162.5894, 55.0238),
+                [4] = vec3(2172.4924, 5167.3901, 55.5249),
+                [5] = vec3(2158.9534, 5170.7520, 55.4918),
+                [6] = vec3(2153.8794, 5178.9380, 56.4784),
+                [7] = vec3(2145.5286, 5184.4600, 56.7473),
+                [8] = vec3(2147.3643, 5196.0039, 57.9572),
+                [9] = vec3(2138.5225, 5197.4136, 57.4630),
+                [10] = vec3(2134.8069, 5202.9419, 57.6294),
+                [11] = vec3(2130.9080, 5207.7373, 57.7305),
+                [12] = vec3(2170.6714, 5145.4829, 51.9476),
+                [13] = vec3(2164.1550, 5154.3433, 53.0478),
+                [14] = vec3(2154.0593, 5159.4741, 53.3424),
+                [15] = vec3(2146.5908, 5168.2437, 54.4723),
+                [16] = vec3(2139.6296, 5177.9883, 55.5299),
+                [17] = vec3(2135.0847, 5186.2339, 56.3193),
+                [18] = vec3(2129.0337, 5191.6782, 56.6006),
+                [19] = vec3(2119.1389, 5195.7695, 56.5050),
+                [20] = vec3(2116.1658, 5203.2280, 57.0254),
+                [21] = vec3(2159.5923, 5138.2407, 49.8532),
+                [22] = vec3(2154.9294, 5145.2588, 50.8309),
+                [23] = vec3(2146.0554, 5151.8408, 51.5500),
+                [24] = vec3(2140.2964, 5158.5825, 52.4179),
+                [25] = vec3(2136.4829, 5166.3301, 53.4914),
+                [26] = vec3(2133.7690, 5173.1504, 54.3835),
+                [27] = vec3(2126.7668, 5180.8262, 55.0367),
+                [28] = vec3(2120.1672, 5185.2935, 55.2166),
+                [29] = vec3(2114.5471, 5193.8320, 56.1267),
+                [30] = vec3(2102.3345, 5198.7134, 55.7128),
+                [31] = vec3(2099.0806, 5191.6616, 55.1150),
+                [32] = vec3(2108.1299, 5185.8960, 54.8048),
+                [33] = vec3(2117.7590, 5176.4795, 53.9329),
+                [34] = vec3(2124.3381, 5168.0464, 53.0896),
+                [35] = vec3(2130.1248, 5158.8242, 52.1414),
+                [36] = vec3(2135.4602, 5149.5005, 50.8720),
+                [37] = vec3(2147.3152, 5144.6392, 50.3661),
+                [38] = vec3(2152.6050, 5138.3320, 49.5138),
+                [39] = vec3(2159.1841, 5130.0737, 48.8332),
+                [40] = vec3(2148.3936, 5128.9341, 48.0955),
+                [41] = vec3(2136.5923, 5140.8809, 49.5312),
+                [42] = vec3(2125.2170, 5153.5503, 51.2402),
+                [43] = vec3(2113.2061, 5164.1587, 52.3151),
+                [44] = vec3(2104.4207, 5176.2031, 53.6669),
+                [45] = vec3(2091.6428, 5186.8242, 54.4904),
+                [46] = vec3(2133.9062, 5131.5181, 48.1057),
+                [47] = vec3(2113.7305, 5151.1050, 50.3221),
+                [48] = vec3(2097.6240, 5169.5703, 52.1555),
+                [49] = vec3(2084.0840, 5183.9663, 53.8722)
+            }
+        },
+
+        -- You can create as many or as few farms as you wish!
+        -- Add more farms here if desired following the same format
+
+        -- [2] = {
+        --     spawn = false,
+        --     model = 'h4_prop_bush_cocaplant_01',
+        --     center = vec3(0.0, 0.0, 0.0),
+        --     size = 100,
+        --     level = 1,
+        --     required = {
+        --         { item = 'ls_shears', quantity = 1, remove = false },
+        --     },
+        --     reward = { item = 'ls_coca_leaf', quantity = { min = 1, max = 3 } },
+        --     seed = { item = 'ls_coca_seed', quantity = { min = 1, max = 1 }, chance = 5 },
+        --     xp = { min = 1, max = 1 },
+        --     blip = { enable = true, sprite = 89, color = 1, scale = 0.7, label = 'Coca Field' },
+        --     coca = {
+        --         [1] = vec3(0.0, 0.0, 0.0),
+        --         [2] = vec3(0.0, 0.0, 0.0),
+        --         [3] = vec3(0.0, 0.0, 0.0)
+        --     }
+        -- }
+
+    },
+
+    ----------------------------------------------
+    --     🌿 Customize your plant options
+    ----------------------------------------------
+
+    planting = {
+        -- The seed item used to plant a coca plant
+        seed = 'ls_coca_seed',
+        -- The maximum number of plants a player can have at once
+        max = 5,
+        -- Do you want to check for collisions during the placement process?
+        collision = true,
+        -- The item(s) required & optionally removed when planting
+        required = {
+            { item = 'ls_plant_pot', quantity = 1, remove = true },
+            -- Add your own additional items here if desired
+        },
+        -- How many police to require be online to plant?
+        police = 0,
+        -- Customize the soil checking feature
+        soil = {
+            -- Do you want to enable the soil checking feature?
+            -- This will only allow the player to place plants
+            -- On soil types matching the soil hashes below
+            enable = true,
+            -- If enable = true, these are the allowed soil types
+            -- You can get a soil type by setting debug to true above
+            -- And try placing a plant - it will print the soil hash in F8!
+            types = {
+                [2409420175] = true,
+                [3008270349] = true,
+                [3833216577] = true,
+                [223086562] = true,
+                [1333033863] = true,
+                [4170197704] = true,
+                [3594309083] = true,
+                [2461440131] = true,
+                [1109728704] = true,
+                [2352068586] = true,
+                [1144315879] = true,
+                [581794674] = true,
+                [2128369009] = true,
+                [-461750719] = true,
+                [-1286696947] = true,
+                [-1885547121] = true,
+                [-1907520769] = true
+            },
+            -- If you wish to keep the soil check feature active but want to allow planting
+            -- In certain locations (such as warehouses, etc) you can put the location & the
+            -- General size (radius) of the area here and the soil checking will be bypassed
+            ignore = {
+                [1] = { coords = vec3(0, 0, 0), radius = 25 },
+                -- [2] = { coords = vec3(0, 0, 0), radius = 25 },
+                -- Add more ignored locations here if desired
+            }
+        },
+        -- If you want to disable planting in specific locations you can do that here
+        blacklist = {
+            [1] = { coords = vec3(0, 0, 0), radius = 25 },
+            -- [2] = { coords = vec3(0, 0, 0), radius = 25 },
+            -- Add more blacklisted locations here if desired
+        },
+        -- If you do not want to allow players to plant freely around the map
+        -- You can restrict planting to whitelisted locations only and customize the
+        -- Size (radius) of each location planting will be enabled at below
+        restrict = {
+            -- Do you want to enable the restricted option?
+            enable = false,
+            -- If enable = true, what locations are allowed to plant in?
+            whitelist = {
+                [1] = { coords = vec3(0, 0, 0), radius = 25 },
+                -- [2] = { coords = vec3(0, 0, 0), radius = 25 },
+                -- Add more whitelisted locations here if desired
+            }
+        },
+        -- The props assigned to each stage
+        stages = {
+            [1] = 'coca_growth_1',
+            [2] = 'coca_growth_2',
+            [3] = 'coca_growth_3'
+        }
+    },
+
+    growth = {
+        -- 'update_interval' is roughly how often in milliseconds each plant is updated
+        update_interval = 15000,
+        -- 'starting' is the starting values (percentage) of each
+        starting = { thirst = 85, hunger = 85, yield = 100, growth = 0 },
+        -- 'growth_increase' is the percentage growth increases each update_interval
+        -- By default, growth will increase between 0.1% & 0.3% roughly every 15 seconds
+        growth_increase = { min = 0.15, max = 0.35 },
+        -- 'stages' is the growth percentage threshold for advancing to that stage
+        -- [2] = 40 means plants will change to stage 2 at 40% growth, etc
+        stages = { [2] = 40, [3] = 90 },
+        -- 'watering' is how much the plants thirst level will increase per watering action
+        -- The 'item' section is the watering item spawn name
+        -- By default, the plants thirst level will increase 8-13% per watering
+        watering = { item = 'ls_watering_can', min = 8.0, max = 13.0 },
+        -- 'fertilizing' is how much the plants hunger level will increase per fertilizing action
+        -- The 'item' section is the fertilizer item spawn name
+        -- By default, the plants hunger level will increase 10-15% per fertilizing
+        fertilizing = { item = 'ls_fertilizer', min = 10.0, max = 15.0 },
+        -- 'thirst' is how much the thirst will decrease per update_interval
+        -- By default, thirst will decrease between 0.1% and 0.4% roughly every 15 seconds
+        thirst = { min = 0.12, max = 0.3 },
+        -- 'hunger' is how much the hunger will decrease per update_interval
+        -- By default, hunger will decrease between 0.1% and 0.4% roughly every 15 seconds
+        hunger = { min = 0.11, max = 0.3 },
+        -- 'death' is when the thirst or hunger reaches this amount, the plant will die
+        -- By default, a plant will die anytime thirst or hunger reaches 20% or lower
+        -- When plants die, they are completely deleted & removed from the map
+        death = 20,
+        -- 'yield_threshold' is when a plants thirst or hunger reaches this number, the yield
+        -- Of the plant starts to decrease. So if a plant has 100% hunger but 69% thirst, the yield
+        -- Level will start going down every update_interval until the plants thirst & hunger are back
+        -- Above this amount
+        yield_threshold = 70,
+        -- 'yield_decrease' is how much the yield percentage will decrease every update_interval
+        -- When any plants thirst or hunger level is below the yield_threshold amount (70% by default)
+        yield_decrease = { min = 0.4, max = 0.9 },
+    },
+
+    harvest = {
+        -- The item(s) required & optionally removed when harvesting
+        required = {
+            { item = 'ls_shears', quantity = 1, remove = false },
+            -- Add your own additional items here if desired
+        },
+        -- The items & quantity given to player upon harvest
+        add = {
+            -- The coca leaf item name
+            leaf = 'ls_coca_leaf',
+            -- The quantity of coca leaves given to player on harvest
+            -- The number of leaves given to the player is based on the plants yield percentage
+            -- By default, a player will get 3 leaves for every 10 percentage points
+            -- If a plant is harvested at 100% yield, this will give the player 30 leaves
+            -- If a plant is harvested at 50% yield, the player will get 15 leaves
+            -- The yield percentage changes based on how well the plant was taken care of
+            yield_per_10_percent = 3,
+            -- When a coca plant is harvested, you get leaves and seed(s)
+            -- However, the "required_yield" option allows you to only reward seeds
+            -- If the plant is being harvested at a specific yield percentage or higher
+            -- This way if the plant was poorly managed and has a yield below required_yield
+            -- Then the player will not get any seeds back
+            seed = { item = 'ls_coca_seed', quantity = { min = 1, max = 1 }, required_yield = 95, },
+            -- How much XP to reward upon harvesting? This is per leaf
+            -- So if a player harvests x15 leaves they'll get 15xp
+            xp = { min = 1, max = 1 }
+        }
+    },
+
+    ----------------------------------------------
+    --      ⚙️ Setup your table options
+    ----------------------------------------------
+
+    table = {
+        -- The item spawn name of the meth table
+        item = 'ls_coke_table',
+        -- The model/object used as the table prop
+        -- More models: https://forge.plebmasters.de/objects
+        model = 'bkr_prop_coke_table01a',
+        -- Do you want to lock tables to be accessed by their owners only?
+        -- If true, only the player who placed the table can interact with it
+        -- If false, anyone can interact & pick up / take the table themselves
+        locked = false,
+        -- How many tables do you want to allow one player to be able to place?
+        -- If you have locked = false, they can still use someone elses table
+        -- Even if the limit to place their own is 1
+        limit = 1,
+        -- If desired, you can disable the collision checking feature when placing
+        -- A table. It is recommended to keep true, but it can be disabled if needed
+        collisions = true,
+        -- How many police to require be online to place & use table?
+        police = { place = 0, use = 0 },
+        -- Restrict placing tables in these areas
+        restricted = {
+            [1] = { coords = vec3(0, 0, 0), radius = 25 },
+            -- Add more here if needed, be sure to increment
+            -- The numbers accordingly, [2], [3], etc
+        },
+    },
+
+    ----------------------------------------------
+    --       📈 Customize the XP system
+    ----------------------------------------------
+
+    experience = {
+        -- The number in these [brackets] are the level
+        -- The number after = is the exp required to reach that level
+        -- Be sure levels *always* start at level 1 with 0 exp
+        [1] = 0,
+        [2] = 2500,
+        [3] = 10000,
+        [4] = 20000,
+        [5] = 50000,
+        [6] = 100000,
+        -- You can add or remove levels as you wish
+        -- Be sure to increment numbers correctly
+    },
+
+    ----------------------------------------------
+    --      ⚒️ Customize cement gathering
+    ----------------------------------------------
+
+    cement = {
+        -- Disable or enable cement gathering
+        enable = true,
+        -- Set a maximum number of cement that can be collected per player
+        -- This is per server session, so this does not reset until the server restarts
+        -- Don't want a limit? Set an unrealistically high number like 5000!
+        limit = 25,
+        -- How long (in seconds) cooldown lasts on each cement pallet after taking 1
+        -- After the cooldown has expired, the cement pallet can be searched again
+        cooldown = 180,
+        -- Do you want police to be notified when cement is taken?
+        -- If yes, chance is the percentage chance of a notification being sent
+        -- If no, set chance to 0. Sprite, color & scale are dispatch blip settings
+        dispatch = { chance = 5, sprite = 133, color = 1, scale = 1.0 },
+        -- Create, edit or manage collecting zones
+        zones = {
+            [1] = {
+                -- These zones are built with poly zones, input all the points below
+                -- Need help building a poly zone? Check out https://skyrossm.github.io/PolyZoneCreator/
+                -- Or you can use ox_libs /zone command to create a poly zone
+                points = {
+                    vec3(-436.36, -863.64, 38.0),
+                    vec3(-434.85, -965.15, 38.0),
+                    vec3(-431.06, -1001.52, 38.0),
+                    vec3(-440.91, -1098.48, 38.0),
+                    vec3(-521.97, -1065.91, 38.0),
+                    vec3(-525.00, -1030.30, 38.0),
+                    vec3(-529.55, -993.18, 38.0),
+                    vec3(-526.52, -959.09, 38.0),
+                    vec3(-489.39, -882.58, 38.0),
+                    vec3(-485.61, -862.88, 38.0)
+                },
+                -- The height of the polygon
+                thickness = 35,
+                -- The item and quantity given when collecting
+                reward = { item = 'ls_cement', quantity = { min = 1, max = 1 } },
+                -- How much XP to reward upon collecting? This is per x1 cement item
+                xp = { min = 0, max = 0 },
+                -- The coordinates of each cement object you want to allow collection at
+                coords = {
+                    [1] = vec3(-486.745, -1051.958, 28.911),
+                    [2] = vec3(-490.756, -1049.139, 28.911),
+                    [3] = vec3(-492.023, -1048.076, 28.911),
+                    [4] = vec3(-478.925, -1050.830, 28.912),
+                    [5] = vec3(-478.925, -1049.176, 28.912),
+                    [6] = vec3(-465.013, -1045.091, 28.911),
+                    [7] = vec3(-464.057, -1046.464, 28.911),
+                    [8] = vec3(-469.612, -1051.953, 28.911),
+                    [9] = vec3(-468.091, -1052.831, 28.911),
+                    [10] = vec3(-455.397, -1052.479, 28.919),
+                    [11] = vec3(-454.051, -1053.609, 28.919),
+                    [12] = vec3(-497.059, -1010.229, 28.918),
+                    [13] = vec3(-497.059, -1008.576, 28.917),
+                    [14] = vec3(-493.132, -996.690, 28.911),
+                    [15] = vec3(-493.132, -994.933, 28.911),
+                    [16] = vec3(-495.574, -992.676, 28.911),
+                    [17] = vec3(-495.574, -994.433, 28.911),
+                    [18] = vec3(-440.356, -1022.513, 25.784),
+                    [19] = vec3(-440.380, -1021.142, 25.784),
+                    [20] = vec3(-440.394, -1019.159, 25.784),
+                    [21] = vec3(-440.041, -1017.833, 25.784),
+                    [22] = vec3(-440.805, -967.684, 25.784),
+                    [23] = vec3(-440.603, -966.006, 25.784),
+                    [24] = vec3(-448.492, -947.273, 28.973),
+                    [25] = vec3(-447.125, -947.166, 28.973),
+                    [26] = vec3(-466.271, -899.449, 28.997),
+                    [27] = vec3(-464.786, -899.297, 28.996),
+                    [28] = vec3(-462.224, -895.241, 28.995),
+                    [29] = vec3(-457.348, -881.329, 28.973),
+                    [30] = vec3(-457.362, -879.957, 28.973),
+                    [31] = vec3(-471.268, -925.761, 28.973),
+                    [32] = vec3(-471.492, -927.114, 28.973),
+                    [33] = vec3(-470.563, -956.971, 28.973),
+                    [34] = vec3(-470.552, -955.599, 28.973),
+                    [35] = vec3(-454.731, -959.882, 28.973),
+                    [36] = vec3(-456.096, -959.752, 28.973),
+                    -- Add or remove as desired
+                }
+            },
+
+            -- You can create as many or as few zones as you wish for cement!
+            -- Add more cement zones here if desired following the same format
+            -- 🗒️ Note: it will NOT spawn cement, only apply targets to the set coords
+
+            -- [2] = {
+            --     points = {
+            --         vec3(0.0, 0.0, 0.0),
+            --         vec3(0.0, 0.0, 0.0),
+            --         vec3(0.0, 0.0, 0.0),
+            --         vec3(0.0, 0.0, 0.0),
+            --     },
+            --     thickness = 35,
+            --     reward = { item = 'ls_cement', quantity = { min = 1, max = 1 } },
+            --     xp = { min = 0, max = 0 },
+            --     coords = {
+            --         [1] = vec3(0.0, 0.0, 0.0),
+            --         [2] = vec3(0.0, 0.0, 0.0),
+            --         [3] = vec3(0.0, 0.0, 0.0),
+            --         [4] = vec3(0.0, 0.0, 0.0),
+            --         [5] = vec3(0.0, 0.0, 0.0),
+            --     }
+            -- },
+
+        }
+    },
+
+    ----------------------------------------------
+    --       🛒 Customize supply shop
+    ----------------------------------------------
+
+    shop = {
+        -- Optionally disable this shop if you wish to grant access to
+        -- Coke supplies via another method
+        enable = true,
+        -- If enabled = true, where is this shop located?
+        location = vec4(1901.1145, 4924.4526, 48.8241, 207.5563),
+        -- The ped model used
+        -- More models: https://docs.fivem.net/docs/game-references/ped-models/
+        model = 'a_m_m_farmer_01',
+        -- The scenario assigned to the ped (or nil/false for no scenario)
+        -- More scenarios: https://github.com/DioneB/gtav-scenarios
+        scenario = 'WORLD_HUMAN_DRINKING',
+        -- You can limit the hours at which the ped is available here
+        -- By default, this ped is available 24/7
+        -- Min is the earliest the shop is available (in 24hr format)
+        -- Max is the latest the shop is available (in 24hr format)
+        -- For example, if you want the ped only available during night set min to 21 and max to 5
+        hours = { min = 0, max = 24 },
+        -- Use cash or bank when purchasing here?
+        account = 'cash',
+        -- Items available for sale in this shop
+        items = {
+            -- item: item spawn name
+            -- price: price of item
+            -- icon: icon for item
+            -- metadata: optional metadata for item
+            [1] = { item = 'ls_watering_can', price = 15, icon = 'droplet', metadata = 100 },
+            [2] = { item = 'ls_fertilizer', price = 20, icon = 'burger', metadata = 100 },
+            [3] = { item = 'ls_plant_pot', price = 10, icon = 'plant-wilt' },
+            [4] = { item = 'ls_shears', price = 150, icon = 'scissors' },
+            [5] = { item = 'ls_baking_soda', price = 15, icon = 'box-archive' },
+            [6] = { item = 'ls_empty_baggy', price = 5, icon = 'bag-shopping' },
+            [7] = { item = 'ls_gasoline', price = 50, icon = 'gas-pump', metadata = 100 },
+            [8] = { item = 'ls_coke_table', price = 5000, icon = 'snowflake' },
+            -- Add or remove items as you wish
+        },
+        -- Manage blip settings if desired
+        blip = {
+            enable = true, -- Enable or disable the blip for this shop
+            sprite = 280, -- Sprite ID (https://docs.fivem.net/docs/game-references/blips/)
+            color = 0, -- Color (https://docs.fivem.net/docs/game-references/blips/#blip-colors)
+            scale = 0.9, -- Size/scale
+            label = 'Farmer' -- Label
+        }
+    },
+
+    ----------------------------------------------
+    --    ❄️ Build & customize your coke labs
+    ----------------------------------------------
+
+    -- Create as many or as few Coke Lab options you wish below
+    -- Be sure to increment the numbers accordingly, [2], [3], etc
+    labs = {
+        [1] = {
+            -- The entrance coords to this lab
+            enter = vec4(499.6197, -651.9501, 24.9085, 262.6456),
+            -- A brief description used in the menu
+            description = 'A modest lab located in Textile City on Little Bighorn',
+            -- The path to the image used to preview lab
+            -- To disable lab preview images, just set image = nil,
+            image = 'nui://lation_coke/labs/lab1.jpg',
+            -- The icon used in the menu
+            icon = 'fas fa-warehouse',
+            -- The price to purchase this lab
+            price = 100000,
+            -- The level required to purchase this lab
+            level = 1,
+            -- "camrot" below is for camera rotation. It it used to assign a default
+            -- Rotation value for a good default angle. To get the camrot for a warehouse
+            -- Simply stand in front of the warehouse entrance, facing away from the door,
+            -- Enable the debug option above and use the command "getrot" ingame
+            camrot = vec3(-0.000001, -0.000000, -97.354431),
+            -- The stashes available in this lab
+            storage = {
+                [1] = {
+                    -- The ID of the stash, this must be unique for each and every stash
+                    -- Recommended naming scheme is: lab#_stash#
+                    identifier = 'lab1_stash1',
+                    -- The label of the stash
+                    label = 'Storage',
+                    -- The coords of the stash
+                    coords = vec3(1096.9021, -3192.4685, -38.8690),
+                    -- The max size of the stash
+                    slots = 50,
+                    -- The max weight of the stash
+                    weight = 50000
+                },
+                -- Add or remove more stashes as desired
+            }
+        },
+        [2] = {
+            enter = vec4(945.9252, -1138.3689, 26.5010, 0.7115),
+            description = 'A conveniently located lab in Murrieta Heights',
+            image = 'nui://lation_coke/labs/lab2.jpg',
+            icon = 'fas fa-warehouse',
+            price = 125000,
+            level = 1,
+            camrot = vec3(0.000000, 0.000000, 0.711507),
+            storage = {
+                [1] = {
+                    identifier = 'lab2_stash1',
+                    label = 'Storage',
+                    coords = vec3(1096.9021, -3192.4685, -38.8690),
+                    slots = 75,
+                    weight = 75000
+                },
+            }
+        },
+        [3] = {
+            enter = vec4(930.9764, -1963.8546, 30.4092, 271.7736),
+            description = 'A lab located in Cypress Flats with extra storage',
+            image = 'nui://lation_coke/labs/lab3.jpg',
+            icon = 'fas fa-warehouse',
+            price = 150000,
+            level = 1,
+            camrot = vec3(-0.019753, -0.034459, -88.226372),
+            storage = {
+                [1] = {
+                    identifier = 'lab3_stash1',
+                    label = 'Storage',
+                    coords = vec3(1096.9021, -3192.4685, -38.8690),
+                    slots = 75,
+                    weight = 75000
+                },
+                [2] = {
+                    identifier = 'lab3_stash2',
+                    label = 'Storage',
+                    coords = vec3(1093.5725, -3199.8215, -38.9873),
+                    slots = 25,
+                    weight = 25000
+                },
+            }
+        },
+        [4] = {
+            enter = vec4(-1267.7716, -811.9169, 17.1077, 127.9849),
+            description = 'A large lab located in the heart of Del Perro',
+            image = 'nui://lation_coke/labs/lab4.jpg',
+            icon = 'fas fa-warehouse',
+            price = 175000,
+            level = 1,
+            camrot = vec3(-0.280802, 0.012579, 127.985153),
+            storage = {
+                [1] = {
+                    identifier = 'lab4_stash1',
+                    label = 'Storage',
+                    coords = vec3(1096.9021, -3192.4685, -38.8690),
+                    slots = 100,
+                    weight = 100000
+                },
+            }
+        },
+        [5] = {
+            enter = vec4(-1684.7803, -291.3889, 51.8901, 145.2175),
+            description = 'A re-purposed church with lots of storage',
+            image = 'nui://lation_coke/labs/lab5.jpg',
+            icon = 'fas fa-warehouse',
+            price = 250000,
+            level = 1,
+            camrot = vec3(0.025158, -0.001362, 145.217484),
+            storage = {
+                [1] = {
+                    identifier = 'lab5_stash1',
+                    label = 'Storage',
+                    coords = vec3(1096.9021, -3192.4685, -38.8690),
+                    slots = 75,
+                    weight = 75000
+                },
+                [2] = {
+                    identifier = 'lab5_stash2',
+                    label = 'Storage',
+                    coords = vec3(1093.5725, -3199.8215, -38.9873),
+                    slots = 50,
+                    weight = 50000
+                },
+                [3] = {
+                    identifier = 'lab5_stash3',
+                    label = 'Storage',
+                    coords = vec3(1090.0062, -3199.6501, -38.8936),
+                    slots = 50,
+                    weight = 50000
+                },
+            }
+        },
+    },
+
+    -- Various coke lab settings that apply to all labs
+    settings = {
+        -- The player account used for specific lab transactions
+        -- Available options: 'cash' or 'bank'
+        accounts = { purchase = 'cash', upgrade = 'cash', sell = 'cash' },
+        -- When a player enters a lab, this is where they are teleported to
+        enter = vec4(1088.7609, -3187.5291, -38.9934, 181.0739),
+        -- When a player is inside the lab, this is where they exit at
+        exit = vec4(1088.7609, -3187.5291, -38.9934, 181.0739),
+        -- Where do you want the manage lab menu to be located?
+        manage = vec3(1086.5208, -3194.2824, -39.1940),
+        -- Where are the cooking stations location at?
+        -- 'basic' is where the non-upgraded labs stations are located
+        -- 'upgrade' is where the upgraded labs stations are located
+        -- By default, an upgraded lab comes with more stations
+        stations = {
+            ['basic'] = {
+                [1] = vec3(1090.3503, -3195.7060, -39.1919),
+                [2] = vec3(1093.1036, -3195.7351, -39.1924),
+                [3] = vec3(1095.3885, -3195.7077, -39.1919)
+            },
+            ['upgrade'] = {
+                [1] = vec3(1090.3503, -3195.7060, -39.1919),
+                [2] = vec3(1093.1036, -3195.7351, -39.1924),
+                [3] = vec3(1095.3885, -3195.7077, -39.1919),
+                [4] = vec3(1098.6831, -3194.3437, -39.1923),
+                [5] = vec3(1101.8637, -3192.8369, -39.1920)
+            }
+        },
+        -- What is the maximum amount of labs a single player can own?
+        limit = 1,
+        -- When a player purchases a lab, these are the default values assigned
+        -- style options: 'basic', 'upgrade'
+        -- security options: 'basic', 'upgrade'
+        defaults = { style = 'basic', security = 'basic' },
+        -- When a player adds an authorized user to their lab, these are the default
+        -- Permissions applied to the newly added user
+        permissions = {
+            -- manageDoor is the ability to lock/unlock the lab door
+            manageDoor = false,
+            -- viewCamera is the ability to view the lab security camera
+            viewCamera = false,
+            -- manageUsers is the ability to add/remove authorized users
+            manageUsers = false
+        },
+        -- Upgrades available for each lab (style & security only available if default = 'basic')
+        -- Price is how much it costs | duration is how long (in minutes) it takes
+        upgrades = {
+            style = { price = 15000, duration = 60 },
+            security = { price = 10000, duration = 30 }
+        },
+        -- Lab selling related options
+        selling = {
+            -- When a user sells their lab, they must type this to continue
+            confirm = 'confirm',
+            -- When selling a lab, this is the percentage of the purchase price refunded
+            refund = 50,
+        },
+        -- If a player owns a warehouse this is the blip settings for it
+        blip = {
+            name = 'Coke Lab',
+            -- Sprite ID: https://docs.fivem.net/docs/game-references/blips/
+            sprite = 473,
+            -- Color: https://docs.fivem.net/docs/game-references/blips/#blip-colors
+            color = 0,
+            -- Size of the blip on the map
+            scale = 0.8
+        }
+    },
+
+    -- Various coke lab raiding settings
+    raids = {
+        -- Do you want to allow police be able to raid coke labs?
+        police = true,
+        -- Do you want to allow players be able to raid coke labs?
+        players = true,
+        -- If raids are enabled, below is the skillcheck difficulties and inputs
+        -- Learn more here: https://overextended.dev/ox_lib/Modules/Interface/Client/skillcheck
+        skillcheck = {
+            -- The skillcheck settings for entering a locked lab
+            entry = {
+                difficulty = {'easy', 'easy', 'easy', 'medium', 'medium', 'medium', 'hard'},
+                inputs = {'W', 'A', 'S', 'D'}
+            },
+            -- The skillcheck settings for opening a locked stash
+            stash = {
+                difficulty = {'easy', 'easy', 'easy', 'medium', 'medium', 'medium', 'hard'},
+                inputs = {'W', 'A', 'S', 'D'}
+            }
+        }
+    },
+
+    -- The ped that sells coke labs
+    dealer = {
+        -- Optionally disable this shop if you wish to grant access to the lab
+        -- Shop via another method through the use of the available export (see docs)
+        enable = true,
+        -- If enabled = true, where is this shop located?
+        location = vec4(-7.2472, 409.2823, 120.1271, 76.4763),
+        -- If enabled = true, the ped model used
+        -- More models: https://docs.fivem.net/docs/game-references/ped-models/
+        model = 'a_m_m_eastsa_02',
+        -- If enabled = true, the scenario assigned to the ped (or nil/false for no scenario)
+        -- More scenarios: https://github.com/DioneB/gtav-scenarios
+        scenario = 'WORLD_HUMAN_SMOKING',
+        -- If enabled = true, what level does a player have to be to access the shop?
+        level = 1,
+        -- You can limit the hours at which the ped is available here
+        -- By default, this ped is available 24/7
+        -- Min is the earliest the shop is available (in 24hr format)
+        -- Max is the latest the shop is available (in 24hr format)
+        -- For example, if you want the ped only available during night set min to 21 and max to 5
+        hours = { min = 0, max = 24 },
+        -- Manage blip settings if desired
+        blip = {
+             -- Enable or disable the blip for this shop
+            enable = true,
+            -- Sprite ID (https://docs.fivem.net/docs/game-references/blips/)
+            sprite = 280,
+            -- Color (https://docs.fivem.net/docs/game-references/blips/#blip-colors)
+            color = 0,
+            -- Size of the blip on the map
+            scale = 0.8,
+            -- Label
+            label = 'Lab Shop'
+        }
+    },
+
+    ----------------------------------------------
+    --      👩‍🍳 Customize cooking process
+    ----------------------------------------------
+
+    cooking = {
+
+        -- Do you want each players cooking process to be unique?
+        -- If true every player will have a different mixture of
+        -- Gas & cement required to reach 100% purity coke/crack
+        -- If false, all players will have the same mixture and you
+        -- Can assign a server-wide range in the cooking steps below
+        unique = true,
+
+        -- Do you want police to be notified when a player is cooking?
+        -- If yes, chance is the percentage chance of a notification being sent
+        -- If no, set chance to 0. Sprite, color, scale & radius are dispatch blip settings
+        dispatch = {
+            -- Portable table cooking dispatch settings
+            table = { chance = 5, sprite = 133, color = 1, scale = 1.0, radius = 50 },
+            -- Lab cooking dispatch settings
+            lab = { chance = 5, sprite = 133, color = 1, scale = 1.0, radius = 50 }
+        },
+
+        -- Create, edit & manage the cooking steps for tables
+        table = {
+            [1] = {
+                -- Title and description of this step (edit in locales file)
+                title = locale('table-menu.process-leaves-title'),
+                description = locale('table-menu.process-leaves-desc'),
+                -- Icon settings
+                icon = 'fas fa-mortar-pestle',
+                iconColor = '',
+                -- Required items for this step
+                required = {
+                    { item = 'ls_coca_leaf', quantity = 20, remove = true },
+                    -- Add your own additional items here if desired
+                    -- Don't want to require anything? Leave this table empty
+                },
+                -- Items added when this step is completed
+                add = {
+                    { item = 'ls_coca_ground', quantity = 1 },
+                    -- Add your own additional items here if desired
+                },
+                -- How much XP is given for this step?
+                -- If you do not want to award XP you can remove this section
+                -- Or assign the min/max to 0/0
+                xp = { min = 1, max = 3 },
+                -- If needing to trigger an event on the server-side
+                -- Add server = true after event name
+                event = { name = 'lation_coke:table:processLeaves' }
+            },
+            [2] = {
+                title = locale('table-menu.add-gas-title'),
+                description = locale('table-menu.add-gas-desc'),
+                icon = 'fas fa-gas-pump',
+                iconColor = '',
+                -- The gasoline item that is used to add to the ground leaves
+                -- This is where the base purity of the coke is first determined
+                gasoline = 'ls_gasoline',
+                -- ⚠️ If unique = true, you can ignore the range settings here
+                -- ⚠️ If unique = false, you can set a range for all players here
+                -- The ideal percentage/amount of gasoline to add
+                -- Any amount outside these values will impact purity negatively
+                range = { min = 5, max = 9 },
+                -- The maximum penalty to purity if outside the range above
+                -- For example if someone puts 100% gas, purity will come back 75% (25% max penalty)
+                penalty = 25,
+                required = {
+                    { item = 'ls_coca_ground', quantity = 5, remove = true },
+                },
+                add = {
+                    { item = 'ls_coca_base_unf', quantity = 1, metatype = 'purity' },
+                },
+                xp = { min = 1, max = 3 },
+                event = { name = 'lation_coke:table:addGasoline' }
+            },
+            [3] = {
+                title = locale('table-menu.add-cement-title'),
+                description = locale('table-menu.add-cement-desc'),
+                icon = 'fas fa-trowel-bricks',
+                iconColor = '',
+                -- The cement item that is used to add to the coca base
+                -- The purity level of the coke can be further impacted here
+                cement = 'ls_cement',
+                -- ⚠️ If unique = true, you can ignore the range settings here
+                -- ⚠️ If unique = false, you can set a range for all players here
+                -- The ideal percentage/amount of cement to add
+                -- Any amount outside these values will impact purity negatively
+                range = { min = 15, max = 19 },
+                -- The maximum penalty to purity if outside the range above
+                penalty = 25,
+                required = {
+                    { item = 'ls_coca_base_unf', quantity = 1, remove = true, metatype = 'purity' },
+                },
+                add = {
+                    { item = 'ls_coca_base', quantity = 1, metatype = 'purity' },
+                },
+                xp = { min = 1, max = 3 },
+                event = { name = 'lation_coke:table:addCement' }
+            },
+            [4] = {
+                title = locale('table-menu.start-heat-title'),
+                description = locale('table-menu.start-heat-desc'),
+                icon = 'fas fa-fire',
+                iconColor = '',
+                -- How long does this step take to complete?
+                -- This duration is in minutes
+                duration = 60,
+                required = {
+                    { item = 'ls_coca_base', quantity = 1, remove = true, metatype = 'purity' }
+                },
+                add = {
+                    { item = 'ls_cocaine_brick', quantity = 1, metatype = 'purity' }
+                },
+                xp = { min = 10, max = 30 },
+                event = { name = 'lation_coke:table:heatAndDry' }
+            },
+            [5] = {
+                title = locale('table-menu.package-title'),
+                description = locale('table-menu.package-desc'),
+                icon = 'fas fa-hammer',
+                iconColor = '',
+                -- The empty baggy item required to package a brick into bags
+                empty_baggy = 'ls_empty_baggy',
+                required = {
+                    { item = 'ls_cocaine_brick', quantity = 1, remove = true, metatype = 'purity' },
+                    -- { item = 'ls_crack_brick', quantity = 1, remove = true, metatype = 'purity'}
+                },
+                add = {
+                    { item = 'ls_cocaine_bag', min = 10, max = 20, metatype = 'purity' },
+                    -- { item = 'ls_crack_bag', min = 10, max = 20, metatype = 'purity' }
+                },
+                xp = { min = 2, max = 5 },
+                event = { name = 'lation_coke:table:packageBrick' }
+            },
+            -- -- OPTIONAL: Uncomment below to enable crack production on tables
+            -- [6] = {
+            --     title = locale('table-menu.cook-coke-title'),
+            --     description = locale('table-menu.cook-coke-desc'),
+            --     icon = 'fas fa-flask-vial',
+            --     iconColor = '',
+            --     -- How long does this step take to complete?
+            --     -- This duration is in minutes
+            --     duration = 60,
+            --     required = {
+            --         { item = 'ls_cocaine_brick', quantity = 1, remove = true, metatype = 'purity' },
+            --         { item = 'ls_baking_soda', quantity = 1, remove = true }
+            --     },
+            --     add = {
+            --         { item = 'ls_crack_brick', quantity = 1, metatype = 'purity' }
+            --     },
+            --     xp = { min = 5, max = 15 },
+            --     event = { name = 'lation_coke:table:cookCoke' }
+            -- },
+            -- -- OPTIONAL: Uncomment below to enable brick cutting on tables
+            -- [7] = {
+            --     title = locale('table-menu.cut-brick-title'),
+            --     description = locale('table-menu.cut-brick-desc'),
+            --     icon = 'fas fa-scissors',
+            --     iconColor = '',
+            --     -- The cutting agent used to double the batch size
+            --     cutting_agent = 'ls_baking_soda',
+            --     -- The percentage purity is impacted when cutting
+            --     -- e.g. If you cut x1 100% purity brick, it'll now be x2 65% bricks
+            --     penalty = 50,
+            --     required = {
+            --         { item = 'ls_cocaine_brick', quantity = 1, remove = true, metatype = 'purity' },
+            --         { item = 'ls_crack_brick', quantity = 1, remove = true, metatype = 'purity' }
+            --     },
+            --     add = {
+            --         { item = 'ls_cocaine_brick', quantity = 2, metatype = 'purity' },
+            --         { item = 'ls_crack_brick', quantity = 2, metatype = 'purity' }
+            --     },
+            --     xp = { min = 1, max = 3 },
+            --     event = { name = 'lation_coke:table:cutBrick' }
+            -- },
+        },
+
+        -- Create, edit & manage the cooking steps for lab stations
+        lab = {
+            [1] = {
+                title = locale('table-menu.process-leaves-title'),
+                description = locale('table-menu.process-leaves-desc'),
+                icon = 'fas fa-mortar-pestle',
+                iconColor = '',
+                required = {
+                    { item = 'ls_coca_leaf', quantity = 20, remove = true },
+                },
+                add = {
+                    { item = 'ls_coca_ground', quantity = 1 },
+                },
+                xp = { min = 2, max = 4 },
+                event = { name = 'lation_coke:lab:processLeaves' }
+            },
+            [2] = {
+                title = locale('table-menu.add-gas-title'),
+                description = locale('table-menu.add-gas-desc'),
+                icon = 'fas fa-gas-pump',
+                iconColor = '',
+                gasoline = 'ls_gasoline',
+                -- ⚠️ If unique = true, you can ignore the range settings here
+                -- ⚠️ If unique = false, you can set a range for all players here
+                -- The ideal percentage/amount of gasoline to add
+                -- Any amount outside these values will impact purity negatively
+                range = { min = 5, max = 9 },
+                -- The maximum penalty to purity if outside the range above
+                -- For example if someone puts 100% gas, purity will come back 75% (25% max penalty)
+                penalty = 20,
+                required = {
+                    { item = 'ls_coca_ground', quantity = 5, remove = true },
+                },
+                add = {
+                    { item = 'ls_coca_base_unf', quantity = 1, metatype = 'purity' },
+                },
+                xp = { min = 2, max = 4 },
+                event = { name = 'lation_coke:lab:addGasoline' }
+            },
+            [3] = {
+                title = locale('table-menu.add-cement-title'),
+                description = locale('table-menu.add-cement-desc'),
+                icon = 'fas fa-trowel-bricks',
+                iconColor = '',
+                cement = 'ls_cement',
+                -- ⚠️ If unique = true, you can ignore the range settings here
+                -- ⚠️ If unique = false, you can set a range for all players here
+                -- The ideal percentage/amount of cement to add
+                -- Any amount outside these values will impact purity negatively
+                range = { min = 15, max = 19 },
+                -- The maximum penalty to purity if outside the range above
+                penalty = 20,
+                required = {
+                    { item = 'ls_coca_base_unf', quantity = 1, remove = true, metatype = 'purity' },
+                },
+                add = {
+                    { item = 'ls_coca_base', quantity = 1, metatype = 'purity' },
+                },
+                xp = { min = 2, max = 4 },
+                event = { name = 'lation_coke:lab:addCement' }
+            },
+            [4] = {
+                title = locale('table-menu.start-heat-title'),
+                description = locale('table-menu.start-heat-desc'),
+                icon = 'fas fa-fire',
+                iconColor = '',
+                -- How long does this step take to complete?
+                -- This duration is in minutes
+                duration = 45,
+                required = {
+                    { item = 'ls_coca_base', quantity = 1, remove = true, metatype = 'purity' }
+                },
+                add = {
+                    { item = 'ls_cocaine_brick', quantity = 1, metatype = 'purity' }
+                },
+                xp = { min = 25, max = 50 },
+                event = { name = 'lation_coke:lab:heatAndDry' }
+            },
+            [5] = {
+                title = locale('table-menu.cook-coke-title'),
+                description = locale('table-menu.cook-coke-desc'),
+                icon = 'fas fa-flask-vial',
+                iconColor = '',
+                -- How long does this step take to complete?
+                -- This duration is in minutes
+                duration = 30,
+                required = {
+                    { item = 'ls_cocaine_brick', quantity = 1, remove = true, metatype = 'purity' },
+                    { item = 'ls_baking_soda', quantity = 1, remove = true }
+                },
+                add = {
+                    { item = 'ls_crack_brick', quantity = 1, metatype = 'purity' }
+                },
+                xp = { min = 5, max = 15 },
+                event = { name = 'lation_coke:lab:cookCoke' }
+            },
+            [6] = {
+                title = locale('table-menu.cut-brick-title'),
+                description = locale('table-menu.cut-brick-desc'),
+                icon = 'fas fa-scissors',
+                iconColor = '',
+                -- The cutting agent used to double the batch size
+                cutting_agent = 'ls_baking_soda',
+                -- The percentage purity is impacted when cutting
+                -- e.g. If you cut x1 100% purity brick, it'll now be x2 65% bricks
+                penalty = 35,
+                required = {
+                    { item = 'ls_cocaine_brick', quantity = 1, remove = true, metatype = 'purity' },
+                    { item = 'ls_crack_brick', quantity = 1, remove = true, metatype = 'purity' }
+                },
+                add = {
+                    { item = 'ls_cocaine_brick', quantity = 2, metatype = 'purity' },
+                    { item = 'ls_crack_brick', quantity = 2, metatype = 'purity' }
+                },
+                xp = { min = 1, max = 3 },
+                event = { name = 'lation_coke:lab:cutBrick' }
+            },
+            [7] = {
+                title = locale('table-menu.package-title'),
+                description = locale('table-menu.package-desc'),
+                icon = 'fas fa-hammer',
+                iconColor = '',
+                -- The empty baggy item required to package a brick into bags
+                empty_baggy = 'ls_empty_baggy',
+                -- A menu pops up to let you select which brick to package, it does not require both items
+                -- Be sure if you add additional brick types, the bag is in the same order
+                -- e.g. If cocaine brick is first, then cocaine bags should be first in the "add" section
+                required = {
+                    { item = 'ls_cocaine_brick', quantity = 1, remove = true, metatype = 'purity' },
+                    { item = 'ls_crack_brick', quantity = 1, remove = true, metatype = 'purity' }
+                },
+                add = {
+                    { item = 'ls_cocaine_bag', min = 10, max = 20, metatype = 'purity' },
+                    { item = 'ls_crack_bag', min = 10, max = 20, metatype = 'purity' }
+                },
+                xp = { min = 3, max = 6 },
+                event = { name = 'lation_coke:lab:packageBrick' }
+            },
+        }
+    },
+
+    ----------------------------------------------
+    --        ❄️ Customize consumables
+    ----------------------------------------------
+
+    consumables = {
+        -- ['item_spawn_name'] Consumable item name
+        ['ls_cocaine_bag'] = {
+            -- Do you want to make this item consumable?
+            usable = true,
+            -- What level must the player be to consume this?
+            level = 1,
+            -- Manage the effects this item has on the player
+            effects = {
+                -- enable: do you want to enable this effect?
+                -- amount: if enabled, how much health to apply?
+                health = { enable = false, amount = 50 },
+                -- enable: do you want to enable this effect?
+                -- amount: if enabled, how much armor to apply?
+                -- max: if consuming multiple, what is the max armor a player can have?
+                armor = { enable = true, amount = 100, max = 100 },
+                -- enable: do you want to enable this effect?
+                -- multiplier: if enabled, how much to increase player speed? (maximum is 1.49)
+                -- duration: if enabled, how long (in milliseconds) to activate the effect
+                speed = { enable = true, multiplier = 1.49, duration = 30000 },
+                -- enable: do you want to enable this effect?
+                -- effect: the timecycle modifier (more can be found at: https://forge.plebmasters.de/timecyclemods)
+                -- duration: if enabled, how long (in milliseconds) to activate the effect
+                screen = { enable = true, effect = 'stoned_monkeys', duration = 30000 },
+                -- enable: do you want to enable this effect?
+                -- clipset: the movement clipset to apply (more can be found at: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/movementClipsetsCompact.json)
+                -- duration: if enabled, how long (in milliseconds) to activate the effect
+                walk = { enable = true, clipset = 'move_m@drunk@a', duration = 30000 },
+                -- enable: do you want to enable this effect?
+                -- name: the camera shake name (more can be found at: https://docs.fivem.net/natives/?_0xFD55E49555E017CF)
+                -- intensity: the intensity of the camera shake (lower is less, higher is more)
+                -- duration: if enabled, how long (in milliseconds) to activate the effect
+                shake = { enable = true, name = 'DRUNK_SHAKE', intensity = 2.0, duration = 30000 }
+            }
+        },
+        ['ls_crack_bag'] = {
+            usable = true,
+            level = 1,
+            effects = {
+                health = { enable = false, amount = 50 },
+                armor = { enable = true, amount = 100, max = 100 },
+                speed = { enable = true, multiplier = 1.49, duration = 30000 },
+                screen = { enable = true, effect = 'stoned_monkeys', duration = 30000 },
+                walk = { enable = true, clipset = 'move_m@drunk@a', duration = 30000 },
+                shake = { enable = true, name = 'DRUNK_SHAKE', intensity = 2.0, duration = 30000 }
+            }
+        },
+    }
+
+}
+```
+
+
+```lua config/client.lua expandable
+return {
+    ----------------------------------------------
+    --          ⌨️ Customize controls
+    ----------------------------------------------
+
+    -- Prop placement controls
+    controls = {
+        -- How fast the prop placement system moves the object
+        speed = 0.025,
+        -- Rotate left
+        rotateL = 44, -- Q
+        -- Rotate right
+        rotateR = 38, -- E
+        -- Move forward
+        forward = 32, -- W
+        -- Move backward
+        backward = 33, -- S
+        -- Move left
+        left = 34, -- A
+        -- Move right
+        right = 35, -- D
+        -- Cancel placement
+        cancel = 73, -- X
+        -- Confirm placement
+        confirm = 22, -- Space
+
+        -- The keys below will be disabled during placement
+        disable = {
+            30, -- Disables left/right movement
+            31, -- Disables forward/backward movement
+            44, -- Disables Q (crouch)
+            22, -- Disables Spacebar (jump)
+            200, -- Disables Escape
+            -- Add more here if needed
+        },
+    },
+
+    ----------------------------------------------
+    --    📹 Customize lab security cameras
+    ----------------------------------------------
+
+    cameras = {
+        -- The speed at which the camera will pan & zoom
+        -- Increase this number to move faster, decrease to move slower
+        speed = 0.15,
+        -- When a player views their warehouse's security camera, this is the timecycle
+        -- Modifier that is used - update it below if you wish for a different effect!
+        -- More timecycle mods: https://forge.plebmasters.de/timecyclemods
+        timecycle = 'scanline_cam_cheap',
+        -- If you would like to or need to configure the keys used for camera viewing
+        -- You can do it here
+        -- control IDs: https://docs.fivem.net/docs/game-references/controls/)
+        controls = {
+            panUp = 32, -- W
+            panDown = 33, -- S
+            panLeft = 34, -- A
+            panRight = 35, -- D
+            zoomIn = 44, -- Q
+            zoomOut = 38, -- E
+            exit = 177 -- Backspace
+        },
+        -- While a player is inside the camera viewing mode, these are the controls that
+        -- Get disabled until they have exited (control IDs: https://docs.fivem.net/docs/game-references/controls/)
+        -- Default controls disabled: W, A, S, D, Q, E, B, movement left/right, movement up/down
+        disable = { 32, 33, 34, 35, 44, 38, 29, 30, 31 },
+        -- The limits section below is the limiting factors to determine max camera pan & zoom
+        limits = {
+            -- Pitch limits (up/down) relative to initial rotation
+            pitch = 30.0,
+            -- Yaw limits (left/right) relative to initial rotation
+            yaw = 45.0,
+            -- FOV limits (lower value = more zoomed in, higher value = more zoomed out)
+            -- To allow further "zoom in", set min to a lower value
+            -- To allow further "zoom out", set max to a higher value
+            fov = { min = 35.0, max = 80.0 }
+        }
+    },
+
+    ----------------------------------------------
+    --       📊 Customize stats menu
+    ----------------------------------------------
+
+    -- Don't want to show the stats menu option at all?
+    -- Set all stats below to false!
+    stats = {
+        -- Do you want to show the leaves harvested stat?
+        leaves = true,
+        -- Do you want to show the total plants grown stat?
+        grown = true,
+        -- Do you want to show the total cement collected stat?
+        cement = true,
+        -- Do you want to show the total bricks produced stat?
+        bricks = true,
+    },
+
+    ----------------------------------------------
+    --    💃 Customize animations and props
+    ----------------------------------------------
+
+    animations = {
+        searching = {
+            label = 'Searching..',
+            description = 'You begin searching the plant for leaves',
+            icon = 'fas fa-magnifying-glass',
+            duration = 6000,
+            position = 'bottom',
+            useWhileDead = false,
+            canCancel = true,
+            disable = { move = true, car = true, combat = true },
+            anim = { dict = 'amb@prop_human_bum_bin@base', clip = 'base' },
+            prop = { }
+        },
+        use_table = {
+            label = 'Placing table..',
+            description = 'You search for a suitable spot to place the table',
+            icon = 'fas fa-location-dot',
+            duration = 1500,
+            position = 'bottom',
+            useWhileDead = false,
+            canCancel = true,
+            disable = { move = true, car = true, combat = true },
+            anim = { dict = 'anim@amb@clubhouse@tutorial@bkr_tut_ig3@', clip = 'machinic_loop_mechandplayer', flag = 0 },
+            prop = {}
+        },
+        -- The animations below are for table cooking specifically
+        -- Ensure the step number from config/shared.lua matches the number here!
+        table = {
+            [1] = {
+                label = 'Processing leaves..',
+                icon = 'fas fa-mortar-pestle',
+                duration = 15000,
+                position = 'bottom',
+                useWhileDead = false,
+                canCancel = true,
+                steps = {
+                    { description = 'You place the leaves onto the table..' },
+                    { description = 'You begin crushing the leaves..' },
+                    { description = 'You finish crushing the leaves..' }
+
+                },
+                disable = { move = true, car = true, combat = true },
+                anim = { dict = 'anim@amb@business@coc@coc_unpack_cut@', clip = 'fullcut_cycle_v4_cokecutter', flag = 0 },
+                prop = {}
+            },
+            [2] = {
+                label = 'Adding gasoline..',
+                description = 'You begin pouring gasoline into the mixture',
+                icon = 'fas fa-gas-pump',
+                duration = 15000,
+                position = 'bottom',
+                useWhileDead = false,
+                canCancel = true,
+                disable = { move = true, car = true, combat = true },
+                anim = { dict = 'anim@amb@business@coc@coc_unpack_cut@', clip = 'fullcut_cycle_v4_cokecutter', flag = 0 },
+                prop = {}
+            },
+            [3] = {
+                label = 'Adding cement..',
+                description = 'You begin pouring cement into the mixture',
+                icon = 'fas fa-square-plus',
+                duration = 15000,
+                position = 'bottom',
+                useWhileDead = false,
+                canCancel = true,
+                disable = { move = true, car = true, combat = true },
+                anim = { dict = 'anim@amb@business@coc@coc_unpack_cut@', clip = 'fullcut_cycle_v4_cokecutter', flag = 0 },
+                prop = {}
+            },
+            [4] = {
+                label = 'Placing down..',
+                description = 'You carefully place the mixture into the boiler',
+                icon = 'fas fa-hand',
+                duration = 1500,
+                position = 'bottom',
+                useWhileDead = false,
+                canCancel = true,
+                disable = { move = true, car = true, combat = true },
+                anim = { dict = 'anim_casino_b@amb@casino@games@blackjack@dealer', clip = 'check_and_turn_card', flag = 0 },
+                prop = {}
+            },
+            [5] = {
+                label = 'Packaging..',
+                icon = 'fas fa-box',
+                duration = 15000,
+                position = 'bottom',
+                useWhileDead = false,
+                canCancel = true,
+                steps = {
+                    { description = 'You cut up the powder into many small lines..' },
+                    { description = 'You carefully place the powder into the baggies..' },
+                    { description = 'You finish packing & seal the baggies..' }
+                },
+                disable = { move = true, car = true, combat = true },
+                anim = { dict = 'anim@amb@business@coc@coc_unpack_cut@', clip = 'fullcut_cycle_v4_cokecutter', flag = 0 },
+                prop = {}
+            },
+            [6] = {
+                label = 'Placing down..',
+                description = 'You carefully place the mixture into the boiler',
+                icon = 'fas fa-hand',
+                duration = 1500,
+                position = 'bottom',
+                useWhileDead = false,
+                canCancel = true,
+                disable = { move = true, car = true, combat = true },
+                anim = { dict = 'anim_casino_b@amb@casino@games@blackjack@dealer', clip = 'check_and_turn_card', flag = 0 },
+                prop = {}
+            },
+            [7] = {
+                label = 'Cutting..',
+                description = 'You begin cutting the coke with a cutting agent',
+                icon = 'fas fa-scissors',
+                duration = 10000,
+                position = 'bottom',
+                useWhileDead = false,
+                canCancel = true,
+                disable = { move = true, car = true, combat = true },
+                anim = { dict = 'anim@amb@business@coc@coc_unpack_cut@', clip = 'fullcut_cycle_v4_cokecutter', flag = 0 },
+                prop = {}
+            },
+        },
+        -- The animations below are for lab station cooking specifically
+        -- Ensure the step number from config/shared.lua matches the number here!
+        lab = {
+            [1] = {
+                label = 'Processing leaves..',
+                icon = 'fas fa-mortar-pestle',
+                duration = 10000,
+                position = 'bottom',
+                useWhileDead = false,
+                canCancel = true,
+                steps = {
+                    { description = 'You place the leaves onto the table..' },
+                    { description = 'You begin crushing the leaves..' },
+                    { description = 'You finish crushing the leaves..' }
+
+                },
+                disable = { move = true, car = true, combat = true },
+                anim = { dict = 'anim@amb@business@coc@coc_unpack_cut@', clip = 'fullcut_cycle_v4_cokecutter', flag = 0 },
+                prop = {}
+            },
+            [2] = {
+                label = 'Adding gasoline..',
+                description = 'You begin pouring gasoline into the mixture',
+                icon = 'fas fa-gas-pump',
+                duration = 10000,
+                position = 'bottom',
+                useWhileDead = false,
+                canCancel = true,
+                disable = { move = true, car = true, combat = true },
+                anim = { dict = 'anim@amb@business@coc@coc_unpack_cut@', clip = 'fullcut_cycle_v4_cokecutter', flag = 0 },
+                prop = {}
+            },
+            [3] = {
+                label = 'Adding cement..',
+                description = 'You begin pouring cement into the mixture',
+                icon = 'fas fa-square-plus',
+                duration = 10000,
+                position = 'bottom',
+                useWhileDead = false,
+                canCancel = true,
+                disable = { move = true, car = true, combat = true },
+                anim = { dict = 'anim@amb@business@coc@coc_unpack_cut@', clip = 'fullcut_cycle_v4_cokecutter', flag = 0 },
+                prop = {}
+            },
+            [4] = {
+                label = 'Placing down..',
+                description = 'You carefully place the mixture into the boiler',
+                icon = 'fas fa-hand',
+                duration = 1500,
+                position = 'bottom',
+                useWhileDead = false,
+                canCancel = true,
+                disable = { move = true, car = true, combat = true },
+                anim = { dict = 'anim_casino_b@amb@casino@games@blackjack@dealer', clip = 'check_and_turn_card', flag = 0 },
+                prop = {}
+            },
+            [5] = {
+                label = 'Placing down..',
+                description = 'You carefully place the mixture into the boiler',
+                icon = 'fas fa-hand',
+                duration = 1500,
+                position = 'bottom',
+                useWhileDead = false,
+                canCancel = true,
+                disable = { move = true, car = true, combat = true },
+                anim = { dict = 'anim_casino_b@amb@casino@games@blackjack@dealer', clip = 'check_and_turn_card', flag = 0 },
+                prop = {}
+            },
+            [6] = {
+                label = 'Cutting..',
+                description = 'You begin cutting the coke with a cutting agent',
+                icon = 'fas fa-scissors',
+                duration = 10000,
+                position = 'bottom',
+                useWhileDead = false,
+                canCancel = true,
+                disable = { move = true, car = true, combat = true },
+                anim = { dict = 'anim@amb@business@coc@coc_unpack_cut@', clip = 'fullcut_cycle_v4_cokecutter', flag = 0 },
+                prop = {}
+            },
+            [7] = {
+                label = 'Packaging..',
+                icon = 'fas fa-box',
+                duration = 10000,
+                position = 'bottom',
+                useWhileDead = false,
+                canCancel = true,
+                steps = {
+                    { description = 'You cut up the powder into many small lines..' },
+                    { description = 'You carefully place the powder into the baggies..' },
+                    { description = 'You finish packing & seal the baggies..' }
+                },
+                disable = { move = true, car = true, combat = true },
+                anim = { dict = 'anim@amb@business@coc@coc_unpack_cut@', clip = 'fullcut_cycle_v4_cokecutter', flag = 0 },
+                prop = {}
+            },
+        },
+        pickup_table = {
+            label = 'Picking up table..',
+            icon = 'fas fa-hand',
+            duration = 1500,
+            position = 'bottom',
+            useWhileDead = false,
+            canCancel = true,
+            disable = { move = true, car = true, combat = true },
+            anim = { dict = 'anim@amb@clubhouse@tutorial@bkr_tut_ig3@', clip = 'machinic_loop_mechandplayer', flag = 0 },
+            prop = {}
+        },
+        place_seed = {
+            label = 'Placing seed..',
+            description = 'You search for a suitable spot to plant',
+            icon = 'fas fa-seedling',
+            duration = 1200,
+            position = 'bottom',
+            useWhileDead = false,
+            canCancel = true,
+            disable = { move = true, car = true, combat = true },
+            anim = { dict = 'pickup_object', clip = 'pickup_low' },
+            prop = { }
+        },
+        watering = {
+            part1 = {
+                label = 'Watering..',
+                description = 'You begin watering the plant',
+                icon = 'fas fa-droplet',
+                duration = 4000,
+                position = 'bottom',
+                useWhileDead = false,
+                canCancel = false,
+                disable = { move = true, car = true, combat = true },
+                anim = { dict = 'weapon@w_sp_jerrycan', clip = 'fire', flag = 1 },
+                prop = { }
+            },
+            part2 = {
+                prop = { model = 'prop_wateringcan', bone = 28422, pos = vec3(0.4, 0.125, -0.05), rot = vec3(90.0, 180.0, 0.0) },
+                fx = { dict = 'core', name = 'ent_sht_water', offset = vec3(0.35, 0.0, 0.25), rot = vec3(0.0, 0.0, 0.0), scale = 2.0 }
+            }
+        },
+        fertilizing = {
+            part1 = {
+                label = 'Fertilizing..',
+                description = 'You begin fertilizing the plant',
+                icon = 'fas fa-burger',
+                duration = 4000,
+                position = 'bottom',
+                useWhileDead = false,
+                canCancel = false,
+                disable = { move = true, car = true, combat = true },
+                anim = { dict = 'weapon@w_sp_jerrycan', clip = 'fire', flag = 1 },
+                prop = { }
+            },
+            part2 = {
+                prop = { model = 'p_cs_sack_01_s', bone = 28422, pos = vec3(0.3239, -0.0328, 0.1253), rot = vec3(49.4678, -18.1732, -79.2577) },
+                fx = { dict = 'scr_fbi3', name = 'scr_fbi3_dirty_water_pour', offset = vec3(0.0, 0.0, 0.0), rot = vec3(0.0, 0.0, 0.0), scale = 2.0 }
+            }
+        },
+        harvesting = {
+            label = 'Harvesting..',
+            icon = 'fas fa-trowel',
+            duration = 4000,
+            position = 'bottom',
+            useWhileDead = false,
+            canCancel = false,
+            disable = { move = true, car = true, combat = true },
+            anim = { dict = 'amb@prop_human_bum_bin@base', clip = 'base' },
+            prop = { }
+        },
+        destroy_plant = {
+            label = 'Destroying..',
+            description = 'You begin destroying the plant',
+            icon = 'fas fa-trash',
+            duration = 4000,
+            position = 'bottom',
+            useWhileDead = false,
+            canCancel = false,
+            disable = { move = true, car = true, combat = true },
+            anim = { dict = 'amb@prop_human_bum_bin@base', clip = 'base' },
+            prop = { }
+        },
+        take_cement = {
+            label = 'Taking cement..',
+            duration = 1500,
+            position = 'bottom',
+            useWhileDead = false,
+            canCancel = false,
+            disable = { move = true, car = true, combat = true },
+            anim = { dict = 'anim@scripted@heist@ig1_table_grab@gold@male@', clip = 'grab' },
+            prop = { }
+        },
+        manage_lab = {
+            dict = 'anim@scripted@player@mission@tunf_bunk_ig3_nas_upload@',
+            clip = 'normal_typing',
+            flag = 51
+        },
+        raid_entry = {
+            dict = 'missheistfbisetup1',
+            clip = 'hassle_intro_loop_f',
+            flag = 51
+        },
+        raid_stash = {
+            dict = 'missheistfbisetup1',
+            clip = 'hassle_intro_loop_f',
+            flag = 51
+        },
+        use_drug = {
+            label = 'Snorting..',
+            duration = 4500,
+            position = 'bottom',
+            useWhileDead = false,
+            canCancel = true,
+            disable = { move = true, car = true, combat = true },
+            anim = { dict = 'anim@amb@nightclub@peds@', clip = 'missfbi3_party_snort_coke_b_male3' },
+            prop = {}
+        },
+        busy = { -- Used when interacting with table, plants and other misc actions
+           dict = 'missheist_jewelleadinout',
+           clip = 'jh_int_outro_loop_a',
+           flag = 51
+        },
+    },
+
+}
+```
+
+
+```lua config/server.lua expandable
+return {
+    ----------------------------------------------
+    --        💬 Setup logging system
+    ----------------------------------------------
+
+    logs = {
+        -- What logging service do you want to use?
+        -- Available options: 'fivemanage', 'fivemerr', 'discord' & 'none'
+        -- It is highly recommended to use a proper logging service such as Fivemanage or Fivemerr
+        service = 'none',
+        -- Do you want to include screenshots with your logs?
+        -- This is only applicable to Fivemanage and Fivemerr
+        screenshots = false,
+        -- You can enable (true) or disable (false) specific player events to log here
+        events = {
+            -- 'leaves_harvested' is when a player harvests coca leaves
+            leaves_harvested = false,
+            -- 'cement_collected' is when a player collects a cement bag
+            cement_collected = false,
+            -- 'table_placed' is when a player places a table down
+            table_placed = false,
+            -- 'table_brick' is when a player receives a completed coke brick from a table
+            table_brick = false,
+            -- 'table_packaged' is when a player packages a coke brick from a table
+            table_packaged = false,
+            -- 'table_removed' is when a player packs up/picks up a table
+            table_removed = false,
+            -- 'lab_purchase' is when a player purchases a lab
+            lab_purchase = false,
+            -- 'lab_brick' is when a player receives a completed coke brick from a lab
+            lab_brick = false,
+            -- 'lab_packaged' is when a player packages a coke brick from a lab
+            lab_packaged = false,
+            -- 'lab_upgrade' is when a lab has been upgraded
+            lab_upgrade = false,
+            -- 'lab_door' is when a player locks/unlocks a lab
+            lab_door = false,
+            -- 'lab_transfer' is when a player transfers ownership of a lab to another player
+            lab_transfer = false,
+            -- 'lab_sold' is when a player sells a lab to the state
+            lab_sold = false,
+        },
+        -- If service = 'discord', you can customize the webhook data here
+        -- If not using Discord, this section can be ignored
+        discord = {
+            -- The name of the webhook
+            name = 'Coke Logs',
+            -- The webhook link
+            link = '',
+            -- The webhook profile image
+            image = 'https://i.imgur.com/ILTkWBh.png',
+            -- The webhook footer image
+            footer = 'https://i.imgur.com/ILTkWBh.png'
+        }
+    },
+
+}
+```
+
+
+```lua config/icons.lua expandable
+return {
+    -- Misc interaction(s)
+    search_coca = 'fas fa-leaf',
+    search_coca_color = '',
+
+    use_table = 'fas fa-snowflake',
+    use_table_color = '',
+
+    use_station = 'fas fa-snowflake',
+    use_station_color = '',
+
+    check_status = 'fas fa-leaf',
+    check_status_color = '',
+
+    take_cement = 'fas fa-hand',
+    take_cement_color = '',
+
+    enter_lab = 'fas fa-right-to-bracket',
+    enter_lab_color = '',
+
+    exit_lab = 'fas fa-right-from-bracket',
+    exit_lab_color = '',
+
+    open_stash = 'fas fa-box-open',
+    open_stash_color = '',
+
+    confiscate_equipment = 'fas fa-shield-halved',
+    confiscate_equipment_color = '',
+
+    -- TextUI icons
+    plant_controls = 'fas fa-hand',
+    table_controls = 'fas fa-hand',
+    camera_controls = 'fas fa-video',
+
+    -- Input menu(s)
+    input_quantity = 'fas fa-hashtag',
+    input_brick = 'fas fa-arrow-pointer',
+    input_stash = 'fas fa-lock',
+    input_passcode = 'fas fa-key',
+    input_transfer_ownership = 'fas fa-right-left',
+    input_sell_lab = 'fas fa-sack-dollar',
+    input_authorized_user = 'fas fa-user-plus',
+    input_manage_authorized_user = 'fas fa-pencil',
+
+    -- Individual shop item icons in config/shared.lua
+    open_shop = 'fas fa-comment',
+    open_shop_color = '',
+
+    -- Player data
+    player_level = 'fas fa-chart-simple',
+    player_level_color = '',
+
+    view_stats = 'fas fa-chart-pie',
+    view_stats_color = '',
+
+    -- Stats menu
+    stats_leaves = 'fas fa-magnifying-glass',
+    stats_leaves_color = '',
+
+    stats_grown = 'fas fa-seedling',
+    stats_grown_color = '',
+
+    stats_cement = 'fas fa-trowel-bricks',
+    stats_cement_color = '',
+
+    stats_bricks = 'fas fa-boxes-stacked',
+    stats_bricks_color = '',
+
+    -- Coke table menu
+    -- Cooking step icons can be found in config/shared.lua
+    pack_up = 'fas fa-dolly',
+    pack_up_color = '#FF5555',
+
+    production = 'fas fa-circle-play',
+    production_color = '#74F37C',
+
+    in_progress = 'fas fa-rotate',
+    in_progress_color = '',
+
+    completed = 'fas fa-hand-holding',
+    completed_color = '',
+
+    -- Lab shop menu
+    confirm_purchase = 'fas fa-circle-check',
+    confirm_purchase_color = '#74F37C',
+
+    cancel_purchase = 'fas fa-circle-xmark',
+    cancel_purchase_color = '#FF5555',
+
+    set_waypoint = 'fas fa-map-location-dot',
+    set_waypoint_color = '',
+
+    -- Manage lab menu
+    manage_lab = 'fas fa-cogs',
+    manage_lab_color = '',
+
+    manage_security = 'fas fa-shield-alt',
+    manage_security_color = '',
+
+    manage_ownership = 'fas fa-user-gear',
+    manage_ownership_color = '',
+
+    upgrade_pending = 'fas fa-rotate',
+    upgrade_pending_color = '',
+
+    upgrade_equipment = 'fas fa-circle-chevron-up',
+    upgrade_equipment_color = '',
+
+    install_security = 'fas fa-shield-alt',
+    install_security_color = '',
+
+    -- Manage lab security menu
+    door_locked = 'fas fa-lock',
+    door_locked_color = '#FF5555',
+
+    door_unlocked = 'fas fa-unlock',
+    door_unlocked_color = '#74F37C',
+
+    create_passcode = 'fas fa-key',
+    create_passcode_color = '',
+
+    change_passcode = 'fas fa-rotate',
+    change_passcode_color = '',
+
+    remove_passcode = 'fas fa-delete-left',
+    remove_passcode_color = '',
+
+    authorized_users = 'fas fa-user-shield',
+    authorized_users_color = '',
+
+    security_cameras = 'fas fa-video',
+    security_cameras_color = '',
+
+    -- Manage authorized users menu
+    add_authorized_user = 'fas fa-user-plus',
+    add_authorized_user_color = '#74F37C',
+
+    manage_authorized_user = 'fas fa-user-gear',
+    manage_authorized_user_color = '',
+
+    -- Manage lab ownership menu
+    transfer_ownership = 'fas fa-right-left',
+    transfer_ownership_color = '',
+
+    sell_lab = 'fas fa-sack-dollar',
+    sell_lab_color = '',
+
+    -- Coca plant menu
+    water = 'fas fa-droplet',
+    water_color = '',
+
+    fertilizer = 'fas fa-burger',
+    fertilizer_color = '',
+
+    growth = 'fas fa-seedling',
+    growth_color = '',
+
+    yield = 'fas fa-chart-simple',
+    yield_color = '',
+
+    destroy = 'fas fa-delete-left',
+    destroy_color = '#FF5555',
+
+    harvest = 'fas fa-scissors',
+    harvest_color = ''
+}
+```
+
+</CodeGroup>
+
+<CodeGroup>
+
+```lua bridge/client.lua expandable
+-- Initialize global variables to store framework & inventory
+Framework, Inventory = nil, nil
+
+-- Initialize global player variables
+PlayerLoaded, PlayerData = nil, {}
+
+-- Get framework
+local function InitializeFramework()
+    if GetResourceState('es_extended') == 'started' then
+        ESX = exports['es_extended']:getSharedObject()
+        Framework = 'esx'
+
+        RegisterNetEvent('esx:playerLoaded', function(xPlayer)
+            PlayerData = xPlayer
+            PlayerLoaded = true
+            TriggerEvent('lation_coke:onPlayerLoaded')
+        end)
+
+        RegisterNetEvent('esx:onPlayerLogout', function()
+            table.wipe(PlayerData)
+            PlayerLoaded = false
+        end)
+
+        AddEventHandler('onResourceStart', function(resourceName)
+            if GetCurrentResourceName() ~= resourceName then return end
+            PlayerData = GetPlayerData()
+            PlayerLoaded = true
+            TriggerEvent('lation_coke:onPlayerLoaded')
+        end)
+
+    elseif GetResourceState('qbx_core') == 'started' then
+        Framework = 'qbx'
+
+        AddEventHandler('QBCore:Client:OnPlayerLoaded', function()
+            PlayerData = GetPlayerData()
+            PlayerLoaded = true
+            TriggerEvent('lation_coke:onPlayerLoaded')
+        end)
+
+        RegisterNetEvent('qbx_core:client:playerLoggedOut', function()
+            table.wipe(PlayerData)
+            PlayerLoaded = false
+        end)
+
+        AddEventHandler('onResourceStart', function(resourceName)
+            if GetCurrentResourceName() ~= resourceName then return end
+            PlayerData = GetPlayerData()
+            PlayerLoaded = true
+            TriggerEvent('lation_coke:onPlayerLoaded')
+        end)
+    elseif GetResourceState('qb-core') == 'started' then
+        QBCore = exports['qb-core']:GetCoreObject()
+        Framework = 'qb'
+
+        AddEventHandler('QBCore:Client:OnPlayerLoaded', function()
+            PlayerData = GetPlayerData()
+            PlayerLoaded = true
+            TriggerEvent('lation_coke:onPlayerLoaded')
+        end)
+
+        RegisterNetEvent('QBCore:Client:OnPlayerUnload', function()
+            table.wipe(PlayerData)
+            PlayerLoaded = false
+        end)
+
+        AddEventHandler('onResourceStart', function(resourceName)
+            if GetCurrentResourceName() ~= resourceName then return end
+            PlayerData = GetPlayerData()
+            PlayerLoaded = true
+            TriggerEvent('lation_coke:onPlayerLoaded')
+        end)
+    elseif GetResourceState('ox_core') == 'started' then
+        Ox = require '@ox_core.lib.init'
+        Framework = 'ox'
+
+        AddEventHandler('ox:playerLoaded', function()
+            PlayerData = GetPlayerData()
+            PlayerLoaded = true
+            TriggerEvent('lation_coke:onPlayerLoaded')
+        end)
+
+        AddEventHandler('ox:playerLogout', function()
+            table.wipe(PlayerData)
+            PlayerLoaded = false
+        end)
+
+        AddEventHandler('onResourceStart', function(resourceName)
+            if GetCurrentResourceName() ~= resourceName then return end
+            PlayerData = GetPlayerData()
+            PlayerLoaded = true
+            TriggerEvent('lation_coke:onPlayerLoaded')
+        end)
+    else
+        -- Add custom framework here
+    end
+end
+
+-- Get inventory
+local function InitializeInventory()
+    if GetResourceState('ox_inventory') == 'started' then
+        Inventory = 'ox_inventory'
+    elseif GetResourceState('qb-inventory') == 'started' then
+        Inventory = 'qb-inventory'
+    elseif GetResourceState('qs-inventory') == 'started' then
+        Inventory = 'qs-inventory'
+    elseif GetResourceState('ps-inventory') == 'started' then
+        Inventory = 'ps-inventory'
+    elseif GetResourceState('origen_inventory') == 'started' then
+        Inventory = 'origen_inventory'
+    elseif GetResourceState('codem-inventory') == 'started' then
+        Inventory = 'codem-inventory'
+    elseif GetResourceState('core_inventory') == 'started' then
+        Inventory = 'core_inventory'
+    else
+        -- Add custom inventory here
+    end
+end
+
+-- Returns player data
+function GetPlayerData()
+    if Framework == 'esx' then
+        return ESX.GetPlayerData()
+    elseif Framework == 'qb' then
+        return QBCore.Functions.GetPlayerData()
+    elseif Framework == 'qbx' then
+        return exports.qbx_core:GetPlayerData()
+    elseif Framework == 'ox' then
+        return Ox.GetPlayer()
+    else
+        -- Add custom framework here
+    end
+end
+
+-- Returns players current inventory
+--- @return any
+function GetInventory()
+    if Inventory then
+        if Inventory == 'ox_inventory' then
+            return exports[Inventory]:GetPlayerItems()
+        elseif Inventory == 'qb-inventory' then
+            return GetPlayerData().items
+        elseif Inventory == 'qs-inventory' then
+            return exports[Inventory]:getUserInventory()
+        elseif Inventory == 'ps-inventory' then
+            return GetPlayerData().items
+        elseif Inventory == 'origen_inventory' then
+            return exports[Inventory]:GetInventory()
+        elseif Inventory == 'codem-inventory' then
+            return exports[Inventory]:GetClientPlayerInventory()
+        end
+    else
+        if Framework == 'esx' then
+            return GetPlayerData().inventory
+        elseif Framework == 'qb' then
+            return GetPlayerData().items
+        elseif Framework == 'qbx' then
+            return print('Are you really not using ox_inventory? Contact support and say: "I\'m special"')
+        elseif Framework == 'ox' then
+            return print('It is confirmed your insane. Please contact support for mental health evaluation.')
+        end
+    end
+end
+
+-- Returns player job
+function GetJob()
+    local player = GetPlayerData()
+    if not player then return end
+    if Framework == 'esx' then
+        return player.job.name
+    elseif Framework == 'qb' then
+        return player.job.name
+    elseif Framework == 'qbx' then
+        return player.job.name
+    elseif Framework == 'ox' then
+        return player.getGroupByType('job')
+    else
+        -- Add custom framework here
+    end
+end
+
+-- Return data for item
+--- @param item string
+function GetItemData(item)
+    if not item then return end
+    if Inventory then
+        if Inventory == 'ox_inventory' then
+            return exports[Inventory]:Items(item)
+        elseif Inventory == 'qb-inventory' or Inventory == 'ps-inventory' then
+            return QBCore.Shared.Items[item]
+        elseif Inventory == 'qs-inventory' then
+            local items = exports[Inventory]:GetItemList()
+            if not items then return end
+            return items[item]
+        elseif Inventory == 'origen_inventory' then
+            local items = exports[Inventory]:GetItems()
+            if not items then return end
+            return items[item]
+        elseif Inventory == 'codem-inventory' then
+            local items = exports[Inventory]:GetItemList()
+            if not items then return end
+            return items[item]
+        elseif Inventory == 'core_inventory' then
+            -- No client-side export available to get item list
+            if Framework == 'qb' then
+                return QBCore.Shared.Items[item]
+            end
+        else
+            -- Add custom inventory here
+        end
+    else
+        if Framework == 'esx' then
+            -- Unlikely to need anything here but.. just in case..
+            print('An error has occured with lation_meth - please contact support')
+        elseif Framework == 'qb' then
+            return QBCore.Shared.Items[item]
+        elseif Framework == 'qbx' then
+            -- Unlikely to need anything here but.. just in case..
+            print('Are you really not using ox_inventory? Contact support please lul.')
+        end
+    end
+end
+
+-- Returns boolean if player has specified amount of item
+--- @param item string
+--- @param amount number
+--- @return boolean
+function HasItem(item, amount)
+    if not item or not amount then return false end
+    if Inventory then
+        if Inventory == 'ox_inventory' then
+            return exports[Inventory]:Search('count', item) >= amount
+        elseif Inventory == 'core_inventory' then
+            return exports[Inventory]:hasItem(item, amount)
+        else
+            return exports[Inventory]:HasItem(item, amount)
+        end
+    else
+        local playerData = GetPlayerData()
+        if not playerData then return false end
+        local inventory = Framework == 'esx' and playerData.inventory or playerData.items
+        if not inventory then return false end
+        for _, itemData in pairs(inventory) do
+            if itemData and itemData.name == item then
+                local count = itemData.amount or itemData.count or 0
+                if count >= amount then
+                    return true
+                end
+            end
+        end
+        return false
+    end
+end
+
+-- Disables access to open/view inventory
+function DisableInventory()
+    if Inventory == 'ox_inventory' then
+        LocalPlayer.state.invBusy = true
+    elseif Inventory == 'qb-inventory' then
+        LocalPlayer.state.inv_busy = true
+    elseif Inventory == 'qs-inventory' then
+        exports[Inventory]:setInventoryDisabled(true)
+    elseif Inventory == 'core_inventory' then
+        exports[Inventory]:lockInventory()
+    else
+        -- Add custom inventory here
+    end
+end
+
+-- Enables access to open/view inventory
+function EnableInventory()
+    if Inventory == 'ox_inventory' then
+        LocalPlayer.state.invBusy = false
+    elseif Inventory == 'qb-inventory' then
+        LocalPlayer.state.inv_busy = false
+    elseif Inventory == 'qs-inventory' then
+        exports[Inventory]:setInventoryDisabled(false)
+    elseif Inventory == 'core_inventory' then
+        exports[Inventory]:unlockInventory()
+    else
+        -- Add custom inventory here
+    end
+end
+
+-- Initialize defaults
+InitializeFramework()
+InitializeInventory()
+```
+
+
+```lua bridge/server.lua expandable
+-- Initialize global variables to store framework & inventory
+Framework, Inventory = nil, nil
+
+-- Initialize config(s)
+local sh_config = require 'config.shared'
+
+-- Get framework
+local function InitializeFramework()
+    if GetResourceState('es_extended') == 'started' then
+        ESX = exports['es_extended']:getSharedObject()
+        Framework = 'esx'
+    elseif GetResourceState('qbx_core') == 'started' then
+        Framework = 'qbx'
+    elseif GetResourceState('qb-core') == 'started' then
+        QBCore = exports['qb-core']:GetCoreObject()
+        Framework = 'qb'
+    elseif GetResourceState('ox_core') == 'started' then
+        Ox = require '@ox_core.lib.init'
+        Framework = 'ox'
+    else
+        -- Add custom framework here
+    end
+end
+
+-- Get inventory
+local function InitializeInventory()
+    if GetResourceState('ox_inventory') == 'started' then
+        Inventory = 'ox_inventory'
+    elseif GetResourceState('qb-inventory') == 'started' then
+        Inventory = 'qb-inventory'
+    elseif GetResourceState('qs-inventory') == 'started' then
+        Inventory = 'qs-inventory'
+    elseif GetResourceState('ps-inventory') == 'started' then
+        Inventory = 'ps-inventory'
+    elseif GetResourceState('origen_inventory') == 'started' then
+        Inventory = 'origen_inventory'
+    elseif GetResourceState('codem-inventory') == 'started' then
+        Inventory = 'codem-inventory'
+    elseif GetResourceState('core_inventory') == 'started' then
+        Inventory = 'core_inventory'
+    else
+        -- Add custom inventory here
+    end
+end
+
+-- Get player from source
+--- @param source number Player ID
+function GetPlayer(source)
+    if not source then return end
+    if Framework == 'esx' then
+        return ESX.GetPlayerFromId(source)
+    elseif Framework == 'qb' then
+        return QBCore.Functions.GetPlayer(source)
+    elseif Framework == 'qbx' then
+        return exports.qbx_core:GetPlayer(source)
+    elseif Framework == 'ox' then
+        return Ox.GetPlayer(source)
+    else
+        -- Add custom framework here
+    end
+end
+
+-- Function to get a player identifier by source
+--- @param source number Player ID
+function GetIdentifier(source)
+    local player = GetPlayer(source)
+    if not player then return end
+    if Framework == 'esx' then
+        return player.identifier
+    elseif Framework == 'qb' or Framework == 'qbx' then
+        return player.PlayerData.citizenid
+    elseif Framework == 'ox' then
+        return player.stateId
+    else
+        -- Add custom framework here
+    end
+end
+
+-- Function to get a player's name
+--- @param source number Player ID
+--- @return string
+function GetName(source)
+    local player = GetPlayer(source)
+    if not player then return 'Unknown' end
+    if Framework == 'esx' then
+        return player.getName()
+    elseif Framework == 'qb' or Framework == 'qbx' then
+        return player.PlayerData.charinfo.firstname .. ' ' .. player.PlayerData.charinfo.lastname
+    elseif Framework == 'ox' then
+        return player.get('firstName') .. ' ' .. player.get('lastName')
+    else
+        -- Add custom framework here
+    end
+    return 'Unknown'
+end
+
+-- Return player job
+--- @param source number Player ID
+function GetJob(source)
+    local player = GetPlayer(source)
+    if not player then return 'unemployed' end
+    if Framework == 'esx' then
+        return player.getJob().name
+    elseif Framework == 'qb' or Framework == 'qbx' then
+        return player.PlayerData.job.name
+    elseif Framework == 'ox' then
+        return player.getGroupByType('job')
+    else
+        -- Add custom framework here
+    end
+    return 'unemployed'
+end
+
+-- Returns number of players with police job(s)
+--- @return number
+function GetPoliceCount()
+    local count, jobs = 0, {}
+    for _, job in pairs(sh_config.setup.police) do
+        jobs[job] = true
+    end
+    if Framework == 'esx' then
+        for _, player in pairs(ESX.GetExtendedPlayers()) do
+            if jobs[player.getJob().name] then
+                count += 1
+            end
+        end
+    elseif Framework == 'qb' then
+        for _, playerId in pairs(QBCore.Functions.GetPlayers()) do
+            local player = QBCore.Functions.GetPlayer(playerId)
+            if jobs[player.PlayerData.job.name] and player.PlayerData.job.onduty then
+                count += 1
+            end
+        end
+    elseif Framework == 'qbx' then
+        for job, _ in pairs(jobs) do
+            count = count + exports.qbx_core:GetDutyCountJob(job)
+        end
+    elseif Framework == 'ox' then
+        for _, player in pairs(Ox.GetPlayers()) do
+            if jobs[player.getGroupByType('job')] then
+                count += 1
+            end
+        end
+    else
+        -- Add custom framework here
+    end
+    return count
+end
+
+-- Returns number of specified item in players inventory
+--- @param source number Player ID
+--- @param item string Item to search
+--- @return number
+function GetItemCount(source, item)
+    if not source or not item then return 0 end
+    local player = GetPlayer(source)
+    if not player then return 0 end
+    if Inventory then
+        if Inventory == 'ox_inventory' then
+            return exports[Inventory]:Search(source, 'count', item) or 0
+        elseif Inventory == 'core_inventory' then
+            return exports[Inventory]:getItemCount(source, item)
+        else
+            local itemData = exports[Inventory]:GetItemByName(source, item)
+            if not itemData then return 0 end
+            return itemData.amount or itemData.count or 0
+        end
+    else
+        if Framework == 'esx' then
+            local itemData = player.getInventoryItem(item)
+            if not itemData then return 0 end
+            return itemData.count or itemData.amount or 0
+        elseif Framework == 'qb' then
+            local itemData = player.Functions.GetItemByName(item)
+            if not itemData then return 0 end
+            return itemData.amount or itemData.count or 0
+        else
+            -- Add custom framework here
+        end
+    end
+    return 0
+end
+
+-- Returns if player can carry item
+--- @param source number Player ID
+--- @param item string Item name
+--- @param count number Item quantity
+function CanCarry(source, item, count)
+    if count <= 0 then return true end
+    local player = GetPlayer(source)
+    if not player then return end
+    if Inventory then
+        if Inventory == 'ox_inventory' then
+            return exports[Inventory]:CanCarryItem(source, item, count)
+        elseif Inventory == 'qb-inventory' then
+            return exports[Inventory]:CanAddItem(source, item, count)
+        elseif Inventory == 'qs-inventory' then
+            return exports[Inventory]:CanCarryItem(source, item, count)
+        elseif Inventory == 'ps-inventory' then
+            -- ps sucks, why do they not have a dedicated export for this..?
+            local totalWeight = exports[Inventory]:GetTotalWeight(player.PlayerData.items)
+            if not totalWeight then return false end
+            local itemInfo = QBCore.Shared.Items[item:lower()]
+            if not itemInfo then return false end
+            if (totalWeight + (itemInfo['weight'] * count)) <= 120000 then
+                return true
+            end
+            return false
+        elseif Inventory == 'origen_inventory' then
+            -- origen's CanCarry export not working as expected, just return true
+            return true
+        elseif Inventory == 'codem-inventory' then
+            -- CodeM docs dont specify an export for this so..
+            return true
+        elseif Inventory == 'core_inventory' then
+            -- core's canCarry export not working as expected, just return true
+            return true
+        else
+            -- Add custom inventory here
+            return true
+        end
+    else
+        if Framework == 'esx' then
+            if player.canCarryItem(item, count) then
+                return true
+            end
+            return false
+        elseif Framework == 'qb' then
+            local totalWeight = QBCore.Player.GetTotalWeight(player.PlayerData.items)
+            if not totalWeight then return false end
+            local itemInfo = QBCore.Shared.Items[item:lower()]
+            if not itemInfo then return false end
+            if (totalWeight + (itemInfo['weight'] * count)) <= 120000 then
+                return true
+            end
+            return false
+        else
+            -- Add custom framework here
+        end
+    end
+end
+
+-- Adds an item to players inventory
+--- @param source number Player ID
+--- @param item string Item to add
+--- @param count number Quantity to add
+--- @param metadata any|table Optional metadata
+function AddItem(source, item, count, metadata)
+    if count <= 0 then return end
+    local player = GetPlayer(source)
+    if not player then return end
+    if Inventory then
+        if Inventory == 'ox_inventory' then
+            exports[Inventory]:AddItem(source, item, count, metadata)
+        elseif Inventory == 'core_inventory' then
+            exports[Inventory]:addItem(source, item, count, metadata)
+        else
+            exports[Inventory]:AddItem(source, item, count, nil, metadata)
+            if Framework == 'qb' then
+                TriggerClientEvent(Inventory.. ':client:ItemBox', source, QBCore.Shared.Items[item], 'add')
+            end
+        end
+    else
+        if Framework == 'esx' then
+            player.addInventoryItem(item, count)
+        elseif Framework == 'qb' then
+            player.Functions.AddItem(item, count, nil, metadata)
+        else
+            -- Add custom framework here
+        end
+    end
+end
+
+-- Removes an item from players inventory
+--- @param source number Player ID
+--- @param item string Item to remove
+--- @param count number Quantity to remove
+function RemoveItem(source, item, count)
+    local player = GetPlayer(source)
+    if not player then return end
+    if Inventory then
+        if Inventory == 'core_inventory' then
+            exports[Inventory]:removeItem(source, item, count)
+        else
+            exports[Inventory]:RemoveItem(source, item, count)
+            if Framework == 'qb' then
+                TriggerClientEvent(Inventory.. ':client:ItemBox', source, QBCore.Shared.Items[item], 'remove')
+            end
+        end
+    else
+        if Framework == 'esx' then
+            player.removeInventoryItem(item, count)
+        elseif Framework == 'qb' then
+            player.Functions.RemoveItem(item, count)
+        else
+            -- Add custom framework here
+        end
+    end
+end
+
+-- Returns correct framework money type if needed
+--- @param type string Money type
+--- @return string
+local function ConvertMoneyType(type)
+    if type == 'money' and (Framework == 'qb' or Framework == 'qbx') then
+        type = 'cash'
+    elseif type == 'cash' and (Framework == 'esx' or Framework == 'ox') then
+        type = 'money'
+    else
+        -- Add custom framework here
+    end
+    return type
+end
+
+-- Returns balance of players account
+--- @param source number Player ID
+--- @param type string Account to check
+--- @return number
+function GetPlayerBalance(source, type)
+    local player = GetPlayer(source)
+    if not player then return 0 end
+    if Framework == 'esx' then
+        return player.getAccount(ConvertMoneyType(type)).money or 0
+    elseif Framework == 'qb' then
+        return player.PlayerData.money[ConvertMoneyType(type)] or 0
+    elseif Framework == 'qbx' then
+        return player.Functions.GetMoney(ConvertMoneyType(type)) or 0
+    elseif Framework == 'ox' then
+        if type == 'cash' or type == 'money' then
+            return GetItemCount(source, ConvertMoneyType(type)) or 0
+        end
+        return Ox.GetCharacterAccount(source).balance or 0
+    else
+        -- Add custom framework here
+    end
+    return 0
+end
+
+-- Add money to players account
+--- @param source number Player ID
+--- @param type string Account to add to
+--- @param amount number Amount to add
+function AddMoney(source, type, amount)
+    local player = GetPlayer(source)
+    if not player then return end
+    if Framework == 'esx' then
+        player.addAccountMoney(ConvertMoneyType(type), amount)
+    elseif Framework == 'qb' or Framework == 'qbx' then
+        player.Functions.AddMoney(ConvertMoneyType(type), amount)
+    elseif Framework == 'ox' then
+        if type == 'cash' or type == 'money' then
+            exports.ox_inventory:AddItem(source, ConvertMoneyType(type), amount)
+        else
+            local accountId = Ox.GetCharacterAccount(source).id
+            Ox.DepositMoney(source, accountId, amount)
+        end
+    else
+        -- Add custom framework here
+    end
+end
+
+-- Remove money from players account
+--- @param source number Player ID
+--- @param type string Account to remove from
+--- @param amount number Amount to remove
+function RemoveMoney(source, type, amount)
+    local player = GetPlayer(source)
+    if not player then return end
+    if Framework == 'esx' then
+        player.removeAccountMoney(ConvertMoneyType(type), amount)
+    elseif Framework == 'qb' or Framework == 'qbx' then
+        player.Functions.RemoveMoney(ConvertMoneyType(type), amount)
+    elseif Framework == 'ox' then
+        if type == 'cash' or type == 'money' then
+            RemoveItem(source, ConvertMoneyType(type), amount)
+        else
+            local accountId = Ox.GetCharacterAccount(source).id
+            Ox.WithdrawMoney(source, accountId, amount)
+        end
+    else
+        -- Add custom framework here
+    end
+end
+
+-- Function to register a usable item
+--- @param item string
+--- @param cb function
+function RegisterUsableItem(item, cb)
+    if not item then return end
+    if Framework == 'esx' then
+        ESX.RegisterUsableItem(item, cb)
+    elseif Framework == 'qb' then
+        QBCore.Functions.CreateUseableItem(item, cb)
+    elseif Framework == 'qbx' then
+        exports.qbx_core:CreateUseableItem(item, cb)
+    elseif Framework == 'ox' then
+        exports(item, function(event, _, inventory)
+            if event ~= 'usingItem' then return false end
+            cb(inventory.id)
+        end)
+    else
+        -- Add custom framework here
+    end
+end
+
+-- Initialize defaults
+InitializeFramework()
+InitializeInventory()
+```
+
+</CodeGroup>
+
+<CodeGroup>
+
+```lua client/functions.lua expandable
+-- Initialize global variable to store dispatch
+Dispatch = nil
+
+-- Initialize config(s)
+local shared = require 'config.shared'
+local client = require 'config.client'
+
+-- Localize export
+local coke = exports.lation_coke
+
+-- You can change the textUI script here
+-- Options: 'lation_ui', 'ox_lib', 'jg-textui', 'okokTextUI', 'qbcore' & 'custom'
+local textui = 'ox_lib'
+
+-- Get dispatch
+local function InitializeDispatch()
+    if GetResourceState('ps-dispatch') == 'started' then
+        Dispatch = 'ps-dispatch'
+    elseif GetResourceState('cd_dispatch') == 'started' then
+        Dispatch = 'cd_dispatch'
+    elseif GetResourceState('qs-dispatch') == 'started' then
+        Dispatch = 'qs-dispatch'
+    elseif GetResourceState('redutzu-mdt') == 'started' then
+        Dispatch = 'redutzu-mdt'
+    elseif GetResourceState('emergencydispatch') == 'started' then
+        Dispatch = 'emergencydispatch'
+    elseif GetResourceState('rcore_dispatch') == 'started' then
+        Dispatch = 'rcore_dispatch'
+    elseif GetResourceState('codem-dispatch') == 'started' then
+        Dispatch = 'codem-dispatch'
+    elseif GetResourceState('tk_dispatch') == 'started' then
+        Dispatch = 'tk_dispatch'
+    elseif GetResourceState('core_dispatch') == 'started' then
+        Dispatch = 'core_dispatch'
+    elseif GetResourceState('aty_dispatch') == 'started' then
+        Dispatch = 'aty_dispatch'
+    elseif GetResourceState('op-dispatch') == 'started' then
+        Dispatch = 'op-dispatch'
+    else
+        -- Add custom dispatch here
+    end
+end
+
+-- Used to determine if a player can (true) or cannot (false) search a plant
+--- @param farmId number local farm = shared.farms[farmId]
+function CanSearchCoca(farmId)
+    for _, req in pairs(shared.farms[farmId].required) do
+        if not HasItem(req.item, req.quantity) then
+            ShowNotification(locale('notify.no-shears'), 'error')
+            return false
+        end
+    end
+    local level = coke:getPlayerData('level')
+    if not level or level < shared.farms[farmId].level then
+        ShowNotification(locale('notify.not-experienced'), 'error')
+        return false
+    end
+    return true
+end
+
+-- Used to determine if a player can (true) or cannot (false) use a coke table
+--- @param tableId number local table = Tables[tableId]
+function CanUseCokeTable(tableId)
+    local police = shared.table.police.use > 0 and lib.callback.await('lation_coke:getpolicecount', false) or 0
+    if police < shared.table.police.use then
+        ShowNotification(locale('notify.no-police'), 'error')
+        return false
+    end
+    return true
+end
+
+-- Used to determine if a player can (true) or cannot (false) take cement
+--- @param zoneId number local zone = shared.cement.zones[zoneId]
+function CanTakeCement(zoneId)
+    return true
+end
+
+-- Used to verify all conditions are met before allowing entry to lab
+---@param labId number Lab ID
+---@return boolean
+function CanEnterLab(labId)
+    return true
+end
+
+-- Used to determine if a player can (true) or cannot (false) open supply shop
+---@return boolean
+function CanOpenSupplyShop()
+    return true
+end
+
+-- Display a notification
+--- @param message string
+--- @param type string
+function ShowNotification(message, type)
+    if shared.setup.notify == 'lation_ui' then
+        exports.lation_ui:notify({ message = message, type = type, icon = 'fas fa-leaf' })
+    elseif shared.setup.notify == 'ox_lib' then
+        lib.notify({ description = message, type = type, position = 'top', icon = 'fas fa-leaf' })
+    elseif shared.setup.notify == 'esx' then
+        ESX.ShowNotification(message)
+    elseif shared.setup.notify == 'qb' then
+        QBCore.Functions.Notify(message, type)
+    elseif shared.setup.notify == 'okok' then
+        exports['okokNotify']:Alert('Coke', message, 5000, type, false)
+    elseif shared.setup.notify == 'sd-notify' then
+        exports['sd-notify']:Notify('Coke', message, type)
+    elseif shared.setup.notify == 'wasabi_notify' then
+        exports.wasabi_notify:notify('Coke', message, 5000, type, false, 'fas fa-leaf')
+    elseif shared.setup.notify == 'custom' then
+        -- Add custom notification export/event here
+    end
+end
+
+-- Display notifications from server
+--- @param message string
+--- @param type string
+RegisterNetEvent('lation_coke:notify', function(message, type)
+    ShowNotification(message, type)
+end)
+
+-- Triggered when object placement begins (tables, plants)
+function StartedPlacement()
+    DisableInventory()
+end
+
+-- Triggered when object placement ends (tables, plants)
+function StoppedPlacement()
+    EnableInventory()
+end
+
+-- Return an inventory's "durability/quality" types
+function GetDurabilityType()
+    if Inventory == 'ox_inventory' then
+        return 'durability'
+    else
+        return 'quality'
+    end
+end
+
+-- Display TextUI
+--- @param text string 
+--- @param icon string
+function ShowTextUI(text, icon)
+    if textui == 'lation_ui' then
+        local isOpen, _ = exports.lation_ui:isOpen()
+        if isOpen then return end
+        exports.lation_ui:showText({
+            description = text,
+            icon = icon
+        })
+    elseif textui == 'ox_lib' then
+        local isOpen, _ = lib.isTextUIOpen()
+        if isOpen then return end
+        lib.showTextUI(text, {
+            position = 'left-center',
+            icon = icon
+        })
+    elseif textui == 'jg-textui' then
+        exports['jg-textui']:DrawText(text)
+    elseif textui == 'okokTextUI' then
+        exports['okokTextUI']:Open(text, 'lightblue ', 'left', false)
+    elseif textui == 'qbcore' then
+        exports['qb-core']:DrawText(text, 'left')
+    else
+        -- Add custom textUI here
+    end
+end
+
+-- Hide TextUI
+--- @param label string
+function HideTextUI(label)
+    if textui == 'lation_ui' then
+        local isOpen, text = exports.lation_ui:isOpen()
+        if isOpen and text == label then
+            exports.lation_ui:hideText()
+        end
+    elseif textui == 'ox_lib' then
+        local isOpen, text = lib.isTextUIOpen()
+        if isOpen and text == label then
+            lib.hideTextUI()
+        end
+    elseif textui == 'jg-textui' then
+        exports['jg-textui']:HideText()
+    elseif textui == 'okokTextUI' then
+        exports['okokTextUI']:Close()
+    elseif textui == 'qbcore' then
+        exports['qb-core']:HideText()
+    else
+        -- Add custom textUI here
+    end
+end
+
+-- Display a progress bar
+--- @param data table
+function ProgressBar(data)
+    if shared.setup.progress == 'lation_ui' then
+        if exports.lation_ui:progressBar({
+            label = data.label,
+            description = data.description or nil,
+            icon = data.icon or nil,
+            duration = data.duration,
+            useWhileDead = data.useWhileDead,
+            canCancel = data.canCancel,
+            steps = data.steps or nil,
+            disable = data.disable,
+            anim = {
+                dict = data.anim.dict or nil,
+                clip = data.anim.clip or nil,
+                flag = data.anim.flag or nil
+            },
+            prop = {
+                model = data.prop.model or nil,
+                bone = data.prop.bone or nil,
+                pos = data.prop.pos or nil,
+                rot = data.prop.rot or nil
+            }
+        }) then
+            return true
+        end
+        return false
+    elseif shared.setup.progress == 'ox_lib' then
+        -- Want to use ox_lib's progress circle instead of bar?
+        -- Change "progressBar" to "progressCircle" below & done!
+        if lib.progressBar({
+            label = data.label,
+            duration = data.duration,
+            position = data.position or 'bottom',
+            useWhileDead = data.useWhileDead,
+            canCancel = data.canCancel,
+            disable = data.disable,
+            anim = {
+                dict = data.anim.dict or nil,
+                clip = data.anim.clip or nil,
+                flag = data.anim.flag or nil
+            },
+            prop = {
+                model = data.prop.model or nil,
+                bone = data.prop.bone or nil,
+                pos = data.prop.pos or nil,
+                rot = data.prop.rot or nil
+            }
+        }) then
+            return true
+        end
+        return false
+    elseif shared.setup.progress == 'qbcore' then
+        local p = promise.new()
+        QBCore.Functions.Progressbar(data.label, data.label, data.duration, data.useWhileDead, data.canCancel, {
+            disableMovement = data.disable.move,
+            disableCarMovement = data.disable.car,
+            disableMouse = false,
+            disableCombat = data.disable.combat
+        }, {
+            animDict = data.anim.dict or nil,
+            anim = data.anim.clip or nil,
+            flags = data.anim.flag or nil
+        }, {
+            model = data.prop.model or nil,
+            bone = data.prop.bone or nil,
+            coords = data.prop.pos or nil,
+            rotation = data.prop.rot or nil
+        }, {},
+        function()
+            ClearPedTasks(cache.ped)
+            p:resolve(true)
+        end,
+        function()
+            ClearPedTasks(cache.ped)
+            p:resolve(false)
+        end)
+        return Citizen.Await(p)
+    else
+        -- Add 'custom' progress bar here
+    end
+end
+
+-- Register menu
+--- @param data table
+function RegisterMenu(data)
+    if shared.setup.menu == 'lation_ui' then
+        exports.lation_ui:registerMenu(data)
+    elseif shared.setup.menu == 'ox_lib' then
+        lib.registerContext(data)
+    elseif shared.setup.menu == 'custom' then
+        -- Add 'custom' menu system here
+    end
+end
+
+-- Show menu
+--- @param menuId string
+function ShowMenu(menuId)
+    if shared.setup.menu == 'lation_ui' then
+        exports.lation_ui:showMenu(menuId)
+    elseif shared.setup.menu == 'ox_lib' then
+        lib.showContext(menuId)
+    elseif shared.setup.menu == 'custom' then
+        -- Add 'custom' menu system here
+    end
+end
+
+-- Display an alert dialog
+--- @param data table
+function ShowAlert(data)
+    if shared.setup.dialogs == 'lation_ui' then
+        return exports.lation_ui:alert(data)
+    elseif shared.setup.dialogs == 'ox_lib' then
+        return lib.alertDialog(data)
+    elseif shared.setup.dialogs == 'custom' then
+        -- Add your custom alert dialog here
+    end
+end
+
+-- Display an input dialog
+--- @param data table
+function ShowInput(data)
+    if shared.setup.dialogs == 'lation_ui' then
+        return exports.lation_ui:input({ title = data.title, options = data.options })
+    elseif shared.setup.dialogs == 'ox_lib' then
+        return lib.inputDialog(data.title, data.options)
+    elseif shared.setup.dialogss == 'custom' then
+        -- Add your custom input dialog here
+    end
+end
+
+-- Display a skillcheck
+--- @param data table .difficulty, .inputs
+function Skillcheck(data)
+    if shared.setup.minigame == 'lation_ui' then
+        if exports.lation_ui:skillCheck(nil, data.difficulty, data.inputs) then
+            return true
+        end
+        return false
+    elseif shared.setup.minigame == 'ox_lib' then
+        if lib.skillCheck(data.difficulty, data.inputs) then
+            return true
+        end
+        return false
+    elseif shared.setup.minigame == 'custom' then
+        -- Add your custom minigame here
+    end
+    return false
+end
+
+-- Open stash
+--- @param labId number
+--- @param stashId number
+function OpenStash(labId, stashId)
+    if not labId or not stashId then return end
+
+    local lab = shared.labs[labId]
+    if not lab then return end
+
+    local stash = lab.storage[stashId]
+    if not stash then return end
+
+    local data = coke:getLabData(labId)
+    if not data then return end
+
+    if data.passcode and not canOpenStash(data) then return end
+
+    if Inventory == 'ox_inventory' then
+        exports[Inventory]:openInventory('stash', stash.identifier)
+    elseif Inventory == 'qb-inventory' then
+        TriggerServerEvent('lation_coke:openStash', labId, stashId)
+    elseif Inventory == 'ps-inventory' then
+        TriggerServerEvent('ps-inventory:server:OpenInventory', 'stash', stash.identifier, {
+            label = stash.label,
+            maxweight = stash.weight,
+            slots = stash.slots
+        })
+        TriggerEvent('ps-inventory:client:SetCurrentStash', stash.identifier)
+    else
+        TriggerServerEvent('inventory:server:OpenInventory', 'stash', stash.identifier, {
+            label = stash.label,
+            maxweight = stash.weight,
+            slots = stash.slots
+        })
+        TriggerEvent('inventory:client:SetCurrentStash', stash.identifier)
+    end
+end
+
+-- Send a police dispatch
+--- @param data table Dispatch data
+-- data.title - Dispatch title
+-- data.code - Dispatch code
+-- data.message - Dispatch message
+-- data.street - Dispatch street name
+-- data.coords - Dispatch coordinates
+-- data.blip - Blip data (data.blip.sprite, data.blip.scale, data.blip.colour, data.blip.radius)
+function SendDispatch(data)
+    if not Dispatch then print('^1[ERROR]: No police dispatch detected - unable to send alert^0') return end
+    if not data or type(data) ~= 'table' then return end
+    if Dispatch == 'ps-dispatch' then
+        exports[Dispatch]:CustomAlert({
+            coords = data.coords,
+            message = data.message:format(data.street),
+            dispatchCode = data.code,
+            description = data.code .. ' | ' .. data.title,
+            alert = { sprite = data.blip.sprite, color = data.blip.color, scale = data.blip.scale, length = 5, radius = data.blip.radius }
+        })
+    elseif Dispatch == 'cd_dispatch' then
+        local cd_data = exports[Dispatch]:GetPlayerInfo()
+        if not cd_data then return end
+        TriggerServerEvent('cd_dispatch:AddNotification', {
+            job_table = shared.setup.police,
+            coords = data.coords,
+            title = data.code .. ' | ' .. data.title,
+            message = data.message:format(data.street),
+            flash = 0,
+            unique_id = cd_data.unique_id,
+            sound = 1,
+            blip = { sprite = data.blip.sprite, scale = data.blip.scale, colour = data.blip.color, text = data.code, time = 5, radius = data.blip.radius }
+        })
+    elseif Dispatch == 'qs-dispatch' then
+        TriggerServerEvent('qs-dispatch:server:CreateDispatchCall', {
+            job = shared.setup.police,
+            callLocation = data.coords,
+            callCode = { code = data.code, snippet = data.title },
+            message = data.message:format(data.street),
+            flashes = false,
+            blip = { sprite = data.blip.sprite, scale = data.blip.scale, colour = data.blip.color, text = data.code, time = (5 * 60000), radius = data.blip.radius },
+        })
+    elseif Dispatch == 'redutzu-mdt' then
+        TriggerServerEvent('redutzu-mdt:server:sendDispatchMessage', {
+            code = data.code,
+            coords = data.coords,
+            street = data.street,
+            gender = IsPedMale(cache.ped) and 'Male' or 'Female',
+            duration = (5 * 60000)
+        })
+    elseif Dispatch == 'emergencydispatch' then
+        TriggerServerEvent('emergencydispatch:emergencycall:new', 'police', data.code .. ' | ' .. data.title, data.coords, true)
+    elseif Dispatch == 'rcore_dispatch' then
+        TriggerServerEvent('rcore_dispatch:server:sendAlert', {
+            code = data.code,
+            default_priority = 'low',
+            coords = data.coords,
+            job = shared.setup.police,
+            text = data.message:format(data.street),
+            type = 'alerts',
+            blip_time = 30,
+            blip = { sprite = data.blip.sprite, scale = data.blip.scale, colour = data.blip.color, text = data.code, radius = data.blip.radius }
+        })
+    elseif Dispatch == 'codem-dispatch' then
+        exports[Dispatch]:CustomDispatch({
+            type = 'Robbery',
+            header = data.title,
+            text = data.message:format(data.street),
+            code = data.code
+        })
+    elseif Dispatch == 'tk_dispatch' then
+        exports[Dispatch]:addCall({
+            title = data.title,
+            code = data.code,
+            priority = 'Priority 3',
+            coords = data.coords,
+            message = data.message:format(data.street),
+            showGender = true,
+            removeTime = (5 * 60000),
+            showTime = (5 * 60000),
+            blip = { sprite = data.blip.sprite, color = data.blip.color, scale = data.blip.scale, radius = data.blip.radius },
+            jobs = shared.setup.police
+        })
+    elseif Dispatch == 'core_dispatch' then
+        exports[Dispatch]:addCall(
+            data.code,
+            data.message:format(data.street),
+            { data.coords.x, data.coords.y, data.coords.z },
+            'police', (5* 60000), data.blip.sprite, data.blip.color, false
+        )
+    elseif Dispatch == 'aty_dispatch' then
+        exports[Dispatch]:SendDispatch(data.title, data.code, data.blip.sprite, shared.setup.police)
+    elseif Dispatch == 'op-dispatch' then
+        TriggerServerEvent('Opto_dispatch:Server:SendAlert',
+            'police',
+            data.title,
+            data.message:format(data.street),
+            data.coords, false, cache.serverId
+        )
+    else
+        -- Add custom dispatch here
+    end
+end
+
+-- Play animation on consumables
+lib.callback.register('lation_coke:consumeItem', function()
+    if ProgressBar(client.animations.use_drug) then
+        return true
+    end
+    return false
+end)
+
+-- Apply effects on consumables
+--- @param item string
+RegisterNetEvent('lation_coke:applyEffects', function(item)
+    if not item then return end
+
+    local valid = lib.callback.await('lation_coke:validateRequest', false)
+    if not valid then return end
+
+    local effects = shared.consumables[item].effects
+    if not effects then return end
+
+    if effects.health.enable then
+        local health = GetEntityHealth(cache.ped)
+        local add = math.min(health + effects.health.amount)
+        if add > 200 then add = 200 end
+        SetEntityHealth(cache.ped, add)
+    end
+
+    if effects.armor.enable then
+        local armor = GetPedArmour(cache.ped)
+        local add = math.min(armor + effects.armor.amount)
+        if add > effects.armor.max then add = effects.armor.max end
+        SetPedArmour(cache.ped, add)
+    end
+
+    if effects.speed.enable then
+        local duration = effects.speed.duration
+        -- Says SetRunSprintMultiplierForPlayer to be called "just one time" but
+        -- Gets overridden by some scripts/frameworks - calling every second instead
+        CreateThread(function()
+            while duration > 0 do
+                Wait(1000)
+                duration = duration - 1000
+                SetRunSprintMultiplierForPlayer(cache.playerId, effects.speed.multiplier)
+            end
+            SetRunSprintMultiplierForPlayer(cache.playerId, 1.0)
+        end)
+    end
+
+    if effects.screen.enable then
+        SetTimecycleModifier(effects.screen.effect)
+        SetTimeout(effects.screen.duration, function()
+            ClearTimecycleModifier()
+        end)
+    end
+
+    if effects.walk.enable then
+        lib.requestAnimSet(effects.walk.clipset, shared.setup.request)
+        SetPedMovementClipset(cache.ped, effects.walk.clipset, 0)
+        SetTimeout(effects.walk.duration, function()
+            ResetPedMovementClipset(cache.ped, 0)
+        end)
+    end
+
+    if effects.shake.enable then
+        ShakeGameplayCam(effects.shake.name, effects.shake.intensity)
+        SetTimeout(effects.shake.duration, function()
+            StopGameplayCamShaking(true)
+        end)
+    end
+end)
+
+-- Add entity target
+--- @param entity number Entity number
+--- @param data table Options table
+function AddTargetEntity(entity, data)
+    if shared.setup.interact == 'ox_target' then
+        exports.ox_target:addLocalEntity(entity, data)
+    elseif shared.setup.interact == 'qb-target' then
+        exports['qb-target']:AddTargetEntity(entity, {options = data, distance = 2})
+    elseif shared.setup.interact == 'interact' then
+        exports.interact:AddLocalEntityInteraction({
+            entity = entity,
+            interactDst = 2.0,
+            offset = vec3(0.0, 0.0, 1.0),
+            options = data
+        })
+    elseif shared.setup.interact == 'custom' then
+        -- Add support for a custom target system here
+    else
+        print('No interaction system defined in the config file.')
+    end
+end
+
+-- Add circle target zones
+--- @param data table
+function AddCircleZone(data)
+    if shared.setup.interact == 'ox_target' then
+        exports.ox_target:addSphereZone(data)
+    elseif shared.setup.interact == 'qb-target' then
+        exports['qb-target']:AddCircleZone(data.name, data.coords, data.radius, {
+            name = data.name,
+            debugPoly = shared.setup.debug}, {
+            options = data.options,
+            distance = 2,
+        })
+    elseif shared.setup.interact == 'interact' then
+        exports.interact:AddInteraction({
+            coords = data.coords,
+            interactDst = 2.0,
+            id = data.name,
+            options = data.options
+        })
+    elseif shared.setup.interact == 'custom' then
+        -- Add support for a custom target system here
+    else
+        print('^1[ERROR]: No interaction system defined in the config file^0')
+    end
+end
+
+-- Add model target
+--- @param model string
+--- @param data table
+function AddTargetModel(model, data)
+    if shared.setup.interact == 'ox_target' then
+        exports.ox_target:addModel(model, data)
+    elseif shared.setup.interact == 'qb-target' then
+        exports['qb-target']:AddTargetModel(model, {options = data, distance = 2})
+    elseif shared.setup.interact == 'interact' then
+        exports.interact:AddModelInteraction({
+            model = model,
+            offset = vec3(0.0, 0.0, 0.0),
+            id = model,
+            interactDst = 2.0,
+            options = data
+        })
+    elseif shared.setup.interact == 'custom' then
+        -- Add support for a custom target system here
+    else
+        print('^1[ERROR]: No interaction system defined in the config file^0')
+    end
+end
+
+-- Function to remove circle zone
+--- @param name string
+function RemoveCircleZone(name)
+    if shared.setup.interact == 'ox_target' then
+        exports.ox_target:removeZone(name)
+    elseif shared.setup.interact == 'qb-target' then
+        exports['qb-target']:RemoveZone(name)
+    elseif shared.setup.interact == 'interact' then
+        exports.interact:RemoveInteraction(name)
+    elseif shared.setup.interact == 'custom' then
+        -- Add support for a custom target system here
+    else
+        print('^1[ERROR]: No interaction system defined in the shared file^0')
+    end
+end
+
+-- Remove target from entity
+--- @param entity any|number
+--- @param data table|string
+function RemoveTargetEntity(entity, data)
+    if shared.setup.interact == 'ox_target' then
+        exports.ox_target:removeLocalEntity(entity, data)
+    elseif shared.setup.interact == 'qb-target' then
+        exports.qtarget:RemoveTargetEntity(entity, data)
+    elseif shared.setup.interact == 'interact' then
+        exports.interact:RemoveLocalEntityInteraction(entity, data)
+    elseif shared.setup.interact == 'custom' then
+        -- Add support for a custom target system here
+    else
+        print('^1[ERROR]: No interaction system defined in the shared file^0')
+    end
+end
+
+-- Triggered on PlayerLoaded event to display metadata for specific inventory(ies)
+function DisplayMetadata()
+    if not Inventory then return end
+    if Inventory == 'ox_inventory' then
+        exports[Inventory]:displayMetadata({
+            purity = 'Purity'
+        })
+    end
+end
+
+-- Function to spawn NPCs
+--- @param model string
+--- @param position vector4
+function SpawnPed(model, position)
+    lib.requestModel(model, shared.setup.request)
+    while not HasModelLoaded(model) do Wait(0) end
+    local ped = CreatePed(0, model, position.x, position.y, position.z - 1.0, position.w, false, true)
+    FreezeEntityPosition(ped, true)
+    SetBlockingOfNonTemporaryEvents(ped, true)
+    SetEntityInvincible(ped, true)
+    return ped
+end
+
+-- Retreive player bucket from server
+function GetPlayerBucket()
+    return lib.callback.await('lation_coke:getplayerbucket', false)
+end
+
+-- Initialize default(s)
+InitializeDispatch()
+```
+
+
+```lua server/functions.lua expandable
+-- Initialize config(s)
+local shared = require 'config.shared'
+local server = require 'config.server'
+
+-- Localize export
+local coke = exports.lation_coke
+
+-- Check to see if fm-logs or fmsdk is started
+local fmlogs = GetResourceState('fm-logs') == 'started'
+local fmsdk = GetResourceState('fmsdk') == 'started'
+
+-- Initialize table to track/validate consumable requests
+local consumables = {}
+
+-- Empty function that is triggered when a player "searches" a wild coca plant
+--- @param source number Player ID
+--- @param farmId number local farm = shared.farms[farmId]
+--- @param plantId number local plant = farm.coca[plantId]
+function CocaPlantSearched(source, farmId, plantId)
+
+end
+
+-- Empty function that is triggered when a player collects a cement bag
+--- @param source number Player ID
+--- @param zoneId number local zone = shared.cement.zones[zoneId]
+--- @param cementId number local cement = zone.coords[cementId]
+function CementCollected(source, zoneId, cementId)
+
+end
+
+-- Used to verify all conditions are met before allowing plant placement
+-- You can add custom requirements here if you have the knowledge to do so
+-- To restrict placement return false. To allow placement return true.
+--- @param source number Player ID
+--- @return boolean
+function CanPlacePlant(source)
+    if not source then return false end
+    local player = GetPlayerPed(source)
+    if not player then return false end
+    local pos = GetEntityCoords(player)
+    if not pos then return false end
+    local identifier = GetIdentifier(source)
+    if not identifier then return false end
+    local hasItems = true
+    for _, req in pairs(shared.planting.required) do
+        if GetItemCount(source, req.item) < req.quantity then
+            hasItems = false
+            break
+        end
+    end
+    if not hasItems then
+        TriggerClientEvent('lation_coke:notify', source, locale('notify.no-pot'), 'error')
+        return false
+    end
+    local count = 0
+    for _, plant in pairs(Plants) do
+        if plant.owner == identifier then
+            count += 1
+        end
+    end
+    if count >= shared.planting.max then
+        TriggerClientEvent('lation_coke:notify', source, locale('notify.max-plants'), 'error')
+        return false
+    end
+    local blacklisted = false
+    for _, zone in pairs(shared.planting.blacklist) do
+        local dist = #(pos - zone.coords)
+        if dist <= zone.radius then
+            blacklisted = true
+            break
+        end
+    end
+    if blacklisted then
+        TriggerClientEvent('lation_coke:notify', source, locale('notify.cant-place'), 'error')
+        return false
+    end
+    if shared.planting.restrict.enable then
+        local whitelisted = false
+        for _, zone in pairs(shared.planting.restrict.whitelist) do
+            local dist = #(pos - zone.coords)
+            if dist <= zone.radius then
+                whitelisted = true
+                break
+            end
+        end
+        if not whitelisted then
+            TriggerClientEvent('lation_coke:notify', source, locale('notify.cant-place'), 'error')
+            return false
+        end
+    end
+    local police = shared.planting.police > 0 and GetPoliceCount() or 0
+    if police < shared.planting.police then
+        TriggerClientEvent('lation_coke:notify', source, locale('notify.no-police'), 'error')
+        return false
+    end
+    return true
+end
+
+-- Empty function triggered when a coca plant is planted
+-- See example below how to use plantId to get plant data
+--- @param source number Player ID
+--- @param plantId number local plant = Plants[plantId]
+function CocaSeedPlanted(source, plantId)
+    -- local plant = Plants[plantId]
+    -- if not plant then return end
+    -- print(json.encode(plant, {indent=true}))
+end
+
+-- Empty function triggered when a coca plant is fertilized
+-- See example below how to use plantId to get plant data
+--- @param source number Player ID
+--- @param plantId number local plant = Plants[plantId]
+function CocaPlantFertilized(source, plantId)
+    -- local plant = Plants[plantId]
+    -- if not plant then return end
+    -- print(json.encode(plant, {indent=true}))
+end
+
+-- Empty function triggered when a coca plant is watered
+-- See example below how to use plantId to get plant data
+--- @param source number Player ID
+--- @param plantId number local plant = Plants[plantId]
+function CocaPlantWatered(source, plantId)
+    -- local plant = Plants[plantId]
+    -- if not plant then return end
+    -- print(json.encode(plant, {indent=true}))
+end
+
+-- Empty function triggered when a coca plant is harvested
+--- @param source number Player ID
+--- @param plantId number
+function CocaPlantHarvested(source, plantId)
+
+end
+
+-- Used to verify all conditions are met before allowing table placement
+-- You can add custom requirements here if you have the knowledge to do so
+-- To restrict placement return false. To allow placement return true.
+--- @param source number Player ID
+--- @return boolean
+function CanPlaceTable(source)
+    if not source then return false end
+    local player = GetPlayerPed(source)
+    if not player then return false end
+    local pos = GetEntityCoords(player)
+    if not pos then return false end
+    local identifier = GetIdentifier(source)
+    if not identifier then return false end
+    local count = 0
+    for _, table in pairs(Tables) do
+        if table.owner == identifier then
+            count += 1
+        end
+    end
+    if count >= shared.table.limit then
+        TriggerClientEvent('lation_coke:notify', source, locale('notify.max-tables'), 'error')
+        return false
+    end
+    for _, location in pairs(shared.table.restricted) do
+        local dist = #(pos - location.coords)
+        if dist < location.radius then
+            TriggerClientEvent('lation_coke:notify', source, locale('notify.cant-place'), 'error')
+            return false
+        end
+    end
+    local police = shared.table.police.place > 0 and GetPoliceCount() or 0
+    if police < shared.table.police.place then
+        TriggerClientEvent('lation_coke:notify', source, locale('notify.no-police'), 'error')
+        return false
+    end
+    return true
+end
+
+-- Empty function triggered when a coke table is placed
+--- @param source number Player ID
+--- @param tableId number Tables[tableId]
+function CokeTablePlaced(source, tableId)
+
+end
+
+-- Used to verify all conditions are met before allowing lab purchase
+-- To restrict purchase return false. To allow purchase return true.
+--- @param source number Player ID
+--- @param labId number shared.labs[labId]
+function CanBuyLab(source, labId)
+    return true
+end
+
+-- Empty function triggered when a cooking process is completed
+--- @param source number Player ID
+--- @param cookType string
+--- @param data table
+function CompletedCook(source, cookType, data)
+    -- cookType = lab | table
+    -- data = {
+    --     item = string,
+    --     quantity = number,
+    --     purity = number,
+    --     labId = number (if cookType is lab),
+    --     tableId = number (if cookType is table)
+    -- }
+end
+
+-- Return an inventory's "durability/quality" types
+function GetDurabilityType()
+    if Inventory == 'ox_inventory' then
+        return 'durability'
+    else
+        return 'quality'
+    end
+end
+
+-- Callback to return police count
+lib.callback.register('lation_coke:getpolicecount', function()
+    return GetPoliceCount()
+end)
+
+-- Returns an items metadata
+--- @param source number Player ID
+--- @param item string Item name
+function GetMetadata(source, item)
+    if not source or not item then return end
+    local player = GetPlayer(source)
+    if not player then return end
+    if Inventory == 'ox_inventory' then
+        local data = exports[Inventory]:Search(source, 'slots', item)
+        if not data or #data == 0 then return end
+        return data[1].metadata
+    elseif Inventory == 'core_inventory' then
+        local data = exports[Inventory]:getItem(source, item)
+        if not data then return end
+        return data.info
+    else
+        local data = exports[Inventory]:GetItemByName(source, item)
+        if not data then return end
+        return data.info
+    end
+end
+
+-- Return item metadata to client
+--- @param source number
+--- @param item string
+lib.callback.register('lation_coke:getmetadata', function(source, item)
+    return GetMetadata(source, item)
+end)
+
+-- Set an items metadata
+--- @param source number Player ID 
+--- @param item string Item name
+--- @param metatype string Metadata type
+--- @param metavalue any Metadata value
+function SetMetadata(source, item, metatype, metavalue)
+    if not source or not item or not metatype or not metavalue then return end
+    local player = GetPlayer(source)
+    if not player then return end
+    if Inventory == 'ox_inventory' then
+        local itemData = exports[Inventory]:Search(source, 'slots', item)
+        if not next(itemData) then return end
+        itemData[1].metadata[metatype] = metavalue
+        exports[Inventory]:SetMetadata(source, itemData[1].slot, itemData[1].metadata)
+    elseif Inventory == 'codem-inventory' then
+        local itemData = exports[Inventory]:GetItemByName(source, item)
+        if not itemData then return end
+        itemData.info[metatype] = metavalue
+        exports[Inventory]:SetItemMetadata(source, itemData.slot, itemData.info)
+    elseif Inventory == 'core_inventory' then
+        local itemData = exports[Inventory]:getItem(source, item)
+        if not itemData then return end
+        local slot = exports[Inventory]:getFirstSlotByItem(source, item)
+        if not slot then return end
+        itemData.info[metatype] = metavalue
+        exports[Inventory]:setMetadata(source, slot, itemData.info)
+    else
+        local itemData = exports[Inventory]:GetItemByName(source, item)
+        if not itemData then return end
+        itemData.info[metatype] = metavalue
+        exports[Inventory]:SetItemData(source, item, 'info', itemData.info)
+    end
+end
+
+-- Used to verify players distance to set of coords with radius
+--- @param coords vector3 | vector4
+--- @param radius number
+function VerifyDist(source, coords, radius)
+    if not source or not coords or not radius then return end
+    local source = source
+    local player = GetPlayerPed(source)
+    local position = GetEntityCoords(player)
+    local dist = #(vec3(position.x, position.y, position.z) - vec3(coords.x, coords.y, coords.z))
+    if dist <= radius + 5 then
+        return true
+    end
+    return false
+end
+
+-- Register stash at start-up if necessary
+--- @param labId number
+--- @param stashId number
+function RegisterStash(labId, stashId)
+    if not labId or not stashId then return end
+
+    if not Inventory then return end
+
+    local lab = shared.labs[labId]
+    if not lab then return end
+
+    local stash = lab.storage[stashId]
+    if not stash then return end
+
+    if Inventory == 'ox_inventory' then
+        exports[Inventory]:RegisterStash(stash.identifier, stash.label, stash.slots, stash.weight, false)
+    end
+end
+
+-- Open stash
+--- @param labId number Lab ID
+--- @param stashId number Stash ID
+function OpenStash(labId, stashId)
+    if not source or not labId or not stashId then return end
+
+    local lab = shared.labs[labId]
+    if not lab then return end
+
+    local stash = lab.storage[stashId]
+    if not stash then return end
+
+    local data = coke:getLabData(source, labId)
+    if not data then return end
+
+    if Inventory == 'qb-inventory' then
+        exports[Inventory]:OpenInventory(source, 'stash', stash.identifier, {
+            label = stash.label,
+            maxweight = stash.weight,
+            slots = stash.slots,
+        })
+    end
+end
+
+-- Clear a specified stash in warehouse
+--- @param labId number 
+--- @param stashId number
+function ClearStash(labId, stashId)
+    if not labId or not stashId then return end
+
+    local lab = shared.labs[labId]
+    if not lab then return end
+
+    local stash = lab.storage[stashId]
+    if not stash then return end
+
+    if not Inventory then return end
+    if Inventory == 'ox_inventory' then
+        exports[Inventory]:ClearInventory(stash.identifier)
+    elseif Inventory == 'qb-inventory' then
+        exports[Inventory]:ClearStash(stash.identifier)
+    elseif Inventory == 'qs-inventory' then
+        MySQL.query('DELETE FROM `inventory_stash` WHERE `stash` = ?', {stash.identifier})
+    elseif Inventory == 'ps-inventory' then
+        TriggerEvent('ps-inventory:server:SaveStashItems', stash.identifier, {})
+    elseif Inventory == 'origen_inventory' then
+        exports[Inventory]:ClearStashItems(stash.identifier)
+    elseif Inventory == 'codem-inventory' then
+        exports[Inventory]:UpdateStash(stash.identifier, {})
+    elseif Inventory == 'core_inventory' then
+        exports[Inventory]:clearInventory(stash.identifier)
+    else
+        -- Add custom inventory here
+    end
+end
+
+-- Register hook if ox_inventory is detected
+if Inventory and Inventory == 'ox_inventory' then
+
+    -- Merge items durability
+    --- @param payload table
+    local function mergeItems(payload)
+        if not payload or type(payload) ~= 'table' then return false end
+
+        local fromType, toType = payload.fromType, payload.toType
+        local fromItem, toItem = payload.fromSlot, payload.toSlot
+
+        if type(toItem) == 'table' and fromItem.name == toItem.name then
+            local fromDurability, toDurability = fromItem.metadata.durability, toItem.metadata.durability
+            if fromDurability and toDurability and fromType == toType then
+                local totalDurability = fromDurability + toDurability
+                fromItem.metadata.durability = math.min(totalDurability, 100)
+                toItem.metadata.durability = math.max(totalDurability - 100, 0)
+
+                exports[Inventory]:SetMetadata(payload.fromInventory, fromItem.slot, fromItem.metadata)
+                exports[Inventory]:SetMetadata(payload.toInventory, toItem.slot, toItem.metadata)
+            end
+        end
+
+        return true
+    end
+
+    -- ⚠️ Changed your gas/cement item names? Update the itemFilter accordingly!
+    exports[Inventory]:registerHook('swapItems', function(payload)
+        return mergeItems(payload)
+    end, {itemFilter = {
+        [shared.growth.watering.item] = true,
+        [shared.growth.fertilizing.item] = true,
+        ls_gasoline = true,
+        ls_cement = true
+    }})
+
+end
+
+-- Register drug items usable (if applicable)
+for item, data in pairs(shared.consumables) do
+    if data.usable then
+        RegisterUsableItem(item, function(source)
+            if not source then return end
+
+            local level = coke:getPlayerData(source, 'level')
+            if not level then return end
+            if level < data.level then
+                TriggerClientEvent('lation_coke:notify', source, locale('notify.not-experienced'), 'error')
+                return
+            end
+
+            local source = source
+
+            local consumed = lib.callback.await('lation_coke:consumeItem', source)
+            if not consumed then return end
+
+            local hasItem = GetItemCount(source, item) >= 1
+            if not hasItem then return end
+
+            if not consumables[source] then consumables[source] = true end
+
+            TriggerClientEvent('lation_coke:applyEffects', source, item)
+
+            RemoveItem(source, item, 1)
+
+            SetTimeout(4500, function()
+                consumables[source] = nil
+            end)
+        end)
+    end
+end
+
+-- Returns boolean if player is consuming an item
+--- @param source number Player ID
+lib.callback.register('lation_coke:validateRequest', function(source)
+    if not source then return false end
+    if not consumables[source] then return false end
+    return true
+end)
+
+-- Add /resetbucket command to reset a players routing bucket
+--- @param source number Player ID
+RegisterCommand('resetbucket', function(source)
+    if not source then return end
+
+    ---@diagnostic disable-next-line: param-type-mismatch
+    local bucket = GetPlayerRoutingBucket(source)
+    if not bucket or bucket == 0 then
+        TriggerClientEvent('lation_coke:notify', source, 'You are already in the default bucket', 'error')
+        return
+    end
+
+    ---@diagnostic disable-next-line: param-type-mismatch
+    SetPlayerRoutingBucket(source, 0)
+    TriggerClientEvent('lation_coke:notify', source, 'You have reset your default bucket', 'success')
+end, false)
+
+-- Log player events if applicable
+--- @param source number Player ID
+--- @param title string Log title
+--- @param message string Message contents
+function PlayerLog(source, title, message)
+    if server.logs.service == 'fivemanage' then
+        if not fmsdk then return end
+        if server.logs.screenshots then
+            exports.fmsdk:takeServerImage(source, {
+                name = title,
+                description = message,
+            })
+        else
+            exports.fmsdk:LogMessage('info', message)
+        end
+    elseif server.logs.service == 'fivemerr' then
+        if not fmlogs then return end
+        exports['fm-logs']:createLog({
+            LogType = 'Player',
+            Message = message,
+            Resource = 'lation_coke',
+            Source = source,
+        }, { Screenshot = server.logs.screenshots })
+    elseif server.logs.service == 'discord' then
+        local embed = {
+            {
+                ["color"] = 16711680,
+                ["title"] = "**".. title .."**",
+                ["description"] = message,
+                ["footer"] = {
+                    ["text"] = os.date("%a %b %d, %I:%M%p"),
+                    ["icon_url"] = server.logs.discord.footer
+                }
+            }
+        }
+        PerformHttpRequest(server.logs.discord.link, function()
+        end, 'POST', json.encode({username = server.logs.discord.name, embeds = embed, avatar_url = server.logs.discord.image}),
+        {['Content-Type'] = 'application/json'})
+    end
+end
+
+-- Register net event(s)
+RegisterNetEvent('lation_coke:openStash', OpenStash)
+```
+
+</CodeGroup>
