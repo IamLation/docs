@@ -54,7 +54,8 @@
                 ]
               },
               "weed/faqs",
-              "weed/changelog"
+              "weed/changelog",
+              "resources/weed/files"
             ]
           },
           {
