@@ -1,0 +1,2208 @@
+---
+title: "Previews"
+description: "Preview open source files included with this resource"
+icon: "eye"
+---
+
+<CodeGroup>
+
+```lua config/shared.lua expandable
+return {
+
+    -- ⚠️ WARNING: When you are working with this script, never do "restart lation_chopshop"
+    -- ⚠️ This will cause issues, data loss & more! You must restart the script like this:
+    -- ⚠️ "stop lation_chopshop" ..wait a couple seconds.. then "ensure lation_chopshop"
+
+    ----------------------------------------------
+    --        🛠️ Setup the basics below
+    ----------------------------------------------
+
+    setup = {
+        -- Use only if needed, directed by support or know what you're doing
+        -- Notice: enabling debug features will significantly increase resmon
+        -- And should always be disabled in production
+        debug = false,
+        -- Set your interaction system below
+        -- Available options are: 'ox_target', 'qb-target', 'interact' & 'custom'
+        -- 'custom' needs to be added to client/functions.lua
+        interact = 'ox_target',
+        -- Set your notification system below
+        -- Available options are: 'lation_ui', 'ox_lib', 'esx', 'qb', 'okok', 'sd-notify', 'wasabi_notify' & 'custom'
+        -- 'custom' needs to be added to client/functions.lua
+        notify = 'ox_lib',
+        -- Set your progress bar system below
+        -- Available options are: 'lation_ui', 'ox_lib', 'qbcore' & 'custom'
+        -- 'custom' needs to be added to client/functions.lua
+        -- Any custom progress bar must also support animations
+        progress = 'ox_lib',
+        -- Set your minigame (skillcheck) system below
+        -- Available options are: 'lation_ui', 'ox_lib' & 'custom'
+        minigame = 'ox_lib',
+        -- Do you want to use Lith Studios Bolt Minigame?
+        -- This is a free, interactive minigame for removing wheels
+        -- Learn more here: https://lith.store/package/6174416
+        ls_bolt_minigame = false,
+        -- Set your context menu system below
+        -- Available options are: 'lation_ui', 'ox_lib' & 'custom'
+        menu = 'ox_lib',
+        -- Set your alert & input dialog system below
+        -- Available options are: 'lation_ui', 'ox_lib' & 'custom'
+        dialogs = 'ox_lib',
+        -- Do you want to hide player names in the group menu?
+        -- If true, names will instead be replaced with their Player IDs
+        -- If false it will display their character names as normal
+        hideNames = false,
+        -- Do you want to be notified via server console if an update is available?
+        -- True if yes, false if no
+        version = true,
+        -- Input all your police jobs below
+        police = { 'police', 'sheriff' }
+    },
+
+    ----------------------------------------------
+    --       📍 Activity start settings
+    ----------------------------------------------
+
+    start = {
+        -- Where to spawn the main ped to start chopping
+        -- If you wish to disable the starting ped, set coords = false
+        coords = vec4(-169.0171, -1352.3877, 29.9817, 91.8764),
+        -- The ped model used
+        -- More models: https://docs.fivem.net/docs/game-references/ped-models/
+        model = 'a_m_m_bevhills_01',
+        -- The scenario assigned to the ped (or scenario = false for no scenario)
+        -- More scenarios: https://github.com/DioneB/gtav-scenarios
+        scenario = 'WORLD_HUMAN_CLIPBOARD',
+        -- You can limit the hours at which the ped is available here
+        -- By default, this ped is available 24/7
+        -- Min is the earliest the ped is available (in 24hr format)
+        -- Max is the latest the ped is available (in 24hr format)
+        -- For example, if you want the ped only available during daytime set min = 6 & max = 21
+        hours = { min = 0, max = 24 },
+        -- How many police must be online in order to start a chop job?
+        police = 0,
+        -- How long (in seconds) until a vehicle is assigned after requesting a job
+        -- Set min & max to 0 to disable the cooldown and instantly assign a vehicle
+        cooldown = { min = 5, max = 25 },
+        -- When a chop job is completed, do you want to display the "Continue Chopping?"
+        -- Dialog to the group owner? True if yes, false if no
+        continue = true,
+        -- Easy mode is an optional mode that highlights matching vehicle models nearby
+        -- Radius is the distance from the player to search for & highlight vehicles
+        -- 424 is the maximum "focus zone" with FiveM OneSync anything higher than this will not work
+        easyMode = { enable = false, radius = 424 },
+        -- This option will REMOVE the ability to start the chopping activity from the main menu
+        -- This is useful if you want to use your own custom method to start the chop job
+        -- Do not set this option to true if you do not plan to implement a custom method
+        exportOnly = false,
+        -- Do you want to allow players to chop owned vehicles?
+        -- If true, players can chop all vehicles, including owned vehicles
+        -- If false, players can only chop unowned vehicles
+        allowOwned = true,
+        -- ⛔ DANGER: THIS IS A DESTRUCTIVE SETTING
+        -- ⛔ DANGER: deleteOwned is only used if allowOwned = true above
+        -- ⛔ DANGER: This will delete (permanently remove) an owned vehicle when chopped
+        -- ℹ️ INFO: Deleted vehicles are stored in the "deleted_vehicles.sql" file
+        -- ℹ️ INFO: This is merely a backup safety measure used for restoration if needed
+        deleteOwned = false
+    },
+
+    ----------------------------------------------
+    --       📈 Customize the XP system
+    ----------------------------------------------
+
+    experience = {
+        -- The number in these [brackets] are the level
+        -- The number after = is the exp required to reach that level
+        -- Be sure levels *always* start at level 1 with 0 exp
+        [1] = 0,
+        [2] = 5000,
+        [3] = 10000,
+        [4] = 25000,
+        [5] = 75000,
+        -- You can add or remove levels as you wish
+    },
+
+    ----------------------------------------------
+    --       🚗 Customize chop vehicles
+    ----------------------------------------------
+
+    vehicles = {
+        "alpha", "asea", "baller", "banshee", "bjxl", "buccaneer", "bullet", "carbonizzare", "cavalcade2", "coquette",
+        "dubsta", "dukes", "emperor", "exemplar", "f620", "felon", "felon2", "furoregt", "futo", "glendale",
+        "huntley", "ingot", "intruder", "jackal", "jester", "manana", "massacro", "ninef", "patriot", "peyote", "phoenix",
+        "picador", "premier", "primo", "radi", "rapidgt", "rapidgt2", "regina", "rhapsody", "rocoto", "sabregt", "schafter2",
+        "schwarzer", "sentinel", "stanier", "stratum", "sultan", "superd", "surano", "tornado", "vigero", "voltic"
+    },
+
+    ----------------------------------------------
+    --        🔨 Customize chopping
+    ----------------------------------------------
+
+    chopping = {
+        wheels = {
+            [0] = { -- Front left tire
+                difficulty = { 'easy', 'easy', 'easy', 'easy' },
+                inputs = { 'E' },
+                duration = 10000
+            },
+            [1] = { -- Front right tire
+                difficulty = { 'easy', 'easy', 'easy', 'easy' },
+                inputs = { 'E' },
+                duration = 10000
+            },
+            [2] = { -- Rear left tire
+                difficulty = { 'easy', 'easy', 'easy', 'easy' },
+                inputs = { 'E' },
+                duration = 10000
+            },
+            [3] = { -- Rear right tire
+                difficulty = { 'easy', 'easy', 'easy', 'easy' },
+                inputs = { 'E' },
+                duration = 10000
+            }
+        },
+        doors = {
+            [0] = { -- Front driver door
+                difficulty = { 'easy', 'easy', 'easy', 'easy', 'easy' },
+                inputs = { 'E' },
+                duration = 12500
+            },
+            [1] = { -- Front passenger door
+                difficulty = { 'easy', 'easy', 'easy', 'easy', 'easy' },
+                inputs = { 'E' },
+                duration = 12500
+            },
+            [2] = { -- Rear driver door
+                difficulty = { 'easy', 'easy', 'easy', 'easy', 'easy' },
+                inputs = { 'E' },
+                duration = 12500
+            },
+            [3] = { -- Rear passenger door
+                difficulty = { 'easy', 'easy', 'easy', 'easy', 'easy' },
+                inputs = { 'E' },
+                duration = 12500
+            },
+            [4] = { -- Hood
+                difficulty = { 'easy', 'easy', 'easy', 'easy', 'easy' },
+                inputs = { 'E' },
+                duration = 15000
+            },
+            [5] = { -- Trunk
+                difficulty = { 'easy', 'easy', 'easy', 'easy', 'easy' },
+                inputs = { 'E' },
+                duration = 15000
+            },
+        },
+        frame = { -- The frame/chassis
+            difficulty = { 'easy', 'easy', 'easy', 'easy', 'easy', 'easy' },
+            inputs = { 'E' },
+            duration = 25000
+        }
+    },
+
+    ----------------------------------------------
+    --       💰 Customize chop rewards
+    ----------------------------------------------
+
+    rewards = {
+        -- The number in these [brackets] are the player level
+        [1] = {
+            -- The min/max amount of "ls_auto_parts" rewarded for each part chopped
+            wheels = { min = 1, max = 3 },
+            doors = { min = 2, max = 4 },
+            frame = { min = 5, max = 10 },
+            -- The min/max amount of XP rewarded when completing a chop job
+            xp = { min = 25, max = 35 },
+            -- The percentage at which chopping parts duration is reduced for this level
+            speed = 0
+        },
+        [2] = {
+            wheels = { min = 2, max = 4 },
+            doors = { min = 3, max = 5 },
+            frame = { min = 6, max = 12 },
+            xp = { min = 35, max = 50 },
+            speed = 15
+        },
+        [3] = {
+            wheels = { min = 3, max = 5 },
+            doors = { min = 4, max = 6 },
+            frame = { min = 7, max = 14 },
+            xp = { min = 50, max = 75 },
+            speed = 30
+        },
+        [4] = {
+            wheels = { min = 4, max = 6 },
+            doors = { min = 5, max = 7 },
+            frame = { min = 8, max = 16 },
+            xp = { min = 75, max = 100 },
+            speed = 45
+        },
+        [5] = {
+            wheels = { min = 5, max = 7 },
+            doors = { min = 6, max = 8 },
+            frame = { min = 9, max = 18 },
+            xp = { min = 100, max = 150 },
+            speed = 60
+        }
+    },
+
+    ----------------------------------------------
+    --          🗺️ Assign chop zones
+    ----------------------------------------------
+
+    zones = {
+        vec3(1565.1211, -2161.1277, 77.5340),
+        vec3(1134.0985, -793.7753, 57.5917),
+        vec3(-84.7814, -2225.9697, 7.8117),
+        vec3(-467.7876, -1678.4623, 19.0395),
+        vec3(1596.7920, -1709.7660, 88.1285),
+        vec3(833.9869, -1405.5132, 26.1511),
+        vec3(970.2102, -1632.1747, 30.1107),
+        vec3(248.3347, 380.5432, 105.5951),
+        vec3(-69.7967, 83.2294, 71.5020),
+        vec3(-1315.3870, -1257.1395, 4.5771),
+        vec3(-443.0953, -2282.7065, 7.6081),
+        vec3(-1597.3135, -1008.8568, 7.6894),
+        -- You can add or remove locations as you wish
+    },
+
+    ----------------------------------------------
+    --      🔨 Customize chop shop items
+    ----------------------------------------------
+
+    items = {
+        -- The main item rewarded when a vehicle part is chopped
+        auto_parts = 'ls_auto_parts',
+        -- The torch item used to remove doors/frame from vehicle
+        torch = {
+            -- The item spawn name
+            item = 'ls_torch',
+            -- Do you want to require the player have a torch to chop?
+            require = true,
+            -- Should this item be removed on each use?
+            remove = false,
+            -- Percentage chance this item breaks on failed skillcheck
+            -- Set chance to 0 to disable break chance
+            break_chance = 20
+        },
+        lug_wrench = {
+            -- The item spawn name
+            item = 'ls_lug_wrench',
+            -- Do you want to require the player have a lug wrench to chop?
+            require = true,
+            -- Should this item be removed on each use?
+            remove = false,
+            -- Percentage chance this item breaks on failed skillcheck
+            -- Set chance to 0 to disable break chance
+            break_chance = 20
+        },
+        vehicle_finder = {
+            -- The item spawn name
+            item = 'ls_vehicle_finder',
+            -- Should this item be removed on each use?
+            remove = false,
+            -- How far the detector searches for vehicles
+            -- 424 is the maximum "focus zone" with FiveM OneSync
+            -- Anything higher than this will not work
+            radius = 424,
+            -- How long (in seconds) the vehicle finder lasts
+            duration = 60,
+            -- Customize blip related settings
+            blips = {
+                -- The blip sprite ID
+                sprite = 225,
+                -- The blip color ID
+                color = 1,
+                -- The blip scale
+                scale = 0.8,
+                -- The blip name
+                name = 'Discovered Vehicle',
+            }
+        }
+    },
+
+    ----------------------------------------------
+    --          🛒 Customize shops
+    ----------------------------------------------
+
+    shops = {
+        -- ⚠️ The shops below are added to the main chop shop menu when enabled!
+        -- The swap shop is a shop where players can exchange their ls_auto_parts
+        -- For whatever items you wish, such as materials, illegal items, etc
+        swap = {
+            -- Optionally disable this shop if you wish
+            enable = true,
+            -- This shop specifically only accepts an item as payment
+            -- You cannot use traditional methods of cash/bank/etc
+            account = 'ls_auto_parts',
+            -- Items available for swapping in this shop
+            items = {
+                -- item: item spawn name
+                -- price: price of item in ls_auto_parts
+                -- quantity: amount of item given for price
+                -- icon: icon for item
+                -- level: optional level requirement to buy item
+                -- metadata: optional metadata for item
+                [1] = { item = 'plastic', price = 1, quantity = 1, icon = 'recycle' },
+                [2] = { item = 'aluminium', price = 1, quantity = 1, icon = 'recycle' },
+                [3] = { item = 'copper', price = 1, quantity = 1, icon = 'recycle' },
+                -- Add or remove items as you wish
+            }
+        },
+        tool = {
+            -- Optionally disable this shop if you wish
+            enable = true,
+            -- Use cash or bank when purchasing here?
+            account = 'cash',
+            -- Items available for sale in this shop
+            items = {
+                -- item: item spawn name
+                -- price: price of item
+                -- icon: icon for item
+                -- level: optional level requirement to buy item
+                -- metadata: optional metadata for item
+                [1] = { item = 'ls_torch', price = 1250, icon = 'fire-flame-curved' },
+                [2] = { item = 'ls_lug_wrench', price = 750, icon = 'wrench' },
+                [3] = { item = 'ls_vehicle_finder', price = 4500, icon = 'satellite-dish' },
+                -- Add or remove items as you wish
+            }
+        }
+    },
+
+}
+```
+
+
+```lua config/client.lua expandable
+return {
+    ----------------------------------------------
+    --     📊 Customize stats & leaderboard
+    ----------------------------------------------
+
+    -- Don't want to show the stats menu option at all?
+    -- Set all stats below to false!
+    stats = {
+        -- Do you want to show the total vehicles chopped stat?
+        vehicles = true,
+        -- Do you want to show the total parts received stat?
+        parts = true
+    },
+
+    -- Do you want to display the leaderboard?
+    -- This shows the top 10 divers by XP
+    -- 🗒️ Note: the leaderboard is not updated constantly
+    -- It is only updated on server restarts & player logouts
+    leaderboard = true,
+
+    ----------------------------------------------
+    --          🗺️ Customize blips
+    ----------------------------------------------
+
+    blips = {
+        -- The location of the starting/main ped
+        start = {
+            -- Enable or disable the blip
+            enable = true,
+            -- Sprite ID (https://docs.fivem.net/docs/game-references/blips/)
+            sprite = 225,
+            -- Color (https://docs.fivem.net/docs/game-references/blips/#blip-colors)
+            color = 2,
+            -- Size/scale
+            scale = 0.9,
+            -- Label
+            label = 'Chop Shop'
+        },
+        -- The available chop zones
+        zones = {
+            enable = true,
+            sprite = 225,
+            color = 0,
+            scale = 0.9,
+            label = 'Chop Zones'
+        }
+    },
+
+    ----------------------------------------------
+    --     💃 Customize animations & props
+    ----------------------------------------------
+
+    anims = {
+        chopWheel = {
+            part1 = {
+                dict = 'anim@amb@clubhouse@tutorial@bkr_tut_ig3@',
+                clip = 'machinic_loop_mechandplayer'
+            },
+            part2 = {
+                label = 'Removing part..',
+                description = 'Using your lug wrench you start to remove the wheel',
+                icon = 'fas fa-wrench',
+                duration = nil,
+                position = 'bottom',
+                useWhileDead = false,
+                canCancel = true,
+                disable = { move = true, car = true, combat = true },
+                anim = { },
+                prop = { }
+            }
+        },
+        chopDoor = {
+            part1 = {
+                dict = 'amb@world_human_welding@male@base',
+                clip = 'base',
+                fx = {
+                    dict = 'scr_ih_fin',
+                    name = 'scr_ih_fin_torch_lock_cutting',
+                    pos = vec3(-0.18, 0.15, 0.0),
+                    rot = vec3(0.0, 0.0, 0.0),
+                    scale = 1.0
+                },
+                prop = {
+                    model = 'prop_weld_torch',
+                    pos = vec3(-0.01, 0.03, 0.02),
+                    rot = vec3(0.0, 0.0, -1.5)
+                }
+            },
+            part2 = {
+                label = 'Removing part..',
+                description = 'Using your torch you start to remove the door',
+                icon = 'fas fa-fire',
+                duration = nil,
+                position = 'bottom',
+                useWhileDead = false,
+                canCancel = true,
+                disable = { move = true, car = true, combat = true },
+                anim = { },
+                prop = { }
+            }
+        },
+        chopFrame = {
+            part1 = {
+                dict = 'amb@world_human_welding@male@base',
+                clip = 'base',
+                fx = {
+                    dict = 'scr_ih_fin',
+                    name = 'scr_ih_fin_torch_lock_cutting',
+                    pos = vec3(-0.18, 0.15, 0.0),
+                    rot = vec3(0.0, 0.0, 0.0),
+                    scale = 1.0
+                },
+                prop = {
+                    model = 'prop_weld_torch',
+                    pos = vec3(-0.01, 0.03, 0.02),
+                    rot = vec3(0.0, 0.0, -1.5)
+                }
+            },
+            part2 = {
+                label = 'Scrapping frame..',
+                description = 'You finish up the job by scrapping the frame',
+                icon = 'fas fa-fire',
+                duration = nil,
+                position = 'bottom',
+                useWhileDead = false,
+                canCancel = true,
+                disable = { move = true, car = true, combat = true },
+                anim = { },
+                prop = { }
+            }
+        },
+        createGroup = {
+            label = 'Creating group..',
+            icon = 'fas fa-users',
+            duration = 1000,
+            position = 'bottom',
+            useWhileDead = false,
+            canCancel = true,
+            disable = { car = true, move = true, combat = true },
+            anim = { },
+            prop = { }
+        },
+    }
+}
+```
+
+
+```lua config/server.lua expandable
+return {
+    ----------------------------------------------
+    --        💬 Setup logging system
+    ----------------------------------------------
+
+    logs = {
+        -- What logging service do you want to use?
+        -- Available options: 'fivemanage', 'fivemerr', 'discord' & 'none'
+        -- It is highly recommended to use a proper logging service such as Fivemanage or Fivemerr
+        service = 'none',
+        -- Do you want to include screenshots with your logs?
+        -- This is only applicable to Fivemanage and Fivemerr
+        screenshots = false,
+        -- You can enable (true) or disable (false) specific player events to log here
+        events = {
+            -- Log when a player chops a part from a vehicle
+            partChopped = false,
+            -- Log when a player breaks a tool
+            toolBroke = false,
+            -- Log when a player purchases an item from the tool shop
+            itemPurchased = false,
+            -- Log when a player swaps an item from the swap shop
+            itemSwapped = false,
+        },
+        -- If service = 'discord', you can customize the webhook data here
+        -- If not using Discord, this section can be ignored
+        discord = {
+            -- The name of the webhook
+            name = 'Chop Shop',
+            -- The webhook link
+            link = '',
+            -- The webhook profile image
+            image = 'https://i.imgur.com/ILTkWBh.png',
+            -- The webhook footer image
+            footer = 'https://i.imgur.com/ILTkWBh.png'
+        }
+    },
+
+}
+```
+
+
+```lua config/icons.lua expandable
+return {
+    -- Misc interaction(s)
+    talk = 'fas fa-comment',
+    talk_color = '',
+
+    start_chop = 'fas fa-recycle',
+    start_chop_color = '',
+
+    remove_part = 'fas fa-wrench',
+    remove_part_color = '',
+
+    -- Input dialog(s)
+    quantity = 'fas fa-hashtag',
+    player_id = 'fas fa-hashtag',
+
+    -- Player data
+    player_level = 'fas fa-chart-simple',
+    player_level_color = '',
+
+    view_stats = 'fas fa-chart-pie',
+    view_stats_color = '',
+
+    -- Stats menu
+    stats_vehicles = 'fas fa-car',
+    stats_vehicles_color = '',
+
+    stats_parts = 'fas fa-wrench',
+    stats_parts_color = '',
+
+    -- Leaderboard menu
+    leaderboard = 'fas fa-trophy',
+
+    -- Chop menu
+    chop_leaderboard = 'fas fa-ranking-star',
+    chop_leaderboard_color = '',
+
+    tool_shop = 'fas fa-wrench',
+    tool_shop_color = '',
+
+    swap_shop = 'fas fa-arrows-rotate',
+    swap_shop_color = '',
+
+    create_group = 'fas fa-people-group',
+    create_group_color = '',
+
+    manage_group = 'fas fa-people-group',
+    manage_group_color = '',
+
+    request_job = 'fas fa-circle-play',
+    request_job_color = '#82E58B',
+
+    add_group_member = 'fas fa-user-plus',
+    add_group_member_color = '',
+
+    remove_group_member = 'fas fa-user-minus',
+    remove_group_member_color = '',
+
+    leave_group = 'fas fa-users-slash',
+    leave_group_color = '',
+}
+```
+
+</CodeGroup>
+
+<CodeGroup>
+
+```lua bridge/client.lua expandable
+-- Initialize global variables to store framework & inventory
+Framework, Inventory = nil, nil
+
+-- Initialize global player variables
+PlayerLoaded, PlayerData = false, {}
+
+-- Get framework
+local function InitializeFramework()
+    if GetResourceState('es_extended') == 'started' then
+        ESX = exports['es_extended']:getSharedObject()
+        Framework = 'esx'
+
+        RegisterNetEvent('esx:playerLoaded', function(xPlayer)
+            PlayerData = xPlayer
+            PlayerLoaded = true
+            TriggerEvent('lation_chopshop:playerLoaded')
+        end)
+
+        RegisterNetEvent('esx:onPlayerLogout', function()
+            table.wipe(PlayerData)
+            PlayerLoaded = false
+            TriggerEvent('lation_chopshop:playerDropped')
+        end)
+
+        AddEventHandler('onResourceStart', function(resourceName)
+            if GetCurrentResourceName() ~= resourceName then return end
+            PlayerData = GetPlayerData()
+            PlayerLoaded = true
+            TriggerEvent('lation_chopshop:playerLoaded')
+        end)
+
+    elseif GetResourceState('qbx_core') == 'started' then
+        Framework = 'qbx'
+
+        AddEventHandler('QBCore:Client:OnPlayerLoaded', function()
+            PlayerData = GetPlayerData()
+            PlayerLoaded = true
+            TriggerEvent('lation_chopshop:playerLoaded')
+        end)
+
+        RegisterNetEvent('qbx_core:client:playerLoggedOut', function()
+            table.wipe(PlayerData)
+            PlayerLoaded = false
+            TriggerEvent('lation_chopshop:playerDropped')
+        end)
+
+        AddEventHandler('onResourceStart', function(resourceName)
+            if GetCurrentResourceName() ~= resourceName then return end
+            PlayerData = GetPlayerData()
+            PlayerLoaded = true
+            TriggerEvent('lation_chopshop:playerLoaded')
+        end)
+    elseif GetResourceState('qb-core') == 'started' then
+        QBCore = exports['qb-core']:GetCoreObject()
+        Framework = 'qb'
+
+        AddEventHandler('QBCore:Client:OnPlayerLoaded', function()
+            PlayerData = GetPlayerData()
+            PlayerLoaded = true
+            TriggerEvent('lation_chopshop:playerLoaded')
+        end)
+
+        RegisterNetEvent('QBCore:Client:OnPlayerUnload', function()
+            table.wipe(PlayerData)
+            PlayerLoaded = false
+            TriggerEvent('lation_chopshop:playerDropped')
+        end)
+
+        AddEventHandler('onResourceStart', function(resourceName)
+            if GetCurrentResourceName() ~= resourceName then return end
+            PlayerData = GetPlayerData()
+            PlayerLoaded = true
+            TriggerEvent('lation_chopshop:playerLoaded')
+        end)
+    elseif GetResourceState('ox_core') == 'started' then
+        Ox = require '@ox_core.lib.init'
+        Framework = 'ox'
+
+        AddEventHandler('ox:playerLoaded', function()
+            PlayerData = GetPlayerData()
+            PlayerLoaded = true
+            TriggerEvent('lation_chopshop:playerLoaded')
+        end)
+
+        AddEventHandler('ox:playerLogout', function()
+            table.wipe(PlayerData)
+            PlayerLoaded = false
+            TriggerEvent('lation_chopshop:playerDropped')
+        end)
+
+        AddEventHandler('onResourceStart', function(resourceName)
+            if GetCurrentResourceName() ~= resourceName then return end
+            PlayerData = GetPlayerData()
+            PlayerLoaded = true
+            TriggerEvent('lation_chopshop:playerLoaded')
+        end)
+    else
+        -- Add custom framework here
+    end
+end
+
+-- Get inventory
+local function InitializeInventory()
+    if GetResourceState('ox_inventory') == 'started' then
+        Inventory = 'ox_inventory'
+    elseif GetResourceState('qb-inventory') == 'started' then
+        Inventory = 'qb-inventory'
+    elseif GetResourceState('qs-inventory') == 'started' then
+        Inventory = 'qs-inventory'
+    elseif GetResourceState('ps-inventory') == 'started' then
+        Inventory = 'ps-inventory'
+    elseif GetResourceState('origen_inventory') == 'started' then
+        Inventory = 'origen_inventory'
+    elseif GetResourceState('codem-inventory') == 'started' then
+        Inventory = 'codem-inventory'
+    elseif GetResourceState('core_inventory') == 'started' then
+        Inventory = 'core_inventory'
+    else
+        -- Add custom inventory here
+    end
+end
+
+-- Returns player data
+function GetPlayerData()
+    if Framework == 'esx' then
+        return ESX.GetPlayerData()
+    elseif Framework == 'qb' then
+        return QBCore.Functions.GetPlayerData()
+    elseif Framework == 'qbx' then
+        return exports.qbx_core:GetPlayerData()
+    elseif Framework == 'ox' then
+        return Ox.GetPlayer()
+    else
+        -- Add custom framework here
+    end
+end
+
+-- Returns player job
+function GetJob()
+    local player = GetPlayerData()
+    if not player then return end
+    if Framework == 'esx' then
+        return player?.job?.name
+    elseif Framework == 'qb' then
+        return player.job.name
+    elseif Framework == 'qbx' then
+        return player.job.name
+    elseif Framework == 'ox' then
+        return player.getGroupByType('job')
+    else
+        -- Add custom framework here
+    end
+    return 'unemployed'
+end
+
+-- Return data for item
+--- @param item string
+function GetItemData(item)
+    if not item then return end
+    if Inventory then
+        if Inventory == 'ox_inventory' then
+            return exports[Inventory]:Items(item)
+        elseif Inventory == 'qb-inventory' or Inventory == 'ps-inventory' then
+            return QBCore.Shared.Items[item]
+        elseif Inventory == 'qs-inventory' then
+            local items = exports[Inventory]:GetItemList()
+            if not items then return end
+            return items[item]
+        elseif Inventory == 'origen_inventory' then
+            local items = exports[Inventory]:GetItems()
+            if not items then return end
+            return items[item]
+        elseif Inventory == 'codem-inventory' then
+            local items = exports[Inventory]:GetItemList()
+            if not items then return end
+            return items[item]
+        elseif Inventory == 'core_inventory' then
+            -- No available client-side export to get item list
+            if Framework == 'qb' then
+                return QBCore.Shared.Items[item]
+            else
+                print('^1[ERROR]: An issue has occured, please contact support at: https://discord.gg/9EbY4nM5uu^0')
+            end
+        else
+            -- Add custom inventory here
+        end
+    else
+        if Framework == 'esx' then
+            -- Unlikely to need anything here but.. just in case..
+            print('^1[ERROR]: An error has occured with lation_chopshop - please contact support^0')
+        elseif Framework == 'qb' then
+            return QBCore.Shared.Items[item]
+        elseif Framework == 'qbx' then
+            -- Unlikely to need anything here but.. just in case..
+            print('^1[ERROR]: Are you really not using ox_inventory? Contact support please lul.^0')
+        end
+    end
+end
+
+-- Returns boolean if player has specified amount of item
+--- @param item string
+--- @param amount number
+--- @return boolean
+function HasItem(item, amount)
+    if not item or not amount then return false end
+    if Inventory then
+        if Inventory == 'ox_inventory' then
+            return exports[Inventory]:Search('count', item) >= amount
+        elseif Inventory == 'core_inventory' then
+            return exports[Inventory]:hasItem(item, amount)
+        else
+            return exports[Inventory]:HasItem(item, amount)
+        end
+    else
+        local playerData = GetPlayerData()
+        if not playerData then return false end
+        local inventory = Framework == 'esx' and playerData.inventory or playerData.items
+        if not inventory then return false end
+        for _, itemData in pairs(inventory) do
+            if itemData and itemData.name == item then
+                local count = itemData.amount or itemData.count or 0
+                if count >= amount then
+                    return true
+                end
+            end
+        end
+        return false
+    end
+end
+
+-- Disables access to open/view inventory
+function DisableInventory()
+    if Inventory == 'ox_inventory' then
+        LocalPlayer.state.invBusy = true
+    elseif Inventory == 'qb-inventory' then
+        LocalPlayer.state.inv_busy = true
+    elseif Inventory == 'qs-inventory' then
+        exports[Inventory]:setInventoryDisabled(true)
+    elseif Inventory == 'core_inventory' then
+        exports[Inventory]:lockInventory()
+    else
+        -- Add custom inventory here
+    end
+end
+
+-- Enables access to open/view inventory
+function EnableInventory()
+    if Inventory == 'ox_inventory' then
+        LocalPlayer.state.invBusy = false
+    elseif Inventory == 'qb-inventory' then
+        LocalPlayer.state.inv_busy = false
+    elseif Inventory == 'qs-inventory' then
+        exports[Inventory]:setInventoryDisabled(false)
+    elseif Inventory == 'core_inventory' then
+        exports[Inventory]:unlockInventory()
+    else
+        -- Add custom inventory here
+    end
+end
+
+-- Initialize defaults
+InitializeFramework()
+InitializeInventory()
+```
+
+
+```lua bridge/server.lua expandable
+-- Initialize global variables to store framework & inventory
+Framework, Inventory = nil, nil
+
+-- Initialize config(s)
+local shared = require 'config.shared'
+
+-- Get framework
+local function InitializeFramework()
+    if GetResourceState('es_extended') == 'started' then
+        ESX = exports['es_extended']:getSharedObject()
+        Framework = 'esx'
+    elseif GetResourceState('qbx_core') == 'started' then
+        Framework = 'qbx'
+    elseif GetResourceState('qb-core') == 'started' then
+        QBCore = exports['qb-core']:GetCoreObject()
+        Framework = 'qb'
+    elseif GetResourceState('ox_core') == 'started' then
+        Ox = require '@ox_core.lib.init'
+        Framework = 'ox'
+    else
+        -- Add custom framework here
+    end
+end
+
+-- Get inventory
+local function InitializeInventory()
+    if GetResourceState('ox_inventory') == 'started' then
+        Inventory = 'ox_inventory'
+    elseif GetResourceState('qb-inventory') == 'started' then
+        Inventory = 'qb-inventory'
+    elseif GetResourceState('qs-inventory') == 'started' then
+        Inventory = 'qs-inventory'
+    elseif GetResourceState('ps-inventory') == 'started' then
+        Inventory = 'ps-inventory'
+    elseif GetResourceState('origen_inventory') == 'started' then
+        Inventory = 'origen_inventory'
+    elseif GetResourceState('codem-inventory') == 'started' then
+        Inventory = 'codem-inventory'
+    elseif GetResourceState('core_inventory') == 'started' then
+        Inventory = 'core_inventory'
+    else
+        -- Add custom inventory here
+    end
+end
+
+-- Get player from source
+--- @param source number Player ID
+function GetPlayer(source)
+    if not source then return end
+    if Framework == 'esx' then
+        return ESX.GetPlayerFromId(source)
+    elseif Framework == 'qb' then
+        return QBCore.Functions.GetPlayer(source)
+    elseif Framework == 'qbx' then
+        return exports.qbx_core:GetPlayer(source)
+    elseif Framework == 'ox' then
+        return Ox.GetPlayer(source)
+    else
+        -- Add custom framework here
+    end
+end
+
+-- Function to get a player identifier by source
+--- @param source number Player ID
+function GetIdentifier(source)
+    local player = GetPlayer(source)
+    if not player then return end
+    if Framework == 'esx' then
+        return player.identifier
+    elseif Framework == 'qb' or Framework == 'qbx' then
+        return player.PlayerData.citizenid
+    elseif Framework == 'ox' then
+        return player.stateId
+    else
+        -- Add custom framework here
+    end
+end
+
+-- Return player's name
+--- @param source number Player ID
+--- @return string
+function GetName(source)
+    local player = GetPlayer(source)
+    if not player then return 'Unknown' end
+    if Framework == 'esx' then
+        return player.getName()
+    elseif Framework == 'qb' or Framework == 'qbx' then
+        return player.PlayerData.charinfo.firstname.. ' ' ..player.PlayerData.charinfo.lastname
+    elseif Framework == 'ox' then
+        return player.get('firstName').. ' ' ..player.get('lastName')
+    else
+        -- Add custom framework here
+    end
+    return 'Unknown'
+end
+
+-- Return player job
+--- @param source number Player ID
+function GetJob(source)
+    local player = GetPlayer(source)
+    if not player then return 'unemployed' end
+    if Framework == 'esx' then
+        return player.getJob().name
+    elseif Framework == 'qb' or Framework == 'qbx' then
+        return player.PlayerData.job.name
+    elseif Framework == 'ox' then
+        return player.getGroupByType('job')
+    else
+        -- Add custom framework here
+    end
+    return 'unemployed'
+end
+
+-- Returns number of players with police job(s)
+--- @return number
+function GetPoliceCount()
+    local count, jobs = 0, {}
+    for _, job in pairs(shared.setup.police) do
+        jobs[job] = true
+    end
+    if Framework == 'esx' then
+        for job, _ in pairs(jobs) do
+            count += #ESX.GetExtendedPlayers('job', job)
+        end
+    elseif Framework == 'qb' then
+        for _, playerId in pairs(QBCore.Functions.GetPlayers()) do
+            local player = QBCore.Functions.GetPlayer(playerId)
+            if jobs[player.PlayerData.job.name] and player.PlayerData.job.onduty then
+                count += 1
+            end
+        end
+    elseif Framework == 'qbx' then
+        for job, _ in pairs(jobs) do
+            count = count + exports.qbx_core:GetDutyCountJob(job)
+        end
+    elseif Framework == 'ox' then
+        for _, player in pairs(Ox.GetPlayers()) do
+            if jobs[player.getGroupByType('job')] then
+                count += 1
+            end
+        end
+    else
+        -- Add custom framework here
+    end
+    return count
+end
+
+-- Returns number of specified item in players inventory
+--- @param source number Player ID
+--- @param item string Item to search
+--- @return number
+function GetItemCount(source, item)
+    if not source or not item then return 0 end
+    local player = GetPlayer(source)
+    if not player then return 0 end
+    if Inventory then
+        if Inventory == 'ox_inventory' then
+            return exports[Inventory]:Search(source, 'count', item) or 0
+        elseif Inventory == 'core_inventory' then
+            return exports[Inventory]:getItemCount(source, item)
+        else
+            local itemData = exports[Inventory]:GetItemByName(source, item)
+            if not itemData then return 0 end
+            return itemData.amount or itemData.count or 0
+        end
+    else
+        if Framework == 'esx' then
+            local itemData = player.getInventoryItem(item)
+            if not itemData then return 0 end
+            return itemData.count or itemData.amount or 0
+        elseif Framework == 'qb' then
+            local itemData = player.Functions.GetItemByName(item)
+            if not itemData then return 0 end
+            return itemData.amount or itemData.count or 0
+        else
+            -- Add custom framework here
+        end
+    end
+    return 0
+end
+
+-- Returns if player can carry item
+--- @param source number Player ID
+--- @param item string Item name
+--- @param count number Item quantity
+function CanCarry(source, item, count)
+    if count <= 0 then return true end
+    local player = GetPlayer(source)
+    if not player then return end
+    if Inventory then
+        if Inventory == 'ox_inventory' then
+            return exports[Inventory]:CanCarryItem(source, item, count)
+        elseif Inventory == 'qb-inventory' then
+            return exports[Inventory]:CanAddItem(source, item, count)
+        elseif Inventory == 'qs-inventory' then
+            return exports[Inventory]:CanCarryItem(source, item, count)
+        elseif Inventory == 'ps-inventory' then
+            -- ps sucks, why do they not have a dedicated export for this..?
+            local totalWeight = exports[Inventory]:GetTotalWeight(player.PlayerData.items)
+            if not totalWeight then return false end
+            local itemInfo = QBCore.Shared.Items[item:lower()]
+            if not itemInfo then return false end
+            if (totalWeight + (itemInfo['weight'] * count)) <= 120000 then
+                return true
+            end
+            return false
+        elseif Inventory == 'origen_inventory' then
+            -- origen's CanCarry export not working as expected, just return true
+            return true
+        elseif Inventory == 'codem-inventory' then
+            -- CodeM docs dont specify an export for this so..
+            return true
+        elseif Inventory == 'core_inventory' then
+            -- core's canCarry export not working as expected, just return true
+            return true
+        else
+            -- Add custom inventory here
+            return true
+        end
+    else
+        if Framework == 'esx' then
+            if player.canCarryItem(item, count) then
+                return true
+            end
+            return false
+        elseif Framework == 'qb' then
+            local totalWeight = QBCore.Player.GetTotalWeight(player.PlayerData.items)
+            if not totalWeight then return false end
+            local itemInfo = QBCore.Shared.Items[item:lower()]
+            if not itemInfo then return false end
+            if (totalWeight + (itemInfo['weight'] * count)) <= 120000 then
+                return true
+            end
+            return false
+        else
+            -- Add custom framework here
+        end
+    end
+end
+
+-- Adds an item to players inventory
+--- @param source number Player ID
+--- @param item string Item to add
+--- @param count number Quantity to add
+--- @param metadata any|table Optional metadata
+function AddItem(source, item, count, metadata)
+    if count <= 0 then return end
+    local player = GetPlayer(source)
+    if not player then return end
+    if Inventory then
+        if Inventory == 'ox_inventory' then
+            exports[Inventory]:AddItem(source, item, count, metadata)
+        elseif Inventory == 'core_inventory' then
+            exports[Inventory]:addItem(source, item, count, metadata)
+        else
+            exports[Inventory]:AddItem(source, item, count, nil, metadata)
+            -- TriggerClientEvent(Inventory.. ':client:ItemBox', source, QBCore.Shared.Items[item], 'add')
+        end
+    else
+        if Framework == 'esx' then
+            player.addInventoryItem(item, count)
+        elseif Framework == 'qb' then
+            player.Functions.AddItem(item, count, nil, metadata)
+        else
+            -- Add custom framework here
+        end
+    end
+end
+
+-- Removes an item from players inventory
+--- @param source number Player ID
+--- @param item string Item to remove
+--- @param count number Quantity to remove
+function RemoveItem(source, item, count)
+    local player = GetPlayer(source)
+    if not player then return end
+    if Inventory then
+        if Inventory == 'core_inventory' then
+            exports[Inventory]:removeItem(source, item, count)
+        else
+            exports[Inventory]:RemoveItem(source, item, count)
+            -- TriggerClientEvent(Inventory.. ':client:ItemBox', source, QBCore.Shared.Items[item], 'remove')
+        end
+    else
+        if Framework == 'esx' then
+            player.removeInventoryItem(item, count)
+        elseif Framework == 'qb' then
+            player.Functions.RemoveItem(item, count)
+        else
+            -- Add custom framework here
+        end
+    end
+end
+
+-- Returns correct framework money type if needed
+--- @param type string Money type
+--- @return string
+local function ConvertMoneyType(type)
+    if type == 'money' and (Framework == 'qb' or Framework == 'qbx') then
+        type = 'cash'
+    elseif type == 'cash' and (Framework == 'esx' or Framework == 'ox') then
+        type = 'money'
+    else
+        -- Add custom framework here
+    end
+    return type
+end
+
+-- Returns balance of players account
+--- @param source number Player ID
+--- @param type string Account
+--- @return number
+function GetPlayerBalance(source, type)
+    local player = GetPlayer(source)
+    if not player then return 0 end
+    if Framework == 'esx' then
+        return player.getAccount(ConvertMoneyType(type)).money or 0
+    elseif Framework == 'qb' then
+        return player.PlayerData.money[ConvertMoneyType(type)] or 0
+    elseif Framework == 'qbx' then
+        return player.Functions.GetMoney(ConvertMoneyType(type)) or 0
+    elseif Framework == 'ox' then
+        if type == 'cash' or type == 'money' then
+            return GetItemCount(source, ConvertMoneyType(type)) or 0
+        end
+        return Ox.GetCharacterAccount(source).balance or 0
+    else
+        -- Add custom framework here
+    end
+    return 0
+end
+
+-- Callback to return players balance to client
+--- @param source number Player ID
+--- @param type string Account
+--- @return number
+lib.callback.register('lation_chopshop:getPlayerBalance', function(source, type)
+    return GetPlayerBalance(source, type)
+end)
+
+-- Add money to players account
+--- @param source number Player ID
+--- @param type string Account to add to
+--- @param amount number Amount to add
+function AddMoney(source, type, amount)
+    local player = GetPlayer(source)
+    if not player then return end
+    if Framework == 'esx' then
+        player.addAccountMoney(ConvertMoneyType(type), amount)
+    elseif Framework == 'qb' or Framework == 'qbx' then
+        player.Functions.AddMoney(ConvertMoneyType(type), amount)
+    elseif Framework == 'ox' then
+        if type == 'cash' or type == 'money' then
+            exports.ox_inventory:AddItem(source, ConvertMoneyType(type), amount)
+        else
+            local accountId = Ox.GetCharacterAccount(source).id
+            Ox.DepositMoney(source, accountId, amount)
+        end
+    else
+        -- Add custom framework here
+    end
+end
+
+-- Remove money from players account
+--- @param source number Player ID
+--- @param type string Account to remove from
+--- @param amount number Amount to remove
+function RemoveMoney(source, type, amount)
+    local player = GetPlayer(source)
+    if not player then return end
+    if Framework == 'esx' then
+        player.removeAccountMoney(ConvertMoneyType(type), amount)
+    elseif Framework == 'qb' or Framework == 'qbx' then
+        player.Functions.RemoveMoney(ConvertMoneyType(type), amount)
+    elseif Framework == 'ox' then
+        if type == 'cash' or type == 'money' then
+            RemoveItem(source, ConvertMoneyType(type), amount)
+        else
+            local accountId = Ox.GetCharacterAccount(source).id
+            Ox.WithdrawMoney(source, accountId, amount)
+        end
+    else
+        -- Add custom framework here
+    end
+end
+
+-- Function to register a usable item
+--- @param item string
+--- @param cb function
+function RegisterUsableItem(item, cb)
+    if not item then return end
+    if Framework == 'esx' then
+        ESX.RegisterUsableItem(item, cb)
+    elseif Framework == 'qb' then
+        QBCore.Functions.CreateUseableItem(item, cb)
+    elseif Framework == 'qbx' then
+        exports.qbx_core:CreateUseableItem(item, cb)
+    elseif Framework == 'ox' then
+        exports(item, function(event, _, inventory)
+            if event ~= 'usingItem' then return false end
+            cb(inventory.id)
+        end)
+    else
+        -- Add custom framework here
+    end
+end
+
+-- Initialize defaults
+InitializeFramework()
+InitializeInventory()
+```
+
+</CodeGroup>
+
+<CodeGroup>
+
+```lua client/functions.lua expandable
+-- Initialize global variable(s) to store phone
+Phone = nil
+
+-- Initialize config(s)
+local shared = require 'config.shared'
+
+-- Localize export
+local chopshop = exports.lation_chopshop
+
+-- You can change the textUI script here
+-- Options: 'lation_ui', 'ox_lib', 'jg-textui', 'okokTextUI', 'qbcore' & 'custom'
+local textui = 'ox_lib'
+
+-- Check if ls_bolt_minigame is installed/started
+local ls_bolt_minigame = GetResourceState('ls_bolt_minigame') == 'started'
+
+-- Get phone
+local function InitializePhone()
+    if GetResourceState('lb-phone') == 'started' then
+        Phone = 'lb-phone'
+    elseif GetResourceState('qb-phone') == 'started' then
+        Phone = 'qb-phone'
+    elseif GetResourceState('qs-smartphone-pro') == 'started' then
+        Phone = 'qs-smartphone-pro'
+    elseif GetResourceState('qs-smartphone') == 'started' then
+        Phone = 'qs-smartphone'
+    elseif GetResourceState('gksphone') == 'started' then
+        Phone = 'gksphone'
+    elseif GetResourceState('roadphone') == 'started' then
+        Phone = 'roadphone'
+    elseif GetResourceState('npwd') == 'started' then
+        Phone = 'npwd'
+    elseif GetResourceState('yseries') == 'started' then
+        Phone = 'yseries'
+    elseif GetResourceState('okokPhone') == 'started' then
+        Phone = 'okokPhone'
+    else
+        -- Add custom phone here
+    end
+end
+
+-- Display a notification
+--- @param message string
+--- @param type any
+function ShowNotification(message, type)
+    if shared.setup.notify == 'lation_ui' then
+        exports.lation_ui:notify({ title = 'Chop Shop', message = message, type = type or 'info', icon = 'fas fa-car' })
+    elseif shared.setup.notify == 'ox_lib' then
+        lib.notify({ description = message, type = type or 'inform', position = 'top', icon = 'fas fa-car' })
+    elseif shared.setup.notify == 'esx' then
+        ESX.ShowNotification(message)
+    elseif shared.setup.notify == 'qb' then
+        QBCore.Functions.Notify(message, type or 'primary')
+    elseif shared.setup.notify == 'okok' then
+        exports['okokNotify']:Alert('Chop Shop', message, 5000, type or 'info', false)
+    elseif shared.setup.notify == 'sd-notify' then
+        exports['sd-notify']:Notify('Chop Shop', message, type or 'primary')
+    elseif shared.setup.notify == 'wasabi_notify' then
+        exports.wasabi_notify:notify('Chop Shop', message, 5000, type or 'info', false, 'fas fa-car')
+    elseif shared.setup.notify == 'custom' then
+        -- Add custom notification export/event here
+    end
+end
+
+-- Display notifications from server
+--- @param message string
+--- @param type string
+RegisterNetEvent('lation_chopshop:notify', function(message, type)
+    ShowNotification(message, type)
+end)
+
+-- Return true or false if player can start chopping
+--- @param model string Model name
+--- @param entity number Entity ID
+--- @return boolean
+function CanStartChopping(model, entity)
+    if not model or not entity then return false end
+
+    if not shared.start.allowOwned then
+        local plate = GetVehicleNumberPlateText(entity)
+        if not plate or plate == '' then return false end
+
+        local isOwned = lib.callback.await('lation_chopshop:isOwnedVehicle', false, plate)
+
+        if isOwned then
+            ShowNotification(locale('notify.owned-vehicle'), 'error')
+            return false
+        end
+    end
+
+    return true
+end
+
+-- Send email
+--- @param message string
+local function SendEmail(message)
+    if not message then return end
+    if Phone == 'qs-smartphone' then
+        TriggerServerEvent('qs-smartphone:server:sendNewMail', {
+            sender = 'Salvage Specialist',
+            subject = 'Chop Shop',
+            message = message
+        })
+    elseif Phone == 'roadphone' then
+        exports[Phone]:sendMail({
+            sender = 'Salvage Specialist',
+            subject = 'Chop Shop',
+            message = message
+        })
+    else
+        lib.alertDialog({
+            header = 'Chop Shop',
+            content = message,
+            centered = true,
+            cancel = true
+        })
+    end
+end
+
+-- Display a progress bar
+--- @param data table
+function ProgressBar(data)
+    if shared.setup.progress == 'lation_ui' then
+        if exports.lation_ui:progressBar({
+            label = data.label,
+            description = data.description or nil,
+            icon = data.icon or nil,
+            duration = data.duration,
+            useWhileDead = data.useWhileDead,
+            canCancel = data.canCancel,
+            steps = data.steps or nil,
+            disable = data.disable,
+            anim = {
+                dict = data.anim.dict or nil,
+                clip = data.anim.clip or nil,
+                flag = data.anim.flag or nil
+            },
+            prop = {
+                model = data.prop.model or nil,
+                bone = data.prop.bone or nil,
+                pos = data.prop.pos or nil,
+                rot = data.prop.rot or nil
+            }
+        }) then
+            return true
+        end
+        return false
+    elseif shared.setup.progress == 'ox_lib' then
+        -- Want to use ox_lib's progress circle instead of bar?
+        -- Change "progressBar" to "progressCircle" below & done!
+        if lib.progressBar({
+            label = data.label,
+            duration = data.duration,
+            position = data.position or 'bottom',
+            useWhileDead = data.useWhileDead,
+            allowSwimming = data.allowSwimming or false,
+            canCancel = data.canCancel,
+            disable = data.disable,
+            anim = {
+                dict = data.anim.dict or nil,
+                clip = data.anim.clip or nil,
+                flag = data.anim.flag or nil
+            },
+            prop = {
+                model = data.prop.model or nil,
+                bone = data.prop.bone or nil,
+                pos = data.prop.pos or nil,
+                rot = data.prop.rot or nil
+            }
+        }) then
+            return true
+        end
+        return false
+    elseif shared.setup.progress == 'qbcore' then
+        local p = promise.new()
+        QBCore.Functions.Progressbar(data.label, data.label, data.duration, data.useWhileDead, data.canCancel, {
+            disableMovement = data.disable.move,
+            disableCarMovement = data.disable.car,
+            disableMouse = false,
+            disableCombat = data.disable.combat
+        }, {
+            animDict = data.anim.dict or nil,
+            anim = data.anim.clip or nil,
+            flags = data.anim.flag or nil
+        }, {
+            model = data.prop.model or nil,
+            bone = data.prop.bone or nil,
+            coords = data.prop.pos or nil,
+            rotation = data.prop.rot or nil
+        }, {},
+        function()
+            ClearPedTasks(cache.ped)
+            p:resolve(true)
+        end,
+        function()
+            ClearPedTasks(cache.ped)
+            p:resolve(false)
+        end)
+        return Citizen.Await(p)
+    else
+        -- Add 'custom' progress bar here
+    end
+end
+
+-- Register menu
+--- @param data table
+function RegisterMenu(data)
+    if shared.setup.menu == 'lation_ui' then
+        exports.lation_ui:registerMenu(data)
+    elseif shared.setup.menu == 'ox_lib' then
+        lib.registerContext(data)
+    elseif shared.setup.menu == 'custom' then
+        -- Add 'custom' menu system here
+    end
+end
+
+-- Show menu
+--- @param menuId string
+function ShowMenu(menuId)
+    if shared.setup.menu == 'lation_ui' then
+        exports.lation_ui:showMenu(menuId)
+    elseif shared.setup.menu == 'ox_lib' then
+        lib.showContext(menuId)
+    elseif shared.setup.menu == 'custom' then
+        -- Add 'custom' menu system here
+    end
+end
+
+-- Display an alert dialog
+--- @param data table
+function ShowAlert(data)
+    if shared.setup.dialogs == 'lation_ui' then
+        return exports.lation_ui:alert(data)
+    elseif shared.setup.dialogs == 'ox_lib' then
+        return lib.alertDialog(data)
+    elseif shared.setup.dialogs == 'custom' then
+        -- Add your custom alert dialog here
+    end
+end
+
+-- Display an input dialog
+--- @param data table
+function ShowInput(data)
+    if shared.setup.dialogs == 'lation_ui' then
+        return exports.lation_ui:input({ title = data.title, options = data.options })
+    elseif shared.setup.dialogs == 'ox_lib' then
+        return lib.inputDialog(data.title, data.options)
+    elseif shared.setup.dialogss == 'custom' then
+        -- Add your custom input dialog here
+    end
+end
+
+-- Display TextUI
+--- @param text string 
+--- @param icon string
+function ShowTextUI(text, icon)
+    if textui == 'lation_ui' then
+        exports.lation_ui:showText({
+            description = text,
+            icon = icon,
+            iconAnimation = 'beat'
+        })
+    elseif textui == 'ox_lib' then
+        lib.showTextUI(text, {
+            position = 'left-center',
+            icon = icon,
+            iconAnimation = 'beat'
+        })
+    elseif textui == 'jg-textui' then
+        exports['jg-textui']:DrawText(text)
+    elseif textui == 'okokTextUI' then
+        exports['okokTextUI']:Open(text, 'lightblue ', 'left', false)
+    elseif textui == 'qbcore' then
+        exports['qb-core']:DrawText(text, 'left')
+    else
+        -- Add custom textUI here
+    end
+end
+
+-- Hide TextUI
+--- @param label string
+function HideTextUI(label)
+    if textui == 'lation_ui' then
+        local isOpen, text = exports.lation_ui:isOpen()
+        if isOpen and text == label then
+            exports.lation_ui:hideText()
+        end
+    elseif textui == 'ox_lib' then
+        local isOpen, text = lib.isTextUIOpen()
+        if isOpen and text == label then
+            lib.hideTextUI()
+        end
+    elseif textui == 'jg-textui' then
+        exports['jg-textui']:HideText()
+    elseif textui == 'okokTextUI' then
+        exports['okokTextUI']:Close()
+    elseif textui == 'qbcore' then
+        exports['qb-core']:HideText()
+    else
+        -- Add custom textUI here
+    end
+end
+
+-- Display skillcheck
+--- @param data table .difficulty, .inputs
+function ShowSkillcheck(data)
+    if shared.setup.minigame == 'lation_ui' then
+        if exports.lation_ui:skillCheck('Chopping', data.difficulty, data.inputs) then
+            return true
+        end
+        return false
+    elseif shared.setup.minigame == 'ox_lib' then
+        if lib.skillCheck(data.difficulty, data.inputs) then
+            return true
+        end
+        return false
+    elseif shared.setup.minigame == 'custom' then
+        -- Add custom minigame here
+    end
+    return false
+end
+
+-- Show Lith Studios Bolt Minigame
+--- @param entity number Entity number
+--- @param wheelId number Wheel index
+--- @param mount boolean Mount wheel
+--- @param goToWheel boolean Go to wheel
+--- @param coords any
+function ShowLsBoltMinigame(entity, wheelId, mount, goToWheel, coords)
+    if shared.setup.ls_bolt_minigame and not ls_bolt_minigame then
+        print('^1[ERROR]: ls_bolt_minigame resource is not installed (or started correctly)^0')
+        print('^1[ERROR]: You either have not installed it or the start order is incorrect^0')
+        print('^1[ERROR]: If installed, ensure the resource is started BEFORE lation_chopshop^0')
+        print('^4[INFO]: Don\'t have ls_bolt_minigame yet? Get it here for free: https://lith.store/package/6174416^0')
+        return false
+    end
+
+    return exports['ls_bolt_minigame']:BoltMinigame(entity, wheelId, mount, goToWheel, coords)
+end
+
+-- Add entity target
+--- @param entity number Entity number
+--- @param data table Options table
+function AddTargetEntity(entity, data)
+    if shared.setup.interact == 'ox_target' then
+        exports.ox_target:addLocalEntity(entity, data)
+    elseif shared.setup.interact == 'qb-target' then
+        exports['qb-target']:AddTargetEntity(entity, {options = data, distance = 1.75})
+    elseif shared.setup.interact == 'interact' then
+        exports.interact:AddLocalEntityInteraction({
+            entity = entity,
+            interactDst = 1.75,
+            offset = vec3(0.0, 0.0, 1.0),
+            options = data
+        })
+    elseif shared.setup.interact == 'custom' then
+        -- Add support for a custom target system here
+    else
+        print('^1[ERROR]: No interaction system was detected - please visit config/shared "setup" section^0')
+    end
+end
+
+-- Add target to model
+--- @param model string Model
+--- @param data table Options table
+function AddTargetModel(model, data)
+    if shared.setup.interact == 'ox_target' then
+        exports.ox_target:addModel(model, data)
+    elseif shared.setup.interact == 'qb-target' then
+        exports['qb-target']:AddTargetModel(model, {options = data, distance = 1.75})
+    elseif shared.setup.interact == 'interact' then
+        exports.interact:AddModelInteraction({
+            model = model,
+            offset = vec3(0.0, 0.0, 0.0),
+            id = model,
+            interactDst = 1.75,
+            options = data
+        })
+    elseif shared.setup.interact == 'custom' then
+        -- Add support for a custom target system here
+    else
+        print('^1[ERROR]: No interaction system was detected - please visit config/shared "setup" section^0')
+    end
+end
+
+-- Add target to entity bone
+--- @param entity number
+--- @param bone string
+--- @param data table
+function AddTargetBone(entity, bone, data)
+    if shared.setup.interact == 'ox_target' then
+        exports.ox_target:addLocalEntity(entity, data)
+    elseif shared.setup.interact == 'qb-target' then
+        exports['qb-target']:AddTargetBone(bone, {options = data, distance = 1.75})
+    elseif shared.setup.interact == 'interact' then
+        exports.interact:AddLocalEntityInteraction({
+            entity = entity,
+            interactDst = 1.75,
+            bone = bone,
+            options = data
+        })
+    elseif shared.setup.interact == 'custom' then
+        -- Add support for a custom target system here
+    else
+        print('^1[ERROR]: No interaction system was detected - please visit config/shared "setup" section^0')
+    end
+end
+
+-- Remove target from entity
+--- @param entity any|number
+--- @param data table|string
+function RemoveTargetEntity(entity, data)
+    if shared.setup.interact == 'ox_target' then
+        exports.ox_target:removeLocalEntity(entity, data)
+    elseif shared.setup.interact == 'qb-target' then
+        exports['qb-target']:RemoveTargetEntity(entity, data)
+    elseif shared.setup.interact == 'interact' then
+        exports.interact:RemoveLocalEntityInteraction(entity, data)
+    elseif shared.setup.interact == 'custom' then
+        -- Add support for a custom target system here
+    else
+        print('^1[ERROR]: No interaction system was detected - please visit config/shared "setup" section^0')
+    end
+end
+
+-- Remove target model
+--- @param model string Model
+function RemoveTargetModel(model)
+    if shared.setup.interact == 'ox_target' then
+        exports.ox_target:removeModel(model, nil)
+    elseif shared.setup.interact == 'qb-target' then
+        exports['qb-target']:RemoveTargetModel(model, nil)
+    elseif shared.setup.interact == 'interact' then
+        exports.interact:RemoveModelInteraction(model, model)
+    elseif shared.setup.interact == 'custom' then
+        -- Add support for a custom target system here
+    else
+        print('^1[ERROR]: No interaction system was detected - please visit config/shared "setup" section^0')
+    end
+end
+
+-- Remove target from entity bone
+--- @param entity any|number
+--- @param bone string
+--- @param data table|string
+function RemoveTargetBone(entity, bone, data)
+    if shared.setup.interact == 'ox_target' then
+        exports.ox_target:removeLocalEntity(entity, data)
+    elseif shared.setup.interact == 'qb-target' then
+        exports['qb-target']:RemoveTargetBone(bone, data)
+    elseif shared.setup.interact == 'interact' then
+        exports.interact:RemoveLocalEntityInteraction(entity, data)
+    elseif shared.setup.interact == 'custom' then
+        -- Add support for a custom target system here
+    else
+        print('^1[ERROR]: No interaction system was detected - please visit config/shared "setup" section^0')
+    end
+end
+
+-- Empty function triggered when "Start Chopping" is selected
+--- @param entity number Entity ID
+--- @param model string Model name
+function StartedChopping(entity, model)
+    -- print(('Chopping has started on entity/model: %s/%s'):format(entity, model))
+end
+
+-- Assign waypoint to random zone upon vehicle entry
+--- @param value number
+--- @param _ any
+lib.onCache('vehicle', function(value, _)
+    if not value then return end
+
+    local model = modelHashes[GetEntityModel(value)]
+    if not model then return end
+
+    local assignedModel = chopshop:getAssignedModel()
+    if not assignedModel then return end
+
+    if model ~= assignedModel then return end
+
+    local zone = shared.zones[math.random(#shared.zones)]
+    if not zone then return end
+
+    SetNewWaypoint(zone.x, zone.y)
+    TriggerServerEvent('lation_chopshop:foundModel')
+end)
+
+-- Function to spawn NPCs
+--- @param model string
+--- @param position vector4
+function SpawnPed(model, position)
+    lib.requestModel(model)
+    local ped = CreatePed(0, model, position.x, position.y, position.z - 1.0, position.w, false, true)
+    FreezeEntityPosition(ped, true)
+    SetBlockingOfNonTemporaryEvents(ped, true)
+    SetEntityInvincible(ped, true)
+    return ped
+end
+
+-- Print debug message
+--- @param message string
+function Debug(message)
+    if not shared.setup.debug then return end
+    print(('^2[DEBUG]:^0 %s'):format(message))
+end
+
+-- Register net event(s)
+RegisterNetEvent('lation_chopshop:sendEmail', SendEmail)
+
+-- Initialize default(s)
+InitializePhone()
+```
+
+
+```lua server/functions.lua expandable
+-- Initialize global variable to store phone
+Phone = nil
+
+-- Initialize config(s)
+local server = require 'config.server'
+local shared = require 'config.shared'
+
+-- Check to see if fm-logs or fmsdk is started
+local fmlogs = GetResourceState('fm-logs') == 'started'
+local fmsdk = GetResourceState('fmsdk') == 'started'
+
+-- Get phone
+local function InitializePhone()
+    if GetResourceState('lb-phone') == 'started' then
+        Phone = 'lb-phone'
+    elseif GetResourceState('qb-phone') == 'started' then
+        Phone = 'qb-phone'
+    elseif GetResourceState('qs-smartphone-pro') == 'started' then
+        Phone = 'qs-smartphone-pro'
+    elseif GetResourceState('qs-smartphone') == 'started' then
+        Phone = 'qs-smartphone'
+    elseif GetResourceState('gksphone') == 'started' then
+        Phone = 'gksphone'
+    elseif GetResourceState('roadphone') == 'started' then
+        Phone = 'roadphone'
+    elseif GetResourceState('npwd') == 'started' then
+        Phone = 'npwd'
+    elseif GetResourceState('yseries') == 'started' then
+        Phone = 'yseries'
+    elseif GetResourceState('okokPhone') == 'started' then
+        Phone = 'okokPhone'
+    else
+        -- Add custom phone here
+    end
+end
+
+-- Empty function that's triggered when requesting a job
+-- Return true to allow, false to deny
+--- @param source number Player ID
+function CanRequestJob(source)
+    return true
+end
+
+-- Empty function that's triggered when a vehicle part is removed
+--- @param source number Player ID
+--- @param entity number Entity ID
+--- @param model string Vehicle model
+--- @param typeId string Type ID "wheels", "doors", "frame"
+--- @param boneId string Bone ID "door_dside_f", "door_pside_f", "door_dside_r", "door_pside_r", "wheel_lf", "wheel_rf", "wheel_lr", "wheel_rr"
+function VehiclePartRemoved(source, entity, model, typeId, boneId)
+    -- print(('Vehicle model & part removed: %s, %s'):format(model, typeId))
+end
+
+-- Returns boolean if vehicle is owned by a player
+--- @param source number Player ID
+--- @param plate string Vehicle plate
+--- @return boolean
+function IsOwnedVehicle(source, plate)
+    if not source or not plate then return false end
+
+    local tableName
+    if Framework == 'esx' then
+        tableName = 'owned_vehicles'
+    elseif Framework == 'qb' or Framework == 'qbx' then
+        tableName = 'player_vehicles'
+    elseif Framework == 'ox' then
+        tableName = 'vehicles'
+    else
+        return false
+    end
+
+    local results = MySQL.query.await('SELECT 1 FROM ' .. tableName .. ' WHERE plate = ? LIMIT 1', { plate })
+    return results and #results > 0
+end
+
+-- Backs up deleted vehicle data to a SQL file
+--- @param tableName string Name of the database table
+--- @param vehicleData table Vehicle data to backup
+function BackupDeletedVehicle(tableName, vehicleData)
+    local resourceName = GetCurrentResourceName()
+    local fileName = 'deleted_vehicles.sql'
+    local existing = LoadResourceFile(resourceName, fileName)
+
+    local columns, values = {}, {}
+    for k, v in pairs(vehicleData) do
+        table.insert(columns, '`' .. k .. '`')
+        if v == nil or v == "" then
+            table.insert(values, "NULL")
+        elseif type(v) == "number" then
+            table.insert(values, tostring(v))
+        elseif type(v) == "boolean" then
+            table.insert(values, v and "1" or "0")
+        else
+            table.insert(values, "'" .. tostring(v):gsub("'", "''") .. "'")
+        end
+    end
+
+    local sql = ("INSERT INTO `%s` (%s) VALUES (%s);\n"):format(
+        tableName,
+        table.concat(columns, ', '),
+        table.concat(values, ', ')
+    )
+
+    local newContent = existing .. sql
+    SaveResourceFile(resourceName, fileName, newContent, #newContent)
+end
+
+-- Deletes owned vehicle from database
+--- @param source number Player ID
+--- @param plate string Vehicle plate
+function DeleteOwnedVehicle(source, plate)
+    if not source or not plate then return end
+    if not shared.start.deleteOwned then return end
+
+    local tableName
+    if Framework == 'esx' then
+        tableName = 'owned_vehicles'
+    elseif Framework == 'qb' or Framework == 'qbx' then
+        tableName = 'player_vehicles'
+    elseif Framework == 'ox' then
+        tableName = 'vehicles'
+    end
+
+    local results = MySQL.query.await('SELECT * FROM ' .. tableName .. ' WHERE plate = ?', { plate })
+    if results and #results > 0 then
+        BackupDeletedVehicle(tableName, results[1])
+        MySQL.query.await('DELETE FROM ' .. tableName .. ' WHERE plate = ?', { plate })
+    end
+end
+
+-- Send an email
+--- @param source number Player ID
+--- @param message string
+function SendEmail(source, message)
+    if not source or not message then return end
+    if Phone == 'lb-phone' then
+        local number = exports[Phone]:GetEquippedPhoneNumber(source)
+        if not number then return end
+        local email = exports[Phone]:GetEmailAddress(number)
+        if not email then return end
+        exports[Phone]:SendMail({
+            to = email,
+            subject = 'Chop Shop',
+            message = message
+        })
+    elseif Phone == 'qb-phone' then
+        exports[Phone]:sendNewMailToOffline(GetIdentifier(source), {
+            sender = 'Salvage Specialist',
+            subject = 'Chop Shop',
+            message = message
+        })
+    elseif Phone == 'qs-smartphone-pro' then
+        exports[Phone]:sendNewMail(source, {
+            sender = 'Salvage Specialist',
+            subject = 'Chop Shop',
+            message = message
+        })
+    elseif Phone == 'qs-smartphone' then
+        TriggerClientEvent('lation_chopshop:sendEmail', source, message)
+    elseif Phone == 'gksphone' then
+        exports[Phone]:SendNewMail(source, {
+            sender = 'Salvage Specialist',
+            image = '/html/static/img/icons/mail.png',
+            subject = 'Chop Shop',
+            message = message
+        })
+    elseif Phone == 'roadphone' then
+        TriggerClientEvent('lation_chopshop:sendEmail', source, message)
+    elseif Phone == 'npwd' then
+        local player = exports[Phone]:getPlayerData({ source = source })
+        if not player then return end
+        exports[Phone]:emitMessage({
+            senderNumber = exports[Phone]:generatePhoneNumber(),
+            targetNumber = player.phoneNumber,
+            message = message
+        })
+    elseif Phone == 'yseries' then
+        local number = exports[Phone]:GetPhoneNumberBySourceId(source)
+        if not number then return end
+        exports[Phone]:SendMail({
+            title = 'Chop Shop',
+            sender = 'Salvage Specialist',
+            senderDisplayName = 'Salvage Specialist',
+            content = message
+        }, 'phoneNumber', number)
+    elseif Phone == 'okokPhone' then
+        local email = exports[Phone]:getEmailAddressFromSource(source)
+        if not email then return end
+        exports[Phone]:sendEmail({
+            sender = 'Salvage Specialist',
+            recipients = {email},
+            subject = 'Chop Shop',
+            body = message
+        })
+    else
+        TriggerClientEvent('lation_chopshop:sendEmail', source, message)
+    end
+end
+
+-- Log player events if applicable
+--- @param source number Player ID
+--- @param title string Log title
+--- @param message string Message contents
+function PlayerLog(source, title, message)
+    if server.logs.service == 'fivemanage' then
+        if not fmsdk then return end
+        if server.logs.screenshots then
+            exports.fmsdk:takeServerImage(source, {
+                name = title,
+                description = message,
+            })
+        else
+            exports.fmsdk:LogMessage('info', message)
+        end
+    elseif server.logs.service == 'fivemerr' then
+        if not fmlogs then return end
+        exports['fm-logs']:createLog({
+            LogType = 'Player',
+            Message = message,
+            Resource = 'lation_coke',
+            Source = source,
+        }, { Screenshot = server.logs.screenshots })
+    elseif server.logs.service == 'discord' then
+        local embed = {
+            {
+                ["color"] = 16711680,
+                ["title"] = "**".. title .."**",
+                ["description"] = message,
+                ["footer"] = {
+                    ["text"] = os.date("%a %b %d, %I:%M%p"),
+                    ["icon_url"] = server.logs.discord.footer
+                }
+            }
+        }
+        PerformHttpRequest(server.logs.discord.link, function()
+        end, 'POST', json.encode({username = server.logs.discord.name, embeds = embed, avatar_url = server.logs.discord.image}),
+        {['Content-Type'] = 'application/json'})
+    end
+end
+
+-- Register net event(s)
+RegisterNetEvent('lation_chopshop:sendEmail', SendEmail)
+
+-- Register callback(s)
+lib.callback.register('lation_chopshop:isOwnedVehicle', IsOwnedVehicle)
+
+-- Initialize default(s)
+InitializePhone()
+
+-- Temporary command to migrate data from V1 to V2
+-- This command should be removed after the migration is complete
+--- @param source number
+RegisterCommand('migrateChopshopData', function(source)
+    if source ~= 0 then
+        print('This command can only be run from the server console.')
+        return
+    end
+
+    local function calculateLevel(exp)
+        local level = 1
+        for lvl, requiredExp in pairs(shared.experience) do
+            if exp >= requiredExp then
+                level = lvl
+            else
+                break
+            end
+        end
+        return level
+    end
+
+    MySQL.Async.fetchAll('SELECT * FROM lation_chopshop', {}, function(oldData)
+        if not oldData or #oldData == 0 then
+            print('No player data was found in the V1 lation_chopshop database table.')
+            print('If this is your first installation of lation_chopshop; you do not need to run this command.')
+            return
+        end
+
+        local transactionData = {}
+
+        for _, row in ipairs(oldData) do
+            local level = calculateLevel(row.reputation)
+            local name = nil
+
+            if Framework == 'esx' then
+                local results = MySQL.query.await('SELECT `firstname`, `lastname` FROM `users` WHERE `identifier` = ? LIMIT 1', { row.player_identifier })
+                local result = results[1]
+                if result then
+                    name = result.firstname.. ' ' ..result.lastname
+                end
+            elseif Framework == 'qb' then
+                local results = MySQL.query.await('SELECT * FROM `players` WHERE `citizenid` = ? LIMIT 1', { row.player_identifier })
+                local result = results[1]
+                if result then
+                    local PlayerData = { charinfo = json.decode(result.charinfo) }
+                    if PlayerData then
+                        name = PlayerData.charinfo.firstname.. ' ' ..PlayerData.charinfo.lastname
+                    end
+                end
+            elseif Framework == 'qbx' then
+                local player = exports.qbx_core:GetOfflinePlayer(row.player_identifier)
+                if player then
+                    name = player.PlayerData.charinfo.firstname.. ' ' ..player.PlayerData.charinfo.lastname
+                end
+            end
+
+            table.insert(transactionData, {
+                query = 'INSERT INTO lation_chopshopv2 (identifier, name, level, exp, vehicles, parts) VALUES (?, ?, ?, ?, ?, ?) ' ..
+                        'ON DUPLICATE KEY UPDATE level = VALUES(level), exp = VALUES(exp), vehicles = VALUES(vehicles), parts = VALUES(parts)',
+                values = {
+                    row.player_identifier,
+                    name or 'Unknown',
+                    level,
+                    row.reputation,
+                    row.total_chopped,
+                    row.total_parts
+                }
+            })
+        end
+
+        MySQL.transaction(transactionData, function(success)
+            if success then
+                print('Player data migration from V1 to V2 completed successfully!')
+                print('You can now safely delete the "lation_chopshop" database table')
+                print('The new database table is "lation_chopshopv2", do not delete that')
+                print('------------------------------------------------------------')
+                print('You should now remove the /migrateChopshopData command from your server.')
+                print('To do this go to lation_chopshop/server/functions.lua and delete lines 153-214')
+            else
+                print('Player data migration failed - no changes were made and your data is safe.')
+            end
+        end)
+    end)
+end, false)
+
+-- Wrapper functions for built-in group management system
+
+function CreateGroup(source)
+    api.createGroup(source)
+end
+
+function AddGroupMember(source, targetId)
+    api.addGroupMember(source, targetId)
+end
+
+function RemoveGroupMember(source, targetId)
+    api.removeGroupMember(source, targetId)
+end
+
+function LeaveGroup(source)
+    api.leaveGroup(source)
+end
+
+function IsInGroup(source)
+    return api.isInGroup(source)
+end
+
+function GetGroupMembers(source)
+    return api.getGroupMembers(source)
+end
+
+function IsGroupOwner(source)
+    return api.isGroupOwner(source)
+end
+
+function GetGroup(source)
+    return api.getGroup(source)
+end
+
+function GetGroupOwner(source)
+    return api.getGroupOwner(source)
+end
+```
+
+</CodeGroup>
