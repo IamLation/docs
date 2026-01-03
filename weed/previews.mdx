@@ -1,0 +1,1768 @@
+---
+title: "Previews"
+icon: "eye"
+description: "Preview open source files included with this resource"
+---
+
+<CodeGroup>
+
+```lua bridge/client.lua expandable
+-- Initialize global variables to store framework & inventory
+Framework, Inventory = nil, nil
+
+-- Initialize global player variables
+PlayerLoaded, PlayerData = nil, {}
+
+-- Get framework
+local function InitializeFramework()
+    if GetResourceState('es_extended') == 'started' then
+        ESX = exports['es_extended']:getSharedObject()
+        Framework = 'esx'
+
+        RegisterNetEvent('esx:playerLoaded', function(xPlayer)
+            PlayerData = xPlayer
+            PlayerLoaded = true
+            TriggerEvent('lation_weed:onPlayerLoaded')
+        end)
+
+        RegisterNetEvent('esx:onPlayerLogout', function()
+            table.wipe(PlayerData)
+            PlayerLoaded = false
+        end)
+
+        AddEventHandler('onResourceStart', function(resourceName)
+            if GetCurrentResourceName() ~= resourceName then return end
+            PlayerData = GetPlayerData()
+            PlayerLoaded = true
+            TriggerEvent('lation_weed:onPlayerLoaded')
+        end)
+
+    elseif GetResourceState('qbx_core') == 'started' then
+        Framework = 'qbx'
+
+        AddEventHandler('QBCore:Client:OnPlayerLoaded', function()
+            PlayerData = GetPlayerData()
+            PlayerLoaded = true
+            TriggerEvent('lation_weed:onPlayerLoaded')
+        end)
+
+        RegisterNetEvent('qbx_core:client:playerLoggedOut', function()
+            table.wipe(PlayerData)
+            PlayerLoaded = false
+        end)
+
+        AddEventHandler('onResourceStart', function(resourceName)
+            if GetCurrentResourceName() ~= resourceName then return end
+            PlayerData = GetPlayerData()
+            PlayerLoaded = true
+            TriggerEvent('lation_weed:onPlayerLoaded')
+        end)
+    elseif GetResourceState('qb-core') == 'started' then
+        QBCore = exports['qb-core']:GetCoreObject()
+        Framework = 'qb'
+
+        AddEventHandler('QBCore:Client:OnPlayerLoaded', function()
+            PlayerData = GetPlayerData()
+            PlayerLoaded = true
+            TriggerEvent('lation_weed:onPlayerLoaded')
+        end)
+
+        RegisterNetEvent('QBCore:Client:OnPlayerUnload', function()
+            table.wipe(PlayerData)
+            PlayerLoaded = false
+        end)
+
+        AddEventHandler('onResourceStart', function(resourceName)
+            if GetCurrentResourceName() ~= resourceName then return end
+            PlayerData = GetPlayerData()
+            PlayerLoaded = true
+            TriggerEvent('lation_weed:onPlayerLoaded')
+        end)
+    elseif GetResourceState('ox_core') == 'started' then
+        Ox = require '@ox_core.lib.init'
+        Framework = 'ox'
+
+        AddEventHandler('ox:playerLoaded', function()
+            PlayerData = GetPlayerData()
+            PlayerLoaded = true
+            TriggerEvent('lation_weed:onPlayerLoaded')
+        end)
+
+        AddEventHandler('ox:playerLogout', function()
+            table.wipe(PlayerData)
+            PlayerLoaded = false
+        end)
+
+        AddEventHandler('onResourceStart', function(resourceName)
+            if GetCurrentResourceName() ~= resourceName then return end
+            PlayerData = GetPlayerData()
+            PlayerLoaded = true
+            TriggerEvent('lation_weed:onPlayerLoaded')
+        end)
+    else
+        -- Add custom framework here
+    end
+end
+
+-- Get inventory
+local function InitializeInventory()
+    if GetResourceState('ox_inventory') == 'started' then
+        Inventory = 'ox_inventory'
+    elseif GetResourceState('qb-inventory') == 'started' then
+        Inventory = 'qb-inventory'
+    elseif GetResourceState('qs-inventory') == 'started' then
+        Inventory = 'qs-inventory'
+    elseif GetResourceState('ps-inventory') == 'started' then
+        Inventory = 'ps-inventory'
+    elseif GetResourceState('origen_inventory') == 'started' then
+        Inventory = 'origen_inventory'
+    elseif GetResourceState('codem-inventory') == 'started' then
+        Inventory = 'codem-inventory'
+    elseif GetResourceState('core_inventory') == 'started' then
+        Inventory = 'core_inventory'
+    else
+        -- Add custom inventory here
+    end
+end
+
+-- Returns player data
+function GetPlayerData()
+    if Framework == 'esx' then
+        return ESX.GetPlayerData()
+    elseif Framework == 'qb' then
+        return QBCore.Functions.GetPlayerData()
+    elseif Framework == 'qbx' then
+        return exports.qbx_core:GetPlayerData()
+    elseif Framework == 'ox' then
+        return Ox.GetPlayer()
+    else
+        -- Add custom framework here
+    end
+end
+
+-- Returns players current inventory data
+--- @return any
+function GetPlayerInventory()
+    if Inventory then
+        if Inventory == 'ox_inventory' then
+            return exports[Inventory]:GetPlayerItems()
+        elseif Inventory == 'qb-inventory' then
+            return GetPlayerData().items
+        elseif Inventory == 'qs-inventory' then
+            return exports[Inventory]:getUserInventory()
+        elseif Inventory == 'ps-inventory' then
+            return GetPlayerData().items
+        elseif Inventory == 'origen_inventory' then
+            return exports[Inventory]:GetInventory()
+        elseif Inventory == 'codem-inventory' then
+            return exports[Inventory]:GetClientPlayerInventory()
+        end
+    else
+        if Framework == 'esx' then
+            return GetPlayerData().inventory
+        elseif Framework == 'qb' then
+            return GetPlayerData().items
+        elseif Framework == 'qbx' then
+            return print('Are you really not using ox_inventory? Contact support and say: "I\'m special"')
+        elseif Framework == 'ox' then
+            return print('It is confirmed your insane. Please contact support for mental health evaluation.')
+        end
+    end
+end
+
+-- Returns player job
+function GetPlayerJob()
+    local player = GetPlayerData()
+    if not player then return end
+    if Framework == 'esx' then
+        return player?.job?.name
+    elseif Framework == 'qb' then
+        return player.job.name
+    elseif Framework == 'qbx' then
+        return player.job.name
+    elseif Framework == 'ox' then
+        return player.getGroups()
+    else
+        -- Add custom framework here
+    end
+end
+
+-- Returns boolean if player has specified amount of item
+--- @param item string
+--- @param amount number
+--- @return boolean
+function HasItem(item, amount)
+    if not item or not amount then return false end
+    if Inventory then
+        if Inventory == 'ox_inventory' then
+            return exports[Inventory]:Search('count', item) >= amount
+        elseif Inventory == 'core_inventory' then
+            return exports[Inventory]:hasItem(item, amount)
+        else
+            return exports[Inventory]:HasItem(item, amount)
+        end
+    else
+        local playerData = GetPlayerData()
+        if not playerData then return false end
+        local inventory = Framework == 'esx' and playerData.inventory or playerData.items
+        if not inventory then return false end
+        for _, itemData in pairs(inventory) do
+            if itemData and itemData.name == item then
+                local count = itemData.amount or itemData.count or 0
+                if count >= amount then
+                    return true
+                end
+            end
+        end
+        return false
+    end
+end
+
+-- Disables access to open/view inventory
+function DisableInventory()
+    if Inventory == 'ox_inventory' then
+        LocalPlayer.state.invBusy = true
+    elseif Inventory == 'qb-inventory' then
+        LocalPlayer.state.inv_busy = true
+    elseif Inventory == 'qs-inventory' then
+        exports[Inventory]:setInventoryDisabled(true)
+    elseif Inventory == 'core_inventory' then
+        exports[Inventory]:lockInventory()
+    else
+        -- Add custom inventory here
+    end
+end
+
+-- Enables access to open/view inventory
+function EnableInventory()
+    if Inventory == 'ox_inventory' then
+        LocalPlayer.state.invBusy = false
+    elseif Inventory == 'qb-inventory' then
+        LocalPlayer.state.inv_busy = false
+    elseif Inventory == 'qs-inventory' then
+        exports[Inventory]:setInventoryDisabled(false)
+    elseif Inventory == 'core_inventory' then
+        exports[Inventory]:unlockInventory()
+    else
+        -- Add custom inventory here
+    end
+end
+
+-- Initialize defaults
+InitializeFramework()
+InitializeInventory()
+```
+
+
+```lua bridge/server.lua expandable
+-- Initialize global variables to store framework & inventory
+Framework, Inventory = nil, nil
+
+-- Get framework
+local function InitializeFramework()
+    if GetResourceState('es_extended') == 'started' then
+        ESX = exports['es_extended']:getSharedObject()
+        Framework = 'esx'
+    elseif GetResourceState('qbx_core') == 'started' then
+        Framework = 'qbx'
+    elseif GetResourceState('qb-core') == 'started' then
+        QBCore = exports['qb-core']:GetCoreObject()
+        Framework = 'qb'
+    elseif GetResourceState('ox_core') == 'started' then
+        Ox = require '@ox_core.lib.init'
+        Framework = 'ox'
+    else
+        -- Add custom framework here
+    end
+end
+
+-- Get inventory
+local function InitializeInventory()
+    if GetResourceState('ox_inventory') == 'started' then
+        Inventory = 'ox_inventory'
+    elseif GetResourceState('qb-inventory') == 'started' then
+        Inventory = 'qb-inventory'
+    elseif GetResourceState('qs-inventory') == 'started' then
+        Inventory = 'qs-inventory'
+    elseif GetResourceState('ps-inventory') == 'started' then
+        Inventory = 'ps-inventory'
+    elseif GetResourceState('origen_inventory') == 'started' then
+        Inventory = 'origen_inventory'
+    elseif GetResourceState('codem-inventory') == 'started' then
+        Inventory = 'codem-inventory'
+    elseif GetResourceState('core_inventory') == 'started' then
+        Inventory = 'core_inventory'
+    else
+        -- Add custom inventory here
+    end
+end
+
+-- Get player from source
+--- @param source number Player ID
+function GetPlayer(source)
+    if not source then return end
+    if Framework == 'esx' then
+        return ESX.GetPlayerFromId(source)
+    elseif Framework == 'qb' then
+        return QBCore.Functions.GetPlayer(source)
+    elseif Framework == 'qbx' then
+        return exports.qbx_core:GetPlayer(source)
+    elseif Framework == 'ox' then
+        return Ox.GetPlayer(source)
+    else
+        -- Add custom framework here
+    end
+end
+
+-- Get player from identifier
+--- @param identifier string Player identifier/citizenId
+function GetPlayerByIdentifier(identifier)
+    if Framework == 'esx' then
+        return ESX.GetPlayerFromIdentifier(identifier)
+    elseif Framework == 'qb' then
+        return QBCore.Functions.GetPlayerByCitizenId(identifier)
+    elseif Framework == 'qbx' then
+        return exports.qbx_core:GetPlayerByCitizenId(identifier)
+    elseif Framework == 'ox' then
+        -- TODO
+    else
+        -- Add custom framework here
+    end
+end
+
+-- Function to get a player identifier by source
+--- @param source number Player ID
+function GetIdentifier(source)
+    local player = GetPlayer(source)
+    if not player then return end
+    if Framework == 'esx' then
+        return player.identifier
+    elseif Framework == 'qb' or Framework == 'qbx' then
+        return player.PlayerData.citizenid
+    elseif Framework == 'ox' then
+        return player.charId
+    else
+        -- Add custom framework here
+    end
+end
+
+-- Function to get a player's name
+--- @param source number Player ID
+--- @return string
+function GetName(source)
+    local player = GetPlayer(source)
+    if not player then return 'Unknown' end
+    if Framework == 'esx' then
+        return player.getName()
+    elseif Framework == 'qb' or Framework == 'qbx' then
+        return player.PlayerData.charinfo.firstname .. ' ' .. player.PlayerData.charinfo.lastname
+    elseif Framework == 'ox' then
+        return player.get('firstName') .. ' ' .. player.get('lastName')
+    else
+        -- Add custom framework here
+    end
+    return 'Unknown'
+end
+
+-- Return result if player has a specific job
+--- @param source number Player ID
+--- @param jobs any Job string or table of jobs
+--- @return boolean
+function DoesPlayerHaveJob(source, jobs)
+    local player = GetPlayer(source)
+    if not player then return false end
+    if type(jobs) ~= 'table' then jobs = {jobs} end
+    local playerJob, playerOnDuty
+    if Framework == 'esx' then
+        playerJob = player.job.name
+        playerOnDuty = true
+    elseif Framework == 'qb' or Framework == 'qbx' then
+        playerJob = player.PlayerData.job.name
+        playerOnDuty = player.PlayerData.job.onduty
+    elseif Framework == 'ox' then
+        playerJob = player.getGroupByType('job')
+        playerOnDuty = true
+    else
+        -- Add custom framework here
+    end
+    for _, job in pairs(jobs) do
+        if playerJob == job and playerOnDuty then
+            return true
+        end
+    end
+    return false
+end
+
+-- Returns number of players with police job(s)
+--- @return number
+function GetPoliceCount()
+    local count, jobs = 0, {}
+    for _, job in pairs(Config.Police.jobs) do
+        jobs[job] = true
+    end
+    if Framework == 'esx' then
+        for _, player in pairs(ESX.GetExtendedPlayers()) do
+            if jobs[player.getJob().name] then
+                count += 1
+            end
+        end
+    elseif Framework == 'qb' then
+        for _, playerId in pairs(QBCore.Functions.GetPlayers()) do
+            local player = QBCore.Functions.GetPlayer(playerId)
+            if jobs[player.PlayerData.job.name] and player.PlayerData.job.onduty then
+                count += 1
+            end
+        end
+    elseif Framework == 'qbx' then
+        for job, _ in pairs(jobs) do
+            count = count + exports.qbx_core:GetDutyCountJob(job)
+        end
+    elseif Framework == 'ox' then
+        for _, player in pairs(Ox.GetPlayers()) do
+            if jobs[player.getGroupByType('job')] then
+                count += 1
+            end
+        end
+    else
+        -- Add custom framework here
+    end
+    return count
+end
+
+-- Returns number of specified item in players inventory
+--- @param source number Player ID
+--- @param item string Item to search
+--- @return number
+function GetItemCount(source, item)
+    if not source or not item then return 0 end
+    local player = GetPlayer(source)
+    if not player then return 0 end
+    if Inventory then
+        if Inventory == 'ox_inventory' then
+            return exports[Inventory]:Search(source, 'count', item) or 0
+        elseif Inventory == 'core_inventory' then
+            return exports[Inventory]:getItemCount(source, item)
+        else
+            local itemData = exports[Inventory]:GetItemByName(source, item)
+            if not itemData then return 0 end
+            return itemData.amount or itemData.count or 0
+        end
+    else
+        if Framework == 'esx' then
+            local itemData = player.getInventoryItem(item)
+            if not itemData then return 0 end
+            return itemData.count or itemData.amount or 0
+        elseif Framework == 'qb' then
+            local itemData = player.Functions.GetItemByName(item)
+            if not itemData then return 0 end
+            return itemData.amount or itemData.count or 0
+        else
+            -- Add custom framework here
+        end
+    end
+    return 0
+end
+
+-- Returns if player can carry item
+--- @param source number Player ID
+--- @param item string Item name
+--- @param count number Item quantity
+function CanCarry(source, item, count)
+    if count <= 0 then return true end
+    local player = GetPlayer(source)
+    if not player then return end
+    if Inventory then
+        if Inventory == 'ox_inventory' then
+            return exports[Inventory]:CanCarryItem(source, item, count)
+        elseif Inventory == 'qb-inventory' then
+            return exports[Inventory]:CanAddItem(source, item, count)
+        elseif Inventory == 'qs-inventory' then
+            return exports[Inventory]:CanCarryItem(source, item, count)
+        elseif Inventory == 'ps-inventory' then
+            -- TODO: ps sucks, why do they not have a dedicated export for this..?
+            local totalWeight = exports[Inventory]:GetTotalWeight(player.PlayerData.items)
+            if not totalWeight then return false end
+            local itemInfo = QBCore.Shared.Items[item:lower()]
+            if not itemInfo then return false end
+            if (totalWeight + (itemInfo['weight'] * count)) <= 120000 then
+                return true
+            end
+            return false
+        elseif Inventory == 'origen_inventory' then
+            -- TODO: origen's CanCarry export not working as expected, just return true
+            return true
+        elseif Inventory == 'codem-inventory' then
+            -- TODO: CodeM docs dont specify an export for this so..
+            return true
+        elseif Inventory == 'core_inventory' then
+            -- TODO: core's canCarry export not working as expected, just return true
+            return true
+        else
+            -- Add custom inventory here
+            return true
+        end
+    else
+        if Framework == 'esx' then
+            if player.canCarryItem(item, count) then
+                return true
+            end
+            return false
+        elseif Framework == 'qb' then
+            local totalWeight = QBCore.Player.GetTotalWeight(player.PlayerData.items)
+            if not totalWeight then return false end
+            local itemInfo = QBCore.Shared.Items[item:lower()]
+            if not itemInfo then return false end
+            if (totalWeight + (itemInfo['weight'] * count)) <= 120000 then
+                return true
+            end
+            return false
+        else
+            -- Add custom framework here
+        end
+    end
+end
+
+-- Adds an item to players inventory
+--- @param source number Player ID
+--- @param item string Item to add
+--- @param count number Quantity to add
+--- @param metadata any|table Optional metadata
+function AddItem(source, item, count, metadata)
+    if count <= 0 then return end
+    local player = GetPlayer(source)
+    if not player then return end
+    if Inventory then
+        if Inventory == 'ox_inventory' then
+            exports[Inventory]:AddItem(source, item, count, metadata)
+        elseif Inventory == 'core_inventory' then
+            exports[Inventory]:addItem(source, item, count, metadata)
+        else
+            exports[Inventory]:AddItem(source, item, count, nil, metadata)
+            if Framework == 'qb' then
+                TriggerClientEvent(Inventory.. ':client:ItemBox', source, QBCore.Shared.Items[item], 'add')
+            end
+        end
+    else
+        if Framework == 'esx' then
+            player.addInventoryItem(item, count)
+        elseif Framework == 'qb' then
+            player.Functions.AddItem(item, count, nil, metadata)
+        else
+            -- Add custom framework here
+        end
+    end
+end
+
+-- Removes an item from players inventory
+--- @param source number Player ID
+--- @param item string Item to remove
+--- @param count number Quantity to remove
+function RemoveItem(source, item, count)
+    local player = GetPlayer(source)
+    if not player then return end
+    if Inventory then
+        if Inventory == 'core_inventory' then
+            exports[Inventory]:removeItem(source, item, count)
+        else
+            exports[Inventory]:RemoveItem(source, item, count)
+            if Framework == 'qb' then
+                TriggerClientEvent(Inventory.. ':client:ItemBox', source, QBCore.Shared.Items[item], 'remove')
+            end
+        end
+    else
+        if Framework == 'esx' then
+            player.removeInventoryItem(item, count)
+        elseif Framework == 'qb' then
+            player.Functions.RemoveItem(item, count)
+        else
+            -- Add custom framework here
+        end
+    end
+end
+
+-- Returns correct framework money type if needed
+--- @param type string Money type
+--- @return string
+local function ConvertMoneyType(type)
+    if type == 'money' and (Framework == 'qb' or Framework == 'qbx') then
+        type = 'cash'
+    elseif type == 'cash' and (Framework == 'esx' or Framework == 'ox') then
+        type = 'money'
+    else
+        -- Add custom framework here
+    end
+    return type
+end
+
+-- Returns balance of players account
+--- @param source number Player ID
+--- @param type string Account to check
+--- @return number
+function GetPlayerBalance(source, type)
+    local player = GetPlayer(source)
+    if not player then return 0 end
+    if Framework == 'esx' then
+        return player.getAccount(ConvertMoneyType(type)).money or 0
+    elseif Framework == 'qb' then
+        return player.PlayerData.money[ConvertMoneyType(type)] or 0
+    elseif Framework == 'qbx' then
+        return player.Functions.GetMoney(ConvertMoneyType(type)) or 0
+    elseif Framework == 'ox' then
+        if type == 'cash' or type == 'money' then
+            return GetItemCount(source, ConvertMoneyType(type)) or 0
+        end
+        return Ox.GetCharacterAccount(source).balance or 0
+    else
+        -- Add custom framework here
+    end
+    return 0
+end
+
+-- Remove money from players account
+--- @param source number Player ID
+--- @param type string Account to remove from
+--- @param amount number Amount to remove
+function RemoveMoney(source, type, amount)
+    local player = GetPlayer(source)
+    if not player then return end
+    if Framework == 'esx' then
+        player.removeAccountMoney(ConvertMoneyType(type), amount)
+    elseif Framework == 'qb' or Framework == 'qbx' then
+        player.Functions.RemoveMoney(ConvertMoneyType(type), amount)
+    elseif Framework == 'ox' then
+        if type == 'cash' or type == 'money' then
+            RemoveItem(source, ConvertMoneyType(type), amount)
+        else
+            local accountId = Ox.GetCharacterAccount(source).id
+            Ox.WithdrawMoney(source, accountId, amount)
+        end
+    else
+        -- Add custom framework here
+    end
+end
+
+-- Function to register a usable item
+--- @param item string
+--- @param cb function
+function RegisterUsableItem(item, cb)
+    if not item then return end
+    if Framework == 'esx' then
+        ESX.RegisterUsableItem(item, cb)
+    elseif Framework == 'qb' then
+        QBCore.Functions.CreateUseableItem(item, cb)
+    elseif Framework == 'qbx' then
+        exports.qbx_core:CreateUseableItem(item, cb)
+    elseif Framework == 'ox' then
+        exports(item, function(event, _, inventory)
+            if event ~= 'usingItem' then return false end
+            cb(inventory.id)
+        end)
+    else
+        -- Add custom framework here
+    end
+end
+
+-- Initialize defaults
+InitializeFramework()
+InitializeInventory()
+```
+
+</CodeGroup>
+
+<CodeGroup>
+
+```lua client/functions.lua expandable
+-- You can change the textUI script here
+-- Options: 'lation_ui', 'ox_lib', 'jg-textui', 'okokTextUI', 'qbcore' & 'custom'
+-- We have pre-formatted text for use with jg & okok textUI, visit our docs:
+-- https://docs.lationscripts.com/premium-resources/advanced-weed-growing/guides/textui
+local textui = 'ox_lib'
+
+-- Used to determine if a player can (true) or cannot(false) search a plant for seeds
+--- @param id number farmId, can be accessed via Config.Farms[id]
+function CanSearchPlant(id)
+    return true
+end
+
+-- Empty function used to allow or reject a user from placing a plant
+-- You can add custom requirements here if you have the knowledge to do so
+-- To restrict planting return false. To allow return true.
+--- @param strain string Unique strain identifier: Config.Strains[strain]
+function CanPlant(strain)
+    local inVehicle = IsPedInAnyVehicle(cache.ped, true)
+    if inVehicle then
+        ShowNotification(locale('notify.no-vehicle'), 'error')
+        return false
+    end
+    return true
+end
+
+-- Function used to allow or reject a user from entering the lab
+-- You can add custom requirements here if you have the knowledge to do so
+-- To restrict access return false. To allow access return true.
+function CanEnterLab()
+    local result, isPolice = true, false
+    if Config.Police.labAccess then
+        local playerJob = GetPlayerJob()
+        for _, job in pairs(Config.Police.jobs) do
+            if playerJob == job then
+                isPolice = true
+            end
+        end
+    end
+    local requirements = Config.Lab.requirements
+    if not requirements then
+        EventLog('[functions.lua]: CanEnterLab: missing config data')
+        result = false
+    end
+    local playerLevel = exports.lation_weed:GetPlayerData('level')
+    if playerLevel < requirements.level and not isPolice then
+        EventLog('[functions.lua]: CanEnterLab: player does not meet level requirement')
+        result = false
+    end
+    if requirements.item.enable then
+        local hasItem = HasItem(requirements.item.name, 1)
+        if not hasItem and not isPolice then
+            EventLog('[functions.lua]: CanEnterLab: player does not have required item')
+            result = false
+        end
+    end
+    if requirements.police.enable then
+        local police = lib.callback.await('lation_weed:PoliceCount', false)
+        if police < requirements.police.count and not isPolice then
+            EventLog('[functions.lua]: CanEnterLab: not enough police available')
+            result = false
+        end
+    end
+    if not result then
+        ShowNotification(locale('notify.not-authorized'), 'error')
+    end
+    -- If you want to add custom requirements for entering the lab
+    -- This is where you would make that happen
+    return result
+end
+
+-- Empty function used to allow or reject a player from starting to roll a joint(s)
+-- To reject a roll return false. To allow a roll return true.
+function CanRoll(strain)
+    return true
+end
+
+-- Empty function used to allow or reject a player from starting to bag bud(s)
+-- To reject a bag return false. To allow a bag return true.
+function CanBag(strain)
+    return true
+end
+
+-- Used to determine if a player can (true) or cannot (false) smoke a joint
+-- Can be used to make custom edits, requirements, etc
+function CanSmoke()
+    return true
+end
+
+-- Function that's triggered when planting process has started
+-- This function can be used for anything, but by default
+-- It disables the ability to open your inventory during
+-- The plant placement process
+function StartedPlanting()
+    DisableInventory()
+end
+
+-- Function that's triggered when finished planting process
+-- As mentioned above, this function can be used for anything
+-- But by default, after a player has finished plant placement
+-- It will re-enable access to their inventory
+function StoppedPlanting()
+    EnableInventory()
+end
+
+-- Function that's triggered when a player is in-range of a plant
+-- And it is spawned on their client
+--- @param entity number
+function PlantSpawned(entity)
+
+end
+
+-- Display a notification
+--- @param message string
+--- @param type string
+function ShowNotification(message, type)
+    if Config.Setup.notify == 'lation_ui' then
+        exports.lation_ui:notify({ title = 'Weed', message = message, type = type, icon = 'fas fa-cannabis' })
+    elseif Config.Setup.notify == 'ox_lib' then
+        lib.notify({ title = 'Weed', description = message, type = type, position = 'top', icon = 'fas fa-cannabis' })
+    elseif Config.Setup.notify == 'esx' then
+        ESX.ShowNotification(message)
+    elseif Config.Setup.notify == 'qb' then
+        QBCore.Functions.Notify(message, type)
+    elseif Config.Setup.notify == 'okok' then
+        exports['okokNotify']:Alert('Weed', message, 5000, type, false)
+    elseif Config.Setup.notify == 'sd-notify' then
+        exports['sd-notify']:Notify('Weed', message, type)
+    elseif Config.Setup.notify == 'wasabi_notify' then
+        exports.wasabi_notify:notify('Weed', message, 5000, type, false, 'fas fa-cannabis')
+    elseif Config.Setup.notify == 'custom' then
+        -- Add custom notification export/event here
+    end
+end
+
+-- Display notifications from server
+--- @param message string
+--- @param type string
+RegisterNetEvent('lation_weed:Notify', function(message, type)
+    ShowNotification(message, type)
+end)
+
+-- Display TextUI
+--- @param text string 
+--- @param icon string
+function ShowTextUI(text, icon)
+    if textui == 'lation_ui' then
+        exports.lation_ui:showText({
+            description = text,
+            icon = icon,
+        })
+    elseif textui == 'ox_lib' then
+        lib.showTextUI(text, {
+            position = 'left-center',
+            icon = icon
+        })
+    elseif textui == 'jg-textui' then
+        exports['jg-textui']:DrawText(text)
+    elseif textui == 'okokTextUI' then
+        exports['okokTextUI']:Open(text, 'lightblue ', 'left', false)
+    elseif textui == 'qbcore' then
+        exports['qb-core']:DrawText(text, 'left')
+    else
+        -- Add custom textUI here
+    end
+end
+
+-- Hide TextUI
+--- @param label string
+function HideTextUI(label)
+    if textui == 'lation_ui' then
+        local isOpen, text = exports.lation_ui:isOpen()
+        if isOpen and text == label then
+            exports.lation_ui:hideText()
+        end
+    elseif textui == 'ox_lib' then
+        local isOpen, text = lib.isTextUIOpen()
+        if isOpen and text == label then
+            lib.hideTextUI()
+        end
+    elseif textui == 'jg-textui' then
+        exports['jg-textui']:HideText()
+    elseif textui == 'okokTextUI' then
+        exports['okokTextUI']:Close()
+    elseif textui == 'qbcore' then
+        exports['qb-core']:HideText()
+    else
+        -- Add custom textUI here
+    end
+end
+
+-- Display a progress bar
+--- @param data table
+function ProgressBar(data)
+    if Config.Setup.progress == 'lation_ui' then
+        if exports.lation_ui:progressBar({
+            label = data.label,
+            description = data.description or nil,
+            icon = data.icon or nil,
+            duration = data.duration,
+            useWhileDead = data.useWhileDead,
+            canCancel = data.canCancel,
+            disable = data.disable,
+            anim = {
+                dict = data.anim.dict or nil,
+                clip = data.anim.clip or nil,
+                flag = data.anim.flag or nil
+            },
+            prop = {
+                model = data.prop.model or nil,
+                bone = data.prop.bone or nil,
+                pos = data.prop.pos or nil,
+                rot = data.prop.rot or nil
+            }
+        }) then
+            return true
+        end
+        return false
+    elseif Config.Setup.progress == 'ox_lib' then
+        -- Want to use ox_lib's progress circle instead of bar?
+        -- Change "progressBar" to "progressCircle" below & done!
+        if lib.progressBar({
+            label = data.label,
+            duration = data.duration,
+            position = data.position or 'bottom',
+            useWhileDead = data.useWhileDead,
+            canCancel = data.canCancel,
+            disable = data.disable,
+            anim = {
+                dict = data.anim.dict or nil,
+                clip = data.anim.clip or nil,
+                flag = data.anim.flag or nil
+            },
+            prop = {
+                model = data.prop.model or nil,
+                bone = data.prop.bone or nil,
+                pos = data.prop.pos or nil,
+                rot = data.prop.rot or nil
+            }
+        }) then
+            return true
+        end
+        return false
+    elseif Config.Setup.progress == 'qbcore' then
+        local p = promise.new()
+        QBCore.Functions.Progressbar(data.label, data.label, data.duration, data.useWhileDead, data.canCancel, {
+            disableMovement = data.disable.move,
+            disableCarMovement = data.disable.car,
+            disableMouse = false,
+            disableCombat = data.disable.combat
+        }, {
+            animDict = data.anim.dict or nil,
+            anim = data.anim.clip or nil,
+            flags = data.anim.flag or nil
+        }, {
+            model = data.prop.model or nil,
+            bone = data.prop.bone or nil,
+            coords = data.prop.pos or nil,
+            rotation = data.prop.rot or nil
+        }, {},
+        function()
+            ClearPedTasks(cache.ped)
+            p:resolve(true)
+        end,
+        function()
+            ClearPedTasks(cache.ped)
+            p:resolve(false)
+        end)
+        return Citizen.Await(p)
+    else
+        -- Add 'custom' progress bar here
+    end
+end
+
+-- Register menu
+--- @param data table
+function RegisterMenu(data)
+    if Config.Setup.menu == 'lation_ui' then
+        exports.lation_ui:registerMenu(data)
+    elseif Config.Setup.menu == 'ox_lib' then
+        lib.registerContext(data)
+    elseif Config.Setup.menu == 'custom' then
+        -- Add 'custom' menu system here
+    end
+end
+
+-- Show menu
+--- @param menuId string
+function ShowMenu(menuId)
+    if Config.Setup.menu == 'lation_ui' then
+        exports.lation_ui:showMenu(menuId)
+    elseif Config.Setup.menu == 'ox_lib' then
+        lib.showContext(menuId)
+    elseif Config.Setup.menu == 'custom' then
+        -- Add 'custom' menu system here
+    end
+end
+
+-- Display an alert dialog
+--- @param data table
+function ShowAlert(data)
+    if Config.Setup.dialogs == 'lation_ui' then
+        return exports.lation_ui:alert(data)
+    elseif Config.Setup.dialogs == 'ox_lib' then
+        return lib.alertDialog(data)
+    elseif Config.Setup.dialogs == 'custom' then
+        -- Add your custom alert dialog here
+    end
+end
+
+-- Display an input dialog
+--- @param data table
+function ShowInput(data)
+    if Config.Setup.dialogs == 'lation_ui' then
+        return exports.lation_ui:input({
+            title = data.title,
+            subtitle = data.subtitle,
+            submitText = data.submitText,
+            cancelText = data.cancelText,
+            type = data.type,
+            options = data.options
+        })
+    elseif Config.Setup.dialogs == 'ox_lib' then
+        return lib.inputDialog(data.title, data.options)
+    elseif Config.Setup.dialogss == 'custom' then
+        -- Add your custom input dialog here
+    end
+end
+
+-- Triggered on PlayerLoaded event to display metadata for specific inventory(ies)
+function DisplayMetadata()
+    if not Inventory then return end
+    if Inventory == 'ox_inventory' then
+        exports[Inventory]:displayMetadata({
+            purity = 'Purity'
+        })
+    end
+end
+
+-- Return an inventory's "durability/quality" types
+function GetDurabilityType()
+    if Inventory == 'ox_inventory' then
+        return 'durability'
+    else
+        return 'quality'
+    end
+end
+
+-- Add target to entity
+--- @param entity number Entity number
+--- @param data table Options table
+function AddTargetEntity(entity, data)
+    if Config.Setup.interact == 'ox_target' then
+        exports.ox_target:addLocalEntity(entity, data)
+    elseif Config.Setup.interact == 'qb-target' then
+        exports['qb-target']:AddTargetEntity(entity, {options = data, distance = 2})
+    elseif Config.Setup.interact == 'interact' then
+        exports.interact:AddLocalEntityInteraction({
+            entity = entity,
+            interactDst = 2.0,
+            offset = vec3(0.0, 0.0, 1.0),
+            options = data
+        })
+    elseif Config.Setup.interact == 'textui' then
+        -- TextUI is being used
+    elseif Config.Setup.interact == 'custom' then
+        -- Add support for a custom target system here
+    else
+        print('No interaction system defined in the config file.')
+    end
+end
+
+-- Function to apply target options to model
+--- @param model string Model
+--- @param data table Options table
+function AddTargetModel(model, data)
+    if Config.Setup.interact == 'ox_target' then
+        exports.ox_target:addModel(model, data)
+    elseif Config.Setup.interact == 'qb-target' then
+        exports['qb-target']:AddTargetModel(model, {options = data})
+    elseif Config.Setup.interact == 'interact' then
+        exports.interact:AddModelInteraction({
+            model = model,
+            offset = vec3(0.0, 0.0, 0.0),
+            id = model,
+            interactDst = 2.0,
+            options = data
+        })
+    elseif Config.Setup.interact == 'textui' then
+        -- TextUI is being used
+    elseif Config.Setup.interact == 'custom' then
+        -- Add support for a custom target system here
+    else
+        print('No interaction system defined in the config file.')
+    end
+end
+
+-- Function to add circle target zones
+--- @param data table
+function AddCircleZone(data)
+    if Config.Setup.interact == 'ox_target' then
+        exports.ox_target:addSphereZone(data)
+    elseif Config.Setup.interact == 'qb-target' then
+        exports['qb-target']:AddCircleZone(data.name, data.coords, data.radius, {
+            name = data.name,
+            debugPoly = Config.Setup.debug}, {
+            options = data.options,
+            distance = 2,
+        })
+    elseif Config.Setup.interact == 'interact' then
+        exports.interact:AddInteraction({
+            coords = data.coords,
+            interactDst = 2.0,
+            id = data.name,
+            options = data.options
+        })
+    elseif Config.Setup.interact == 'textui' then
+        -- TextUI is being used
+    elseif Config.Setup.interact == 'custom' then
+        -- Add support for a custom target system here
+    else
+        print('No interaction system defined in the config file.')
+    end
+end
+
+-- Remove target from entity
+--- @param entity any|number Entity number
+--- @param data table|string Options table or table name
+function RemoveTargetEntity(entity, data)
+    if Config.Setup.interact == 'ox_target' then
+        exports.ox_target:removeLocalEntity(entity, data)
+    elseif Config.Setup.interact == 'qb-target' then
+        exports.qtarget:RemoveTargetEntity(entity, data)
+    elseif Config.Setup.interact == 'interact' then
+        exports.interact:RemoveLocalEntityInteraction(entity, data)
+    elseif Config.Setup.interact == 'textui' then
+        -- TextUI is being used
+    elseif Config.Setup.interact == 'custom' then
+        -- Add support for a custom target system here
+    else
+        print('No interaction system defined in the config file.')
+    end
+end
+
+-- Function to remove target options
+--- @param model string Model
+function RemoveTargetModel(model)
+    if Config.Setup.interact == 'ox_target' then
+        exports.ox_target:removeModel(model, nil)
+    elseif Config.Setup.interact == 'qb-target' then
+        exports['qb-target']:RemoveTargetModel(model, nil)
+    elseif Config.Setup.interact == 'interact' then
+        exports.interact:RemoveModelInteraction(model, model)
+    elseif Config.Setup.interact == 'textui' then
+        -- TextUI is being used
+    elseif Config.Setup.interact == 'custom' then
+        -- Add support for a custom target system here
+    else
+        print('No interaction system defined in the config file.')
+    end
+end
+
+-- Function to remove circle zone
+--- @param name string
+function RemoveCircleZone(name)
+    if Config.Setup.interact == 'ox_target' then
+        exports.ox_target:removeZone(name)
+    elseif Config.Setup.interact == 'qb-target' then
+        exports['qb-target']:RemoveZone(name)
+    elseif Config.Setup.interact == 'interact' then
+        exports.interact:RemoveInteraction(name)
+    elseif Config.Setup.interact == 'textui' then
+        -- TextUI is being used
+    elseif Config.Setup.interact == 'custom' then
+        -- Add support for a custom target system here
+    else
+        print('No interaction system defined in the config file.')
+    end
+end
+
+-- Function to spawn NPCs
+--- @param model string
+--- @param coords vector4
+function SpawnPed(model, coords)
+    lib.requestModel(model, Config.Setup.request)
+    while not HasModelLoaded(model) do Wait(0) end
+    local ped = CreatePed(0, model, coords.x, coords.y, coords.z - 1.0, coords.w, false, true)
+    FreezeEntityPosition(ped, true)
+    SetBlockingOfNonTemporaryEvents(ped, true)
+    SetEntityInvincible(ped, true)
+    return ped
+end
+
+-- Callback used to play animation before applying effects
+lib.callback.register('lation_weed:SmokeJoint', function()
+    if not CanSmoke() then return false end
+    if ProgressBar(Config.Animations.smoking) then
+        return true
+    end
+    return false
+end)
+
+-- Event handler to apply health upon smoking
+--- @param joint string Joint item name
+RegisterNetEvent('lation_weed:ApplyHealth', function(joint)
+    if not joint then return end
+    local data = Config.Joints[joint].effects.health
+    if not data then return end
+    local request = lib.callback.await('lation_weed:ValidateRequest', false, 'health')
+    if not request then return end
+    local current = GetEntityHealth(cache.ped)
+    local new = math.min(current + data.amount)
+    if new > 200 then new = 200 end
+    SetEntityHealth(cache.ped, new)
+end)
+
+-- Event handler to apply armor upon smoking
+--- @param joint string Joint item name
+RegisterNetEvent('lation_weed:ApplyArmor', function(joint)
+    if not joint then return end
+    local data = Config.Joints[joint].effects.armor
+    if not data then return end
+    local request = lib.callback.await('lation_weed:ValidateRequest', false, 'armor')
+    if not request then return end
+    local current = GetPedArmour(cache.ped)
+    local new = math.min(current + data.amount, data.max)
+    SetPedArmour(cache.ped, new)
+end)
+
+-- Event handler to apply speed multiplier upon smoking
+--- @param joint string Joint item name
+RegisterNetEvent('lation_weed:ApplySpeed', function(joint)
+    if not joint then return end
+    local data = Config.Joints[joint].effects.speed
+    if not data then return end
+    local request = lib.callback.await('lation_weed:ValidateRequest', false, 'speed')
+    if not request then return end
+    local duration = data.duration
+    -- Says SetRunSprintMultiplierForPlayer to be called "just one time" but
+    -- Gets overridden by some scripts/frameworks - calling every second instead
+    CreateThread(function()
+        while duration > 0 do
+            Wait(1000)
+            duration = duration - 1000
+            SetRunSprintMultiplierForPlayer(cache.playerId, data.multiplier)
+        end
+        SetRunSprintMultiplierForPlayer(cache.playerId, 1.0)
+    end)
+end)
+
+-- Event handler to apply scren effects upon smoking
+--- @param joint string Joint item name
+RegisterNetEvent('lation_weed:ApplyScreen', function(joint)
+    if not joint then return end
+    local data = Config.Joints[joint].effects.screen
+    if not data then return end
+    SetTimecycleModifier(data.effect)
+    SetTimeout(data.duration, function()
+        ClearTimecycleModifier()
+    end)
+end)
+
+-- Event handler to apply walk effects upon smoking
+--- @param joint string Joint item name
+RegisterNetEvent('lation_weed:ApplyWalk', function(joint)
+    if not joint then return end
+    local data = Config.Joints[joint].effects.walk
+    if not data then return end
+    lib.requestAnimSet(data.clipset, Config.Setup.request)
+    while not HasAnimSetLoaded(data.clipset) do Wait(0) end
+    SetPedMovementClipset(cache.ped, data.clipset, 0)
+    SetTimeout(data.duration, function()
+        ResetPedMovementClipset(cache.ped, 0)
+    end)
+end)
+
+-- Event handler to apply screen shake upon smoking
+--- @param joint string Joint item name
+RegisterNetEvent('lation_weed:ApplyShake', function(joint)
+    if not joint then return end
+    local data = Config.Joints[joint].effects.shake
+    if not data then return end
+    ShakeGameplayCam(data.name, data.intensity)
+    SetTimeout(data.duration, function()
+        StopGameplayCamShaking(true)
+    end)
+end)
+
+-- Function used to print events if Config.Setup.debug is enabled
+--- @param string string Event message
+function EventLog(string)
+    if not string or not Config.Setup.debug then return end
+    print(string)
+end
+```
+
+
+```lua server/functions.lua expandable
+-- Check to see if fm-logs or fmsdk is started
+local fmlogs = GetResourceState('fm-logs') == 'started'
+local fmsdk = GetResourceState('fmsdk') == 'started'
+
+-- Initialize table to track and validate smoking related requests
+local smoking = {}
+
+-- Used to verify all conditions are met before allowing plant placement
+-- You can add custom requirements here if you have the knowledge to do so
+-- To restrict placement return false. To allow placement return true.
+--- @param source number Player ID
+--- @param strain string Unique strain identifier | Config.Strains[strain]
+--- @return boolean
+function CanPlant(source, strain)
+    if not source or not strain then
+        EventLog('[functions.lua]: CanPlant: params missing or nil', 'error')
+        return false
+    end
+    local data = Config.Strains[strain]
+    if not data then
+        EventLog('[functions.lua]: CanPlant: invalid strain', 'error')
+        return false
+    end
+    local player = GetPlayerPed(source)
+    if not player then
+        EventLog('[functions.lua]: CanPlant: unable to get player ped', 'error')
+        return false
+    end
+    local pos = GetEntityCoords(player)
+    if not pos then
+        EventLog('[functions.lua]: CanPlant: unable to get player coords', 'error')
+        return false
+    end
+    local identifier = GetIdentifier(source)
+    if not identifier then
+        EventLog('[functions.lua]: CanPlant: unable to get player identifier', 'error')
+        return false
+    end
+    local level = exports.lation_weed:GetPlayerData(source, 'level')
+    if not level then
+        EventLog('[functions.lua]: CanPlant: unable to get player level', 'error')
+        return false
+    end
+    if level < data.level then
+        TriggerClientEvent('lation_weed:Notify', source, locale('notify.not-experienced'), 'error')
+        return false
+    end
+    if Config.Police.require then
+        local police = GetPoliceCount()
+        if police < Config.Police.count then
+            TriggerClientEvent('lation_weed:Notify', source, locale('notify.no-police'), 'error')
+            return false
+        end
+    end
+    local blacklisted = false
+    for _, zone in pairs(Config.Planting.blacklist) do
+        local dist = #(pos - zone.coords)
+        if dist <= zone.radius then
+            blacklisted = true
+            break
+        end
+    end
+    if blacklisted then
+        TriggerClientEvent('lation_weed:Notify', source, locale('notify.cant-place'), 'error')
+        return false
+    end
+    if Config.Planting.restrict.enable then
+        local whitelisted = false
+        for _, zone in pairs(Config.Planting.restrict.whitelist) do
+            local dist = #(pos - zone.coords)
+            if dist <= zone.radius then
+                whitelisted = true
+                break
+            end
+        end
+        if not whitelisted then
+            TriggerClientEvent('lation_weed:Notify', source, locale('notify.cant-place'), 'error')
+            return false
+        end
+    end
+    local count = 0
+    for _, plant in pairs(WeedPlants) do
+        if plant.owner == identifier then
+            count += 1
+        end
+    end
+    if count >= Config.Planting.max then
+        TriggerClientEvent('lation_weed:Notify', source, locale('notify.max-plants'), 'error')
+        return false
+    end
+    if Config.Planting.items.plant_pot.require then
+        local hasPot = GetItemCount(source, Config.Planting.items.plant_pot.item) >= Config.Planting.items.plant_pot.consume
+        if not hasPot then
+            TriggerClientEvent('lation_weed:Notify', source, locale('notify.no-pot'), 'error')
+            return false
+        end
+    end
+    if Config.Planting.items.shovel.require then
+        local hasShovel = GetItemCount(source, Config.Planting.items.shovel.item) >= Config.Planting.items.shovel.consume
+        if not hasShovel then
+            TriggerClientEvent('lation_weed:Notify', source, locale('notify.no-shovel'), 'error')
+            return false
+        end
+    end
+    return true
+end
+
+-- Used to verify all conditions are met before allowing table placement
+-- You can add custom requirements here if you have the knowledge to do so
+-- To restrict placement return false. To allow placement return true.
+--- @param source number Player ID
+--- @return boolean
+function CanPlaceTable(source)
+    if not source then
+        EventLog('[functions.lua]: CanPlaceTable: source missing or nil')
+        return false
+    end
+    local player = GetPlayerPed(source)
+    if not player then
+        EventLog('[functions.lua]: CanPlaceTable: unable to obtain player ped')
+        return false
+    end
+    local pos = GetEntityCoords(player)
+    if not pos then
+        EventLog('[functions.lua]: CanPlaceTable: unable to obtain player position')
+        return false
+    end
+    local identifier = GetIdentifier(source)
+    if not identifier then
+        EventLog('[functions.lua]: CanPlaceTable: unable to obtain player identifier')
+        return false
+    end
+    local count = 0
+    for _, table in pairs(Tables) do
+        if table.owner == identifier then
+            count += 1
+        end
+    end
+    if count >= Config.Table.limit then
+        TriggerClientEvent('lation_weed:Notify', source, locale('notify.max-tables'), 'error')
+        return false
+    end
+    local level = exports.lation_weed:GetPlayerData(source, 'level')
+    if not level then
+        EventLog('[functions.lua]: CanPlaceTable: unable to get player level')
+        return false
+    end
+    if level < Config.Table.level then
+        TriggerClientEvent('lation_weed:Notify', source, locale('notify.not-experienced'), 'error')
+        return false
+    end
+    if Config.Table.requirements.police.enable then
+        local police = GetPoliceCount()
+        if police < Config.Table.requirements.police.count then
+            TriggerClientEvent('lation_weed:Notify', source, locale('notify.no-police'), 'error')
+            return false
+        end
+    end
+    for _, location in pairs(Config.Table.restricted) do
+        local dist = #(pos - location.coords)
+        if dist < location.radius then
+            TriggerClientEvent('lation_weed:Notify', source, locale('notify.cant-place'), 'error')
+            return false
+        end
+    end
+    return true
+end
+
+-- Empty function triggered when a player searches a plant & finds a seed
+--- @param source number Player Id
+--- @param farmId number Config.Farms[farmId]
+--- @param reward table reward.item, reward.quantity
+function FarmSearched(source, farmId, reward)
+
+end
+
+-- Empty function thats triggered when a player plants a seed
+--- @param source number Player ID
+--- @param data table Plant data (use: print(json.encode(data, {indent = true})) to see data)
+function SeedPlanted(source, data)
+    if not Housing then return end
+    SetHouse(source, data.id)
+end
+
+-- Empty function thats triggered when a player fertilizes a plant
+--- @param source number Player ID
+--- @param data table Plant data (use: print(json.encode(data, {indent = true})) to see data)
+function PlantFed(source, data)
+
+end
+
+-- Empty function thats triggered when a player waters a plant
+--- @param source number PlayerID
+--- @param data table Plant data (use: print(json.encode(data, {indent = true})) to see data)
+function PlantWatered(source, data)
+
+end
+
+-- Empty function thats triggered when a plant is destroyed
+--- @param source number Player ID
+--- @param data table Plant data (use: print(json.encode(data, {indent = true})) to see data)
+function PlantDeleted(source, data)
+
+end
+
+-- Empty function thats triggered when a player harvests a plant
+--- @param source number Player ID
+--- @param data table Plant data (use: print(json.encode(data, {indent = true})) to see data)
+--- @param buds number Quantity of bud harvested
+--- @param seeds number Quantity of seeds harvested
+function PlantHarvested(source, data, buds, seeds)
+
+end
+
+-- Empty function thats triggered when a player finished rolling joints
+--- @param source number Player ID
+--- @param strain string Unique strain identifier | Config.Strains[strain]
+--- @param total number Total number rolled
+function JointsRolled(source, strain, total)
+
+end
+
+-- Empty function thats triggered when a player finished bagging weed
+--- @param source number Player ID
+--- @param strain string Unique strain identifier | Config.Strains[strain]
+--- @param total number Total number bagged
+function WeedBagged(source, strain, total)
+
+end
+
+-- Empty function thats triggered when a player smokes a joint
+--- @param source number Player ID
+--- @param item string Item name
+function JointSmoked(source, item)
+
+end
+
+-- Empty function thats triggered when a player places a table down
+--- @param source number Player ID
+--- @param coords vector3|vector4 Coordinates
+function TablePlaced(source, coords)
+
+end
+
+-- Empty function thats triggered when a player buys from supply shop
+--- @param source number Player ID
+--- @param itemId string Config.Shop.items[itemId]
+--- @param quantity number Quantity of item purchased
+function ShopPurchase(source, itemId, quantity)
+
+end
+
+-- Return an inventory's "durability/quality" types
+function GetDurabilityType()
+    if Inventory == 'ox_inventory' then
+        return 'durability'
+    else
+        return 'quality'
+    end
+end
+
+-- Returns an items metadata
+--- @param source number Player ID
+--- @param item string Item name
+function GetMetadata(source, item)
+    if not source or not item then return end
+    local player = GetPlayer(source)
+    if not player then return end
+    if Inventory == 'ox_inventory' then
+        local data = exports[Inventory]:Search(source, 'slots', item)
+        if not data or #data == 0 then return end
+        return data[1].metadata
+    elseif Inventory == 'core_inventory' then
+        local data = exports[Inventory]:getItem(source, item)
+        if not data then return end
+        return data.info
+    else
+        local data = exports[Inventory]:GetItemByName(source, item)
+        if not data then return end
+        return data.info
+    end
+end
+
+-- Return item metadata to client
+--- @param source number
+--- @param item string
+lib.callback.register('lation_weed:GetMetadata', function(source, item)
+    return GetMetadata(source, item)
+end)
+
+-- Set an items metadata
+--- @param source number Player ID 
+--- @param item string Item name
+--- @param metaType string Metadata type
+--- @param metaValue any Metadata value
+function SetMetadata(source, item, metaType, metaValue)
+    if not source or not item or not metaType or not metaValue then return end
+    local player = GetPlayer(source)
+    if not player then return end
+    if Inventory == 'ox_inventory' then
+        local itemData = exports[Inventory]:Search(source, 'slots', item)
+        if not next(itemData) then return end
+        itemData[1].metadata[metaType] = metaValue
+        exports[Inventory]:SetMetadata(source, itemData[1].slot, itemData[1].metadata)
+    elseif Inventory == 'codem-inventory' then
+        local itemData = exports[Inventory]:GetItemByName(source, item)
+        if not itemData then return end
+        itemData.info[metaType] = metaValue
+        exports[Inventory]:SetItemMetadata(source, itemData.slot, itemData.info)
+    elseif Inventory == 'core_inventory' then
+        local itemData = exports[Inventory]:getItem(source, item)
+        if not itemData then return end
+        local slot = exports[Inventory]:getFirstSlotByItem(source, item)
+        if not slot then return end
+        itemData.info[metaType] = metaValue
+        exports[Inventory]:setMetadata(source, slot, itemData.info)
+    else
+        local itemData = exports[Inventory]:GetItemByName(source, item)
+        if not itemData then return end
+        itemData.info[metaType] = metaValue
+        exports[Inventory]:SetItemData(source, item, 'info', itemData.info)
+    end
+end
+
+-- Register command to open plant management menu
+--- @param source number Player ID
+RegisterCommand('plants', function(source)
+    TriggerClientEvent('lation_weed:OpenAdminMenu', source)
+end, false)
+
+-- Register hook if ox_inventory is detected
+if Inventory and Inventory == 'ox_inventory' and Config.Setup.metadata then
+
+    -- Merge items durability
+    --- @param payload table
+    local function mergeItems(payload)
+        if not payload or type(payload) ~= 'table' then return false end
+
+        local fromType, toType = payload.fromType, payload.toType
+        local fromItem, toItem = payload.fromSlot, payload.toSlot
+
+        if type(toItem) == 'table' and fromItem.name == toItem.name then
+            local fromDurability, toDurability = fromItem.metadata.durability, toItem.metadata.durability
+            if fromDurability and toDurability and fromType == toType then
+                local totalDurability = fromDurability + toDurability
+                fromItem.metadata.durability = math.min(totalDurability, 100)
+                toItem.metadata.durability = math.max(totalDurability - 100, 0)
+
+                exports[Inventory]:SetMetadata(payload.fromInventory, fromItem.slot, fromItem.metadata)
+                exports[Inventory]:SetMetadata(payload.toInventory, toItem.slot, toItem.metadata)
+            end
+        end
+
+        return true
+    end
+
+    -- ⚠️ Changed your gas/cement item names? Update the itemFilter accordingly!
+    exports[Inventory]:registerHook('swapItems', function(payload)
+        return mergeItems(payload)
+    end, {itemFilter = {
+        [Config.Growth.watering.item] = true,
+        [Config.Growth.fertilizing.item] = true
+    }})
+
+end
+
+-- Returns bool if player can have joint effect applied
+--- @param source number
+--- @param effect string
+lib.callback.register('lation_weed:ValidateRequest', function(source, effect)
+    if not source or not effect then return false end
+    if not smoking[source] then return false end
+    return smoking[source][effect]
+end)
+
+-- Register joint items usable (if applicable)
+for item, data in pairs(Config.Joints) do
+    if data.usable then
+        RegisterUsableItem(item, function(source)
+            if not source then
+                EventLog('[functions.lua]: RegisterUsableItem: source missing or nil', 'error')
+                return
+            end
+            local level = exports.lation_weed:GetPlayerData(source, 'level')
+            if not level then
+                EventLog('[functions.lua]: RegisterUsableItem: unable to get player level', 'error')
+                return
+            end
+            if level < data.level then
+                TriggerClientEvent('lation_weed:Notify', source, locale('notify.not-experienced'), 'error')
+                return
+            end
+            local source = source
+            local smoked = lib.callback.await('lation_weed:SmokeJoint', source)
+            if not smoked then
+                EventLog('[functions.lua]: RegisterUsableItem: CanSmokeJoint or animation returned false', 'error')
+                return
+            end
+            local hasJoint = GetItemCount(source, item) >= 1
+            if not hasJoint then
+                EventLog('[functions.lua]: RegisterUsableItem: item not found in inventory', 'error')
+                return
+            end
+            if not smoking[source] then smoking[source] = {} end
+            if data.effects.health.enable then
+                smoking[source]['health'] = true
+                TriggerClientEvent('lation_weed:ApplyHealth', source, item)
+            end
+            if data.effects.armor.enable then
+                smoking[source]['armor'] = true
+                TriggerClientEvent('lation_weed:ApplyArmor', source, item)
+            end
+            if data.effects.speed.enable then
+                smoking[source]['speed'] = true
+                TriggerClientEvent('lation_weed:ApplySpeed', source, item)
+            end
+            if data.effects.screen.enable then
+                TriggerClientEvent('lation_weed:ApplyScreen', source, item)
+            end
+            if data.effects.walk.enable then
+                TriggerClientEvent('lation_weed:ApplyWalk', source, item)
+            end
+            if data.effects.shake.enable then
+                TriggerClientEvent('lation_weed:ApplyShake', source, item)
+            end
+            RemoveItem(source, item, 1)
+            JointSmoked(source, item)
+            SetTimeout(1250, function()
+                smoking[source] = nil
+            end)
+        end)
+    end
+end
+
+-- Log events if applicable
+--- @param message string Message contents
+--- @param type string Log type
+function EventLog(message, type)
+    if not message or not Config.Setup.debug then return end
+    if Logs.Service == 'fivemanage' then
+        if not fmsdk then return end
+        exports.fmsdk:LogMessage(type or 'info', message)
+    elseif Logs.Service == 'fivemerr' then
+        if not fmlogs then return end
+        exports['fm-logs']:createLog({
+            LogType = 'Resource',
+            Resource = 'lation_weed',
+            Level = type or 'info',
+            Message = message,
+        })
+    else
+        print(message)
+    end
+end
+
+-- Log player events if applicable
+--- @param source number Player ID
+--- @param title string Log title
+--- @param message string Message contents
+function PlayerLog(source, title, message)
+    if Logs.Service == 'fivemanage' then
+        if not fmsdk then return end
+        if Logs.Screenshots then
+            exports.fmsdk:takeServerImage(source, {
+                name = title,
+                description = message,
+            })
+        else
+            exports.fmsdk:LogMessage('info', message)
+        end
+    elseif Logs.Service == 'fivemerr' then
+        if not fmlogs then return end
+        exports['fm-logs']:createLog({
+            LogType = 'Player',
+            Message = message,
+            Resource = 'lation_weed',
+            Source = source,
+        }, { Screenshot = Logs.Screenshots })
+    elseif Logs.Service == 'discord' then
+        local embed = {
+            {
+                ["color"] = 16711680,
+                ["title"] = "**".. title .."**",
+                ["description"] = message,
+                ["footer"] = {
+                    ["text"] = os.date("%a %b %d, %I:%M%p"),
+                    ["icon_url"] = Logs.Discord.footer
+                }
+            }
+        }
+        PerformHttpRequest(Logs.Discord.link, function()
+        end, 'POST', json.encode({username = Logs.Discord.name, embeds = embed, avatar_url = Logs.Discord.image}), {['Content-Type'] = 'application/json'})
+    end
+end
+```
+
+</CodeGroup>
