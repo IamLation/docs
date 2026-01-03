@@ -1,5 +1,5 @@
 ---
-title: "Input Dialog"
+title: "Input"
 description: "Input dialogs provide forms with various field types for collecting user data."
 icon: "rectangle-list"
 ---
@@ -41,6 +41,7 @@ end
     Opens an input dialog and waits for user submission.
 
     **Returns:**
+
     - `table` - Array of values indexed by field order (e.g., `result[1]`, `result[2]`)
     - `nil` - User cancelled or closed the dialog
 
@@ -49,14 +50,13 @@ end
         title = 'Enter Details',
         options = { ... }
     })
-
+    
     if result then
         -- Process input values
         print('First field:', result[1])
     end
     ```
   </Accordion>
-
   <Accordion title="closeInput()" icon="xmark">
     Programmatically closes any currently open input dialog.
 
@@ -72,7 +72,7 @@ end
 
 <ParamField body="options" type="table" required>
   Array of field objects that define the form inputs. Each field type supports specific configuration options.
-  
+
   See [Field Types](#field-types) below for available types and their options.
 </ParamField>
 
@@ -84,17 +84,17 @@ end
   Optional subtitle providing additional context or instructions.
 </ParamField>
 
-<ParamField body="submitText" type="string" default="Submit">
+<ParamField body="submitText" default="Submit" type="string">
   Custom text for the submit button.
 </ParamField>
 
-<ParamField body="cancelText" type="string" default="Cancel">
+<ParamField body="cancelText" default="Cancel" type="string">
   Custom text for the cancel button.
 </ParamField>
 
-<ParamField body="type" type="string" default="default">
+<ParamField body="type" default="default" type="string">
   Dialog styling type to indicate context or severity.
-  
+
   **Options:** `'default'`, `'info'`, `'success'`, `'warning'`, `'error'`
 </ParamField>
 
@@ -124,7 +124,7 @@ Standard single-line text input field.
   FontAwesome icon class (e.g., `'fas fa-user'`)
 </ParamField>
 
-<ParamField body="iconColor" type="string" default="#71717A">
+<ParamField body="iconColor" default="#71717A" type="string">
   Icon color (hex code or CSS color name)
 </ParamField>
 
@@ -132,15 +132,15 @@ Standard single-line text input field.
   Default text value
 </ParamField>
 
-<ParamField body="required" type="boolean" default={false}>
+<ParamField body="required" default="false" type="boolean">
   Whether the field must be filled
 </ParamField>
 
-<ParamField body="disabled" type="boolean" default={false}>
+<ParamField body="disabled" default="false" type="boolean">
   Whether the field is disabled
 </ParamField>
 
-<ParamField body="password" type="boolean" default={false}>
+<ParamField body="password" default="false" type="boolean">
   Enable password field with visibility toggle
 </ParamField>
 
@@ -172,7 +172,7 @@ Numeric input with increment/decrement controls.
   FontAwesome icon class
 </ParamField>
 
-<ParamField body="iconColor" type="string" default="#71717A">
+<ParamField body="iconColor" default="#71717A" type="string">
   Icon color (hex code or CSS color name)
 </ParamField>
 
@@ -180,11 +180,11 @@ Numeric input with increment/decrement controls.
   Default numeric value
 </ParamField>
 
-<ParamField body="required" type="boolean" default={false}>
+<ParamField body="required" default="false" type="boolean">
   Whether the field must be filled
 </ParamField>
 
-<ParamField body="disabled" type="boolean" default={false}>
+<ParamField body="disabled" default="false" type="boolean">
   Whether the field is disabled
 </ParamField>
 
@@ -196,7 +196,7 @@ Numeric input with increment/decrement controls.
   Maximum numeric value
 </ParamField>
 
-<ParamField body="step" type="number" default={1}>
+<ParamField body="step" default={1} type="number">
   Step increment (e.g., `0.5`, `5`, `10`)
 </ParamField>
 
@@ -224,7 +224,7 @@ Multi-line text input for longer content.
   FontAwesome icon class
 </ParamField>
 
-<ParamField body="iconColor" type="string" default="#71717A">
+<ParamField body="iconColor" default="#71717A" type="string">
   Icon color (hex code or CSS color name)
 </ParamField>
 
@@ -232,11 +232,11 @@ Multi-line text input for longer content.
   Default text value
 </ParamField>
 
-<ParamField body="required" type="boolean" default={false}>
+<ParamField body="required" default="false" type="boolean">
   Whether the field must be filled
 </ParamField>
 
-<ParamField body="disabled" type="boolean" default={false}>
+<ParamField body="disabled" default="false" type="boolean">
   Whether the field is disabled
 </ParamField>
 
@@ -252,7 +252,9 @@ Multi-line text input for longer content.
 
 Toggle switch or checkbox for boolean values.
 
-<Note>`'toggle'` and `'checkbox'` are aliases - both render the same component.</Note>
+<Note>
+  `'toggle'` and `'checkbox'` are aliases - both render the same component.
+</Note>
 
 <ParamField body="type" type="string" required>
   Must be `'toggle'` or `'checkbox'`
@@ -270,17 +272,19 @@ Toggle switch or checkbox for boolean values.
   FontAwesome icon class
 </ParamField>
 
-<ParamField body="iconColor" type="string" default="#71717A">
+<ParamField body="iconColor" default="#71717A" type="string">
   Icon color (hex code or CSS color name)
 </ParamField>
 
 <ParamField body="default" type="boolean">
   Default checked state (`true` or `false`)
-  
-  <Note>You can also use `checked` as an alias for `default`.</Note>
+
+  <Note>
+    You can also use `checked` as an alias for `default`.
+  </Note>
 </ParamField>
 
-<ParamField body="disabled" type="boolean" default={false}>
+<ParamField body="disabled" default="false" type="boolean">
   Whether the field is disabled
 </ParamField>
 
@@ -304,7 +308,7 @@ Single-select dropdown menu.
   FontAwesome icon class
 </ParamField>
 
-<ParamField body="iconColor" type="string" default="#71717A">
+<ParamField body="iconColor" default="#71717A" type="string">
   Icon color (hex code or CSS color name)
 </ParamField>
 
@@ -316,15 +320,15 @@ Single-select dropdown menu.
   Default selected value (must match an option's `value`)
 </ParamField>
 
-<ParamField body="required" type="boolean" default={false}>
+<ParamField body="required" default="false" type="boolean">
   Whether a selection is required
 </ParamField>
 
-<ParamField body="disabled" type="boolean" default={false}>
+<ParamField body="disabled" default="false" type="boolean">
   Whether the field is disabled
 </ParamField>
 
-<ParamField body="searchable" type="boolean" default={true}>
+<ParamField body="searchable" default="true" type="boolean">
   Enable search/filter functionality
 </ParamField>
 
@@ -348,7 +352,7 @@ Multi-select dropdown menu allowing multiple selections.
   FontAwesome icon class
 </ParamField>
 
-<ParamField body="iconColor" type="string" default="#71717A">
+<ParamField body="iconColor" default="#71717A" type="string">
   Icon color (hex code or CSS color name)
 </ParamField>
 
@@ -358,21 +362,21 @@ Multi-select dropdown menu allowing multiple selections.
 
 <ParamField body="default" type="table">
   Array of default selected values
-  
+
   ```lua
   default = {'option1', 'option2'}
   ```
 </ParamField>
 
-<ParamField body="required" type="boolean" default={false}>
+<ParamField body="required" default="false" type="boolean">
   Whether at least one selection is required
 </ParamField>
 
-<ParamField body="disabled" type="boolean" default={false}>
+<ParamField body="disabled" default="false" type="boolean">
   Whether the field is disabled
 </ParamField>
 
-<ParamField body="searchable" type="boolean" default={true}>
+<ParamField body="searchable" default="true" type="boolean">
   Enable search/filter functionality
 </ParamField>
 
@@ -400,7 +404,7 @@ Range slider for numeric value selection.
   FontAwesome icon class
 </ParamField>
 
-<ParamField body="iconColor" type="string" default="#71717A">
+<ParamField body="iconColor" default="#71717A" type="string">
   Icon color (hex code or CSS color name)
 </ParamField>
 
@@ -412,7 +416,7 @@ Range slider for numeric value selection.
   Maximum slider value
 </ParamField>
 
-<ParamField body="step" type="number" default={1}>
+<ParamField body="step" default={1} type="number">
   Step increment between values
 </ParamField>
 
@@ -424,7 +428,7 @@ Range slider for numeric value selection.
   Default slider value
 </ParamField>
 
-<ParamField body="disabled" type="boolean" default={false}>
+<ParamField body="disabled" default="false" type="boolean">
   Whether the field is disabled
 </ParamField>
 
@@ -452,14 +456,15 @@ Color picker with multiple format support.
   FontAwesome icon class
 </ParamField>
 
-<ParamField body="iconColor" type="string" default="#71717A">
+<ParamField body="iconColor" default="#71717A" type="string">
   Icon color (hex code or CSS color name)
 </ParamField>
 
-<ParamField body="format" type="string" default="hex">
+<ParamField body="format" default="hex" type="string">
   Color format for the returned value
-  
+
   **Options:**
+
   - `'hex'` - `#RRGGBB`
   - `'hexa'` - `#RRGGBBAA`
   - `'rgb'` - `rgb(r, g, b)`
@@ -472,11 +477,11 @@ Color picker with multiple format support.
   Default color value (must match specified format)
 </ParamField>
 
-<ParamField body="required" type="boolean" default={false}>
+<ParamField body="required" default="false" type="boolean">
   Whether a color must be selected
 </ParamField>
 
-<ParamField body="disabled" type="boolean" default={false}>
+<ParamField body="disabled" default="false" type="boolean">
   Whether the field is disabled
 </ParamField>
 
@@ -504,14 +509,15 @@ Date picker with customizable format and range constraints.
   FontAwesome icon class
 </ParamField>
 
-<ParamField body="iconColor" type="string" default="#71717A">
+<ParamField body="iconColor" default="#71717A" type="string">
   Icon color (hex code or CSS color name)
 </ParamField>
 
-<ParamField body="format" type="string" default="MM/dd/yyyy">
+<ParamField body="format" default="MM/dd/yyyy" type="string">
   Date format for display and return value
-  
+
   **Options:**
+
   - `'MM/dd/yyyy'` - 01/15/2025
   - `'dd/MM/yyyy'` - 15/01/2025
   - `'yyyy-MM-dd'` - 2025-01-15
@@ -530,15 +536,15 @@ Date picker with customizable format and range constraints.
   Latest selectable date (must match specified format)
 </ParamField>
 
-<ParamField body="clearable" type="boolean" default={true}>
+<ParamField body="clearable" default="true" type="boolean">
   Show clear button to remove selected date
 </ParamField>
 
-<ParamField body="required" type="boolean" default={false}>
+<ParamField body="required" default="false" type="boolean">
   Whether a date must be selected
 </ParamField>
 
-<ParamField body="disabled" type="boolean" default={false}>
+<ParamField body="disabled" default="false" type="boolean">
   Whether the field is disabled
 </ParamField>
 
@@ -566,14 +572,15 @@ Date range picker for selecting start and end dates.
   FontAwesome icon class
 </ParamField>
 
-<ParamField body="iconColor" type="string" default="#71717A">
+<ParamField body="iconColor" default="#71717A" type="string">
   Icon color (hex code or CSS color name)
 </ParamField>
 
-<ParamField body="format" type="string" default="MM/dd/yyyy">
+<ParamField body="format" default="MM/dd/yyyy" type="string">
   Date format for display and return values
-  
+
   **Options:**
+
   - `'MM/dd/yyyy'` - 01/15/2025
   - `'dd/MM/yyyy'` - 15/01/2025
   - `'yyyy-MM-dd'` - 2025-01-15
@@ -582,7 +589,7 @@ Date range picker for selecting start and end dates.
 
 <ParamField body="default" type="table">
   Default date range as array: `{ startDate, endDate }`
-  
+
   ```lua
   default = { '01/01/2025', '01/07/2025' }
   ```
@@ -596,15 +603,15 @@ Date range picker for selecting start and end dates.
   Latest selectable date (must match specified format)
 </ParamField>
 
-<ParamField body="clearable" type="boolean" default={true}>
+<ParamField body="clearable" default="true" type="boolean">
   Show clear button to remove selected range
 </ParamField>
 
-<ParamField body="required" type="boolean" default={false}>
+<ParamField body="required" default="false" type="boolean">
   Whether a date range must be selected
 </ParamField>
 
-<ParamField body="disabled" type="boolean" default={false}>
+<ParamField body="disabled" default="false" type="boolean">
   Whether the field is disabled
 </ParamField>
 
@@ -614,7 +621,7 @@ For `'select'` and `'multi-select'` field types, each option in the `options` ar
 
 <ParamField body="value" type="any" required>
   The value returned when this option is selected
-  
+
   ```lua
   value = 'us'
   value = 123
@@ -624,15 +631,15 @@ For `'select'` and `'multi-select'` field types, each option in the `options` ar
 
 <ParamField body="label" type="string">
   Display text shown to the user (uses `value` if omitted)
-  
+
   ```lua
   { label = 'United States', value = 'us' }
   ```
 </ParamField>
 
-<ParamField body="disable" type="boolean" default={false}>
+<ParamField body="disable" default="false" type="boolean">
   Whether the option is disabled and cannot be selected
-  
+
   ```lua
   { label = 'Coming Soon', value = 'beta', disable = true }
   ```
@@ -641,5 +648,5 @@ For `'select'` and `'multi-select'` field types, each option in the `options` ar
 ## Preview
 
 <Frame>
-  <img src="/resources/modern-ui/components/input-dialog/user-data-example.webp" alt="Input dialog example" />
+  ![Input dialog example](/resources/modern-ui/components/input-dialog/user-data-example.webp)
 </Frame>
