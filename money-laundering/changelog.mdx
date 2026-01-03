@@ -4,6 +4,75 @@ icon: "server"
 description: "A chronological log of every release, feature addition, and bug fix"
 ---
 
+<Update label="2.2.5" description="Nov 29, 2025">
+  Fixed bug with time_remaining not saving properly if disconnecting within the first 45 seconds after inputting money to washer
+</Update>
+
+<Update label="2.2.4" description="Nov 20, 2025">
+  Fixed small logic error for ESX\
+  Fixed faulty logic with Config.Reject options\
+  Added new logs (negotiate, rejected & warehouseKey purchases)\
+  Added new "MoneyLaundered" empty function in server/functions
+</Update>
+
+<Update label="2.2.3" description="Sep 27, 2025">
+  Fix exploit
+</Update>
+
+<Update label="2.2.2" description="Jul 3, 2025">
+  Fixed starting contracts from OpenMenu export not working\
+  Added empty function TaxPaid() that sends the amount of tax paid during a wash\
+  Maintenance update for upcoming lation_ui release
+</Update>
+
+<Update label="2.2.1" description="Apr 3, 2025">
+  Fixed not getting money after counting
+</Update>
+
+<Update label="2.2.0" description="Mar 20, 2025">
+  Fixed an exploit\
+  Added Config.Progress option with QBCore progress bar support\
+  Added optional "remove" required item or not in Config.Start.item\
+  New version checking API\
+  Warning if .sql file(s) missing\
+  Updated Keymaster link to Portal\
+  Moved VerifyDistance function to server/functions
+</Update>
+
+<Update label="2.1.2" description="Sep 16, 2024">
+  Fix restarting/stopping any resource removing targets (missing resource check)
+</Update>
+
+<Update label="2.1.1" description="Sep 10, 2024">
+  Fix exploit\
+  Add in vehicle check for interactions during contracts
+</Update>
+
+<Update label="2.1.0" description="Jun 13, 2024">
+  Added optional item requirement to start laundering\
+  Added render distance to Config.Start section\
+  Added EnteredWarehouse & ExitedWarehouse empty functions\
+  Added duty check in PoliceCount for QBCore\
+  Added individual warehouse washing limit, so contracts & warehouse can be unique\
+  Fixed starting ped sometimes not spawning\
+  Fixed typo in PoliceCount function\
+  Fixed typos in PoliceDispatch function\
+  Fixed core_dispatch implementation\
+  Fixed gksphone implementation (added image)\
+  Removed config.displayscale as wasnt needed\
+  Improved other failed to load model related issues\
+  Improved warehouse "requireLvl" logic to restict usage correctly\
+  Other general refactoring and improvements
+</Update>
+
+<Update label="2.0.2" description="Apr 14, 2024">
+  Fix RemoveMoney logic
+</Update>
+
+<Update label="2.0.1" description="Apr 13, 2024">
+  Fix qb-target error
+</Update>
+
 <Update label="2.0.0" description="Apr 12, 2024">
   Initial v2 release
 </Update>
