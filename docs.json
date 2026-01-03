@@ -209,6 +209,13 @@
               "drug-sales/changelog",
               "drug-sales/previews"
             ]
+          },
+          {
+            "group": "Modern UI",
+            "icon": "palette",
+            "pages": [
+              "modern-ui/install"
+            ]
           }
         ]
       }
