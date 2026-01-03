@@ -1,0 +1,341 @@
+---
+title: "Alert Dialog"
+description: "Alert dialogs used for confirmations, warnings, informational messages and more."
+icon: "triangle-exclamation"
+---
+
+Alert dialogs provide a flexible way to show confirmations, warnings, informational messages, and more with support for markdown content, custom icons, and styled callouts.
+
+## Quick Start
+
+<CodeGroup>
+
+```lua Basic Usage
+local result = exports.lation_ui:alert({
+    header = 'Delete Item',
+    content = 'Are you sure you want to delete this item?',
+    icon = 'fas fa-trash',
+    iconColor = '#EF4444',
+    type = 'error'
+})
+
+if result == 'confirm' then
+    print('Item deleted!')
+end
+```
+
+
+```lua With Callouts
+local result = exports.lation_ui:alert({
+    header = 'Important Information',
+    content = 'Please review the information below before proceeding.',
+    icon = 'fas fa-info-circle',
+    callouts = {
+        {
+            label = 'Warning',
+            description = 'This action cannot be undone',
+            type = 'warning'
+        },
+        {
+            label = 'Note',
+            description = 'Make sure you have a backup before continuing',
+            type = 'info',
+            icon = 'fas fa-database'
+        }
+    }
+})
+```
+
+</CodeGroup>
+
+## Functions
+
+<AccordionGroup>
+  <Accordion title="alert(data) → string" icon="code">
+    Opens an alert dialog and waits for user interaction.
+
+    **Returns:**
+
+    - `'confirm'` - User clicked the confirm button
+    - `'cancel'` - User clicked cancel or closed the dialog
+
+    ```lua
+    local result = exports.lation_ui:alert({
+        header = 'Confirm Action',
+        content = 'Do you want to continue?'
+    })
+    ```
+  </Accordion>
+  <Accordion title="closeAlert()" icon="xmark">
+    Programmatically closes any currently open alert dialog.
+
+    ```lua
+    exports.lation_ui:closeAlert()
+    ```
+  </Accordion>
+</AccordionGroup>
+
+## Configuration
+
+### Dialog Options
+
+<ParamField body="header" type="string">
+  The dialog header text. Supports markdown formatting.
+
+  <Note>
+    Either `header` or `content` must be provided.
+  </Note>
+</ParamField>
+
+<ParamField body="content" type="string">
+  The main content text displayed in the dialog. Supports markdown formatting.
+
+  <Note>
+    Either `header` or `content` must be provided.
+  </Note>
+</ParamField>
+
+<ParamField body="icon" type="string">
+  FontAwesome icon class (e.g., `'fas fa-trash'`, `'fas fa-info-circle'`).
+</ParamField>
+
+<ParamField body="iconColor" default="#71717A" type="string">
+  Icon color using hex code or [CSS color name](https://htmlcolorcodes.com/color-names/).
+
+  ```lua
+  iconColor = '#EF4444'  -- Hex code
+  iconColor = 'red'      -- CSS color name
+  ```
+</ParamField>
+
+<ParamField body="type" default="default" type="string">
+  Dialog type that affects the overall styling.
+
+  **Options:** `'default'`, `'info'`, `'success'`, `'warning'`, `'error'`
+</ParamField>
+
+<ParamField body="size" default="md" type="string">
+  Dialog size for responsive layouts.
+
+  **Options:** `'xs'`, `'sm'`, `'md'`, `'lg'`, `'xl'`
+</ParamField>
+
+<ParamField body="cancel" default="true" type="boolean">
+  Whether to show the cancel button. Set to `false` for informational dialogs.
+</ParamField>
+
+<ParamField body="labels" default="{ cancel = 'Cancel', confirm = 'Confirm' }" type="table">
+  Custom button labels for internationalization or custom text.
+
+  ```lua
+  labels = {
+      cancel = 'No',
+      confirm = 'Yes'
+  }
+  ```
+</ParamField>
+
+<ParamField body="callouts" type="table">
+  Array of callout objects to highlight important information within the dialog.
+
+  See [Callouts](#callouts) section below for detailed options.
+</ParamField>
+
+---
+
+### Callouts
+
+Callouts are styled information boxes that can be added to alert dialogs to emphasize critical information.
+
+<ParamField body="description" type="string" required>
+  The callout content text. Supports markdown formatting.
+</ParamField>
+
+<ParamField body="label" type="string">
+  The callout title/header. Supports markdown formatting.
+</ParamField>
+
+<ParamField body="type" default="info" type="string">
+  Callout styling type.
+
+  **Options:** `'info'`, `'success'`, `'warning'`, `'error'`
+</ParamField>
+
+<ParamField body="icon" type="string">
+  Custom FontAwesome icon. Inherits the color from the callout type.
+
+  ```lua
+  icon = 'fas fa-rocket'
+  ```
+</ParamField>
+
+## Examples
+
+<Tabs>
+  <Tab title="Basic Alert">
+    Simple confirmation dialog with icon and custom colors.
+
+    ```lua
+    local result = exports.lation_ui:alert({
+        header = 'Delete Item',
+        content = 'Are you sure you want to delete this item? This action cannot be undone.',
+        icon = 'fas fa-trash',
+        iconColor = '#EF4444',
+        type = 'error',
+        labels = {
+            cancel = 'No, keep it',
+            confirm = 'Yes, delete'
+        }
+    })
+    
+    if result == 'confirm' then
+        -- Delete the item
+        DeleteItem()
+        print('Item deleted successfully')
+    else
+        print('Deletion cancelled')
+    end
+    ```
+
+    <Frame>
+      ![Destructive alert example](https://img.lationscripts.com/docs/ui/alert-dialog/destructive-example.webp)
+    </Frame>
+  </Tab>
+  <Tab title="With Callouts">
+    Alert dialog showcasing multiple callout types for highlighting important information.
+
+    ```lua
+    local result = exports.lation_ui:alert({
+        header = 'System Update Available',
+        content = 'A new system update is ready to install. Please review the information below.',
+        icon = 'fas fa-download',
+        iconColor = '#3B82F6',
+        type = 'info',
+        callouts = {
+            {
+                label = 'Important',
+                description = 'This update includes critical security patches',
+                type = 'warning',
+                icon = 'fas fa-shield-alt'
+            },
+            {
+                label = 'What\'s New',
+                description = 'Bug fixes, performance improvements, and new features',
+                type = 'success',
+                icon = 'fas fa-sparkles'
+            },
+            {
+                label = 'Backup Recommended',
+                description = 'Please backup your data before proceeding with the update',
+                type = 'error',
+                icon = 'fas fa-database'
+            }
+        }
+    })
+    
+    if result == 'confirm' then
+        StartSystemUpdate()
+    end
+    ```
+
+    <Frame>
+      ![Alert with callouts](https://img.lationscripts.com/docs/ui/alert-dialog/callouts-example.webp)
+    </Frame>
+  </Tab>
+  <Tab title="Information Only">
+    Information dialog without a cancel button.
+
+    ```lua
+    exports.lation_ui:alert({
+        header = 'Welcome!',
+        content = 'Thank you for using our system. Click OK to continue.',
+        icon = 'fas fa-hand-wave',
+        iconColor = '#10B981',
+        type = 'success',
+        cancel = false,
+        labels = {
+            confirm = 'OK'
+        }
+    })
+    ```
+  </Tab>
+  <Tab title="Custom Styling">
+    Advanced example with custom size and multiple configuration options.
+
+    ```lua
+    local result = exports.lation_ui:alert({
+        header = '## Account Verification',
+        content = 'Please verify your account details:\n\n- Email: user@example.com\n- Phone: +1 234 567 8900',
+        icon = 'fas fa-user-check',
+        iconColor = '#8B5CF6',
+        type = 'default',
+        size = 'lg',
+        labels = {
+            cancel = 'Update Details',
+            confirm = 'Confirm'
+        },
+        callouts = {
+            {
+                description = 'Make sure your contact information is up to date for security purposes',
+                type = 'info'
+            }
+        }
+    })
+    ```
+  </Tab>
+</Tabs>
+
+## Best Practices
+
+<CardGroup cols={2}>
+  <Card title="Use Appropriate Types" icon="palette">
+    Match the dialog type to the action severity. Use `'error'` for destructive actions, `'warning'` for caution, and `'info'` for general information.
+  </Card>
+  <Card title="Clear Labels" icon="tag">
+    Use descriptive button labels that clearly indicate the action. Instead of "Yes/No", use "Delete/Cancel" or "Confirm/Go Back".
+  </Card>
+  <Card title="Markdown Support" icon="markdown">
+    Leverage markdown in header and content for better formatting, such as bold text, lists, and emphasis.
+  </Card>
+  <Card title="Callouts for Context" icon="bell">
+    Use callouts to provide additional context or warnings without cluttering the main message.
+  </Card>
+</CardGroup>
+
+<Tip>
+  For better UX, always provide clear consequences of actions in the dialog content, especially for destructive operations.
+</Tip>
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Dialog not showing" icon="bug">
+    **Possible causes:**
+
+    - Another dialog is already open
+    - Missing required `header` or `content` field
+    - Script resource not started
+
+    **Solution:** Use `closeAlert()` to close any existing dialogs before opening a new one.
+  </Accordion>
+  <Accordion title="Callouts not displaying correctly" icon="triangle-exclamation">
+    **Possible causes:**
+
+    - Missing required `description` field in callout
+    - Invalid callout `type` value
+
+    **Solution:** Ensure each callout has a `description` and uses a valid type: `'info'`, `'success'`, `'warning'`, or `'error'`.
+  </Accordion>
+  <Accordion title="Icons not appearing" icon="icons">
+    **Possible causes:**
+
+    - Invalid FontAwesome class name
+    - FontAwesome library not loaded
+
+    **Solution:** Verify the icon class at [FontAwesome Icons](https://fontawesome.com/icons) and ensure it follows the format `'fas fa-icon-name'`.
+  </Accordion>
+</AccordionGroup>
+
+<Warning>
+  Always handle the return value appropriately. Dialogs return `'cancel'` when closed via ESC key or clicking outside the dialog area.
+</Warning>

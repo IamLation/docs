@@ -215,7 +215,14 @@
             "icon": "palette",
             "pages": [
               "modern-ui/install",
-              "modern-ui/convars"
+              "modern-ui/convars",
+              {
+                "group": "Components",
+                "icon": "folder",
+                "pages": [
+                  "modern-ui/components/alert-dialog"
+                ]
+              }
             ]
           }
         ]
