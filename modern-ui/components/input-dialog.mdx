@@ -1,0 +1,1013 @@
+---
+title: "Input Dialog"
+description: "Input dialogs provide forms with various field types for collecting user data."
+icon: "rectangle-list"
+---
+
+Input dialogs provide flexible forms for collecting user data with support for validation, default values, and a wide variety of field types.
+
+## Quick Start
+
+<CodeGroup>
+
+```lua Simple Form
+local result = exports.lation_ui:input({
+    title = 'User Registration',
+    options = {
+        {
+            type = 'input',
+            label = 'Username',
+            placeholder = 'Enter username',
+            required = true
+        },
+        {
+            type = 'number',
+            label = 'Age',
+            min = 18,
+            max = 100,
+            required = true
+        }
+    }
+})
+
+if result then
+    print('Username:', result[1])
+    print('Age:', result[2])
+end
+```
+
+
+```lua With Validation
+local result = exports.lation_ui:input({
+    title = 'Create Password',
+    subtitle = 'Password must be at least 8 characters',
+    type = 'warning',
+    options = {
+        {
+            type = 'input',
+            label = 'Password',
+            placeholder = 'Enter password',
+            password = true,
+            min = 8,
+            required = true
+        },
+        {
+            type = 'toggle',
+            label = 'Remember me',
+            default = true
+        }
+    }
+})
+```
+
+
+```lua Multi-Field Form
+local result = exports.lation_ui:input({
+    title = 'Settings',
+    options = {
+        {
+            type = 'select',
+            label = 'Theme',
+            options = {
+                { label = 'Light', value = 'light' },
+                { label = 'Dark', value = 'dark' }
+            },
+            default = 'dark'
+        },
+        {
+            type = 'slider',
+            label = 'Volume',
+            min = 0,
+            max = 100,
+            unit = '%',
+            default = 75
+        }
+    }
+})
+```
+
+</CodeGroup>
+
+## Functions
+
+<AccordionGroup>
+  <Accordion title="input(data) → table | nil" icon="code">
+    Opens an input dialog and waits for user submission.
+
+    **Returns:**
+
+    - `table` - Array of values indexed by field order (e.g., `result[1]`, `result[2]`)
+    - `nil` - User cancelled or closed the dialog
+
+    ```lua
+    local result = exports.lation_ui:input({
+        title = 'Enter Details',
+        options = { ... }
+    })
+    
+    if result then
+        -- Process input values
+        print('First field:', result[1])
+    end
+    ```
+  </Accordion>
+  <Accordion title="closeInput()" icon="xmark">
+    Programmatically closes any currently open input dialog.
+
+    ```lua
+    exports.lation_ui:closeInput()
+    ```
+  </Accordion>
+</AccordionGroup>
+
+## Configuration
+
+### Dialog Options
+
+<ParamField body="options" type="table" required>
+  Array of field objects that define the form inputs. Each field type supports specific configuration options.
+
+  See [Field Types](#field-types) below for available types and their options.
+</ParamField>
+
+<ParamField body="title" type="string">
+  Main dialog title displayed at the top.
+</ParamField>
+
+<ParamField body="subtitle" type="string">
+  Optional subtitle providing additional context or instructions.
+</ParamField>
+
+<ParamField body="submitText" default="Submit" type="string">
+  Custom text for the submit button.
+</ParamField>
+
+<ParamField body="cancelText" default="Cancel" type="string">
+  Custom text for the cancel button.
+</ParamField>
+
+<ParamField body="type" default="default" type="string">
+  Dialog styling type to indicate context or severity.
+
+  **Options:** `'default'`, `'info'`, `'success'`, `'warning'`, `'error'`
+</ParamField>
+
+---
+
+## Field Types
+
+### Text Input (`'input'`)
+
+Standard single-line text input field.
+
+<ParamField body="type" type="string" required>
+  Must be `'input'`
+</ParamField>
+
+<ParamField body="label" type="string" required>
+  Field label displayed above the input
+</ParamField>
+
+<ParamField body="description" type="string">
+  Helper text displayed below the label
+</ParamField>
+
+<ParamField body="placeholder" type="string">
+  Placeholder text shown when empty
+</ParamField>
+
+<ParamField body="icon" type="string">
+  FontAwesome icon class (e.g., `'fas fa-user'`)
+</ParamField>
+
+<ParamField body="iconColor" default="#71717A" type="string">
+  Icon color (hex code or CSS color name)
+</ParamField>
+
+<ParamField body="default" type="string">
+  Default text value
+</ParamField>
+
+<ParamField body="required" default="false" type="boolean">
+  Whether the field must be filled
+</ParamField>
+
+<ParamField body="disabled" default="false" type="boolean">
+  Whether the field is disabled
+</ParamField>
+
+<ParamField body="password" default="false" type="boolean">
+  Enable password field with visibility toggle
+</ParamField>
+
+<ParamField body="min" type="number">
+  Minimum character length
+</ParamField>
+
+<ParamField body="max" type="number">
+  Maximum character length
+</ParamField>
+
+---
+
+### Number Input (`'number'`)
+
+Numeric input with increment/decrement controls.
+
+<ParamField body="type" type="string" required>
+  Must be `'number'`
+</ParamField>
+
+<ParamField body="label" type="string" required>
+  Field label displayed above the input
+</ParamField>
+
+<ParamField body="description" type="string">
+  Helper text displayed below the label
+</ParamField>
+
+<ParamField body="icon" type="string">
+  FontAwesome icon class
+</ParamField>
+
+<ParamField body="iconColor" default="#71717A" type="string">
+  Icon color (hex code or CSS color name)
+</ParamField>
+
+<ParamField body="default" type="number">
+  Default numeric value
+</ParamField>
+
+<ParamField body="required" default="false" type="boolean">
+  Whether the field must be filled
+</ParamField>
+
+<ParamField body="disabled" default="false" type="boolean">
+  Whether the field is disabled
+</ParamField>
+
+<ParamField body="min" type="number">
+  Minimum numeric value
+</ParamField>
+
+<ParamField body="max" type="number">
+  Maximum numeric value
+</ParamField>
+
+<ParamField body="step" default={1} type="number">
+  Step increment (e.g., `0.5`, `5`, `10`)
+</ParamField>
+
+---
+
+### Text Area (`'textarea'`)
+
+Multi-line text input for longer content.
+
+<ParamField body="type" type="string" required>
+  Must be `'textarea'`
+</ParamField>
+
+<ParamField body="label" type="string" required>
+  Field label displayed above the input
+</ParamField>
+
+<ParamField body="description" type="string">
+  Helper text displayed below the label
+</ParamField>
+
+<ParamField body="placeholder" type="string">
+  Placeholder text shown when empty
+</ParamField>
+
+<ParamField body="icon" type="string">
+  FontAwesome icon class
+</ParamField>
+
+<ParamField body="iconColor" default="#71717A" type="string">
+  Icon color (hex code or CSS color name)
+</ParamField>
+
+<ParamField body="default" type="string">
+  Default text value
+</ParamField>
+
+<ParamField body="required" default="false" type="boolean">
+  Whether the field must be filled
+</ParamField>
+
+<ParamField body="disabled" default="false" type="boolean">
+  Whether the field is disabled
+</ParamField>
+
+<ParamField body="min" type="number">
+  Minimum character length
+</ParamField>
+
+<ParamField body="max" type="number">
+  Maximum character length
+</ParamField>
+
+---
+
+### Toggle / Checkbox (`'toggle'` or `'checkbox'`)
+
+Toggle switch or checkbox for boolean values.
+
+<Note>
+  `'toggle'` and `'checkbox'` are aliases - both render the same component.
+</Note>
+
+<ParamField body="type" type="string" required>
+  Must be `'toggle'` or `'checkbox'`
+</ParamField>
+
+<ParamField body="label" type="string" required>
+  Field label displayed next to the toggle
+</ParamField>
+
+<ParamField body="description" type="string">
+  Helper text displayed below the label
+</ParamField>
+
+<ParamField body="icon" type="string">
+  FontAwesome icon class
+</ParamField>
+
+<ParamField body="iconColor" default="#71717A" type="string">
+  Icon color (hex code or CSS color name)
+</ParamField>
+
+<ParamField body="default" type="boolean">
+  Default checked state (`true` or `false`)
+
+  <Note>
+    You can also use `checked` as an alias for `default`.
+  </Note>
+</ParamField>
+
+<ParamField body="disabled" default="false" type="boolean">
+  Whether the field is disabled
+</ParamField>
+
+---
+
+### Select Dropdown (`'select'`)
+
+Single-select dropdown menu.
+
+<ParamField body="type" type="string" required>
+  Must be `'select'`
+</ParamField>
+
+<ParamField body="label" type="string" required>
+  Field label displayed above the dropdown
+</ParamField>
+
+<ParamField body="description" type="string">
+  Helper text displayed below the label
+</ParamField>
+
+<ParamField body="icon" type="string">
+  FontAwesome icon class
+</ParamField>
+
+<ParamField body="iconColor" default="#71717A" type="string">
+  Icon color (hex code or CSS color name)
+</ParamField>
+
+<ParamField body="options" type="table" required>
+  Array of option objects (see [Select Options](#select-options) below)
+</ParamField>
+
+<ParamField body="default" type="any">
+  Default selected value (must match an option's `value`)
+</ParamField>
+
+<ParamField body="required" default="false" type="boolean">
+  Whether a selection is required
+</ParamField>
+
+<ParamField body="disabled" default="false" type="boolean">
+  Whether the field is disabled
+</ParamField>
+
+<ParamField body="searchable" default="true" type="boolean">
+  Enable search/filter functionality
+</ParamField>
+
+---
+
+### Multi-Select Dropdown (`'multi-select'`)
+
+Multi-select dropdown menu allowing multiple selections.
+
+<ParamField body="type" type="string" required>
+  Must be `'multi-select'`
+</ParamField>
+
+<ParamField body="label" type="string" required>
+  Field label displayed above the dropdown
+</ParamField>
+
+<ParamField body="description" type="string">
+  Helper text displayed below the label
+</ParamField>
+
+<ParamField body="icon" type="string">
+  FontAwesome icon class
+</ParamField>
+
+<ParamField body="iconColor" default="#71717A" type="string">
+  Icon color (hex code or CSS color name)
+</ParamField>
+
+<ParamField body="options" type="table" required>
+  Array of option objects (see [Select Options](#select-options) below)
+</ParamField>
+
+<ParamField body="default" type="table">
+  Array of default selected values
+
+  ```lua
+  default = {'option1', 'option2'}
+  ```
+</ParamField>
+
+<ParamField body="required" default="false" type="boolean">
+  Whether at least one selection is required
+</ParamField>
+
+<ParamField body="disabled" default="false" type="boolean">
+  Whether the field is disabled
+</ParamField>
+
+<ParamField body="searchable" default="true" type="boolean">
+  Enable search/filter functionality
+</ParamField>
+
+<ParamField body="max" type="number">
+  Maximum number of selections allowed
+</ParamField>
+
+---
+
+### Slider (`'slider'`)
+
+Range slider for numeric value selection.
+
+<ParamField body="type" type="string" required>
+  Must be `'slider'`
+</ParamField>
+
+<ParamField body="label" type="string" required>
+  Field label displayed above the slider
+</ParamField>
+
+<ParamField body="description" type="string">
+  Helper text displayed below the label
+</ParamField>
+
+<ParamField body="icon" type="string">
+  FontAwesome icon class
+</ParamField>
+
+<ParamField body="iconColor" default="#71717A" type="string">
+  Icon color (hex code or CSS color name)
+</ParamField>
+
+<ParamField body="min" type="number" required>
+  Minimum slider value
+</ParamField>
+
+<ParamField body="max" type="number" required>
+  Maximum slider value
+</ParamField>
+
+<ParamField body="step" default={1} type="number">
+  Step increment between values
+</ParamField>
+
+<ParamField body="unit" type="string">
+  Unit label displayed next to value (e.g., `'%'`, `'mph'`, `'px'`)
+</ParamField>
+
+<ParamField body="default" type="number">
+  Default slider value
+</ParamField>
+
+<ParamField body="disabled" default="false" type="boolean">
+  Whether the field is disabled
+</ParamField>
+
+---
+
+### Color Picker (`'color'`)
+
+Color picker with multiple format support.
+
+<ParamField body="type" type="string" required>
+  Must be `'color'`
+</ParamField>
+
+<ParamField body="label" type="string" required>
+  Field label displayed above the picker
+</ParamField>
+
+<ParamField body="description" type="string">
+  Helper text displayed below the label
+</ParamField>
+
+<ParamField body="placeholder" type="string">
+  Placeholder text shown when empty
+</ParamField>
+
+<ParamField body="icon" type="string">
+  FontAwesome icon class
+</ParamField>
+
+<ParamField body="iconColor" default="#71717A" type="string">
+  Icon color (hex code or CSS color name)
+</ParamField>
+
+<ParamField body="format" default="hex" type="string">
+  Color format for the returned value
+
+  **Options:**
+
+  - `'hex'` - `#RRGGBB`
+  - `'hexa'` - `#RRGGBBAA`
+  - `'rgb'` - `rgb(r, g, b)`
+  - `'rgba'` - `rgba(r, g, b, a)`
+  - `'hsl'` - `hsl(h, s%, l%)`
+  - `'hsla'` - `hsla(h, s%, l%, a)`
+</ParamField>
+
+<ParamField body="default" type="string">
+  Default color value (must match specified format)
+</ParamField>
+
+<ParamField body="required" default="false" type="boolean">
+  Whether a color must be selected
+</ParamField>
+
+<ParamField body="disabled" default="false" type="boolean">
+  Whether the field is disabled
+</ParamField>
+
+---
+
+### Date Picker (`'date'`)
+
+Date picker with customizable format and range constraints.
+
+<ParamField body="type" type="string" required>
+  Must be `'date'`
+</ParamField>
+
+<ParamField body="label" type="string" required>
+  Field label displayed above the picker
+</ParamField>
+
+<ParamField body="description" type="string">
+  Helper text displayed below the label
+</ParamField>
+
+<ParamField body="placeholder" type="string">
+  Placeholder text shown when empty
+</ParamField>
+
+<ParamField body="icon" type="string">
+  FontAwesome icon class
+</ParamField>
+
+<ParamField body="iconColor" default="#71717A" type="string">
+  Icon color (hex code or CSS color name)
+</ParamField>
+
+<ParamField body="format" default="MM/dd/yyyy" type="string">
+  Date format for display and return value
+
+  **Options:**
+
+  - `'MM/dd/yyyy'` - 01/15/2025
+  - `'dd/MM/yyyy'` - 15/01/2025
+  - `'yyyy-MM-dd'` - 2025-01-15
+  - `'dd.MM.yyyy'` - 15.01.2025
+</ParamField>
+
+<ParamField body="default" type="string">
+  Default date value (must match specified format)
+</ParamField>
+
+<ParamField body="min" type="string">
+  Earliest selectable date (must match specified format)
+</ParamField>
+
+<ParamField body="max" type="string">
+  Latest selectable date (must match specified format)
+</ParamField>
+
+<ParamField body="clearable" default="true" type="boolean">
+  Show clear button to remove selected date
+</ParamField>
+
+<ParamField body="required" default="false" type="boolean">
+  Whether a date must be selected
+</ParamField>
+
+<ParamField body="disabled" default="false" type="boolean">
+  Whether the field is disabled
+</ParamField>
+
+---
+
+### Date Range Picker (`'date-range'`)
+
+Date range picker for selecting start and end dates.
+
+<ParamField body="type" type="string" required>
+  Must be `'date-range'`
+</ParamField>
+
+<ParamField body="label" type="string" required>
+  Field label displayed above the picker
+</ParamField>
+
+<ParamField body="description" type="string">
+  Helper text displayed below the label
+</ParamField>
+
+<ParamField body="placeholder" type="string">
+  Placeholder text shown when empty
+</ParamField>
+
+<ParamField body="icon" type="string">
+  FontAwesome icon class
+</ParamField>
+
+<ParamField body="iconColor" default="#71717A" type="string">
+  Icon color (hex code or CSS color name)
+</ParamField>
+
+<ParamField body="format" default="MM/dd/yyyy" type="string">
+  Date format for display and return values
+
+  **Options:**
+
+  - `'MM/dd/yyyy'` - 01/15/2025
+  - `'dd/MM/yyyy'` - 15/01/2025
+  - `'yyyy-MM-dd'` - 2025-01-15
+  - `'dd.MM.yyyy'` - 15.01.2025
+</ParamField>
+
+<ParamField body="default" type="table">
+  Default date range as array: `{ startDate, endDate }`
+
+  ```lua
+  default = { '01/01/2025', '01/07/2025' }
+  ```
+</ParamField>
+
+<ParamField body="min" type="string">
+  Earliest selectable date (must match specified format)
+</ParamField>
+
+<ParamField body="max" type="string">
+  Latest selectable date (must match specified format)
+</ParamField>
+
+<ParamField body="clearable" default="true" type="boolean">
+  Show clear button to remove selected range
+</ParamField>
+
+<ParamField body="required" default="false" type="boolean">
+  Whether a date range must be selected
+</ParamField>
+
+<ParamField body="disabled" default="false" type="boolean">
+  Whether the field is disabled
+</ParamField>
+
+---
+
+### Select Options
+
+For `'select'` and `'multi-select'` field types, each option in the `options` array supports:
+
+<ParamField body="value" type="any" required>
+  The value returned when this option is selected
+
+  ```lua
+  value = 'us'
+  value = 123
+  value = true
+  ```
+</ParamField>
+
+<ParamField body="label" type="string">
+  Display text shown to the user (uses `value` if omitted)
+
+  ```lua
+  { label = 'United States', value = 'us' }
+  ```
+</ParamField>
+
+<ParamField body="disable" default="false" type="boolean">
+  Whether the option is disabled and cannot be selected
+
+  ```lua
+  { label = 'Coming Soon', value = 'beta', disable = true }
+  ```
+</ParamField>
+
+## Examples
+
+<Tabs>
+  <Tab title="Complete Form">
+    Comprehensive example showcasing multiple field types in a single form.
+
+    ```lua
+    local result = exports.lation_ui:input({
+        title = 'User Profile',
+        subtitle = 'Complete your profile information',
+        submitText = 'Save Profile',
+        cancelText = 'Cancel',
+        options = {
+            {
+                type = 'input',
+                label = 'Username',
+                description = 'Your unique username',
+                placeholder = 'IamLation',
+                icon = 'fas fa-user',
+                required = true,
+                min = 3,
+                max = 20
+            },
+            {
+                type = 'number',
+                label = 'Age',
+                description = 'Must be 18 or older',
+                icon = 'fas fa-birthday-cake',
+                required = true,
+                min = 18,
+                max = 120,
+                default = 18
+            },
+            {
+                type = 'select',
+                label = 'Country',
+                description = 'Select your country of residence',
+                icon = 'fas fa-globe',
+                searchable = true,
+                options = {
+                    { label = 'United States', value = 'us' },
+                    { label = 'Canada', value = 'ca' },
+                    { label = 'United Kingdom', value = 'uk' },
+                    { label = 'Australia', value = 'au' },
+                    { label = 'Germany', value = 'de' },
+                    { label = 'France', value = 'fr' }
+                }
+            },
+            {
+                type = 'toggle',
+                label = 'Receive Notifications',
+                description = 'Get notified about important updates',
+                icon = 'fas fa-bell',
+                default = true
+            },
+            {
+                type = 'slider',
+                label = 'Volume',
+                description = 'Adjust your preferred volume level',
+                icon = 'fas fa-volume-up',
+                min = 0,
+                max = 100,
+                step = 5,
+                unit = '%',
+                default = 50
+            }
+        }
+    })
+    
+    if result then
+        print('Username:', result[1])
+        print('Age:', result[2])
+        print('Country:', result[3])
+        print('Notifications:', result[4])
+        print('Volume:', result[5])
+    else
+        print('Form cancelled')
+    end
+    ```
+
+    <Frame>
+      ![Complete form example](/resources/modern-ui/components/input-dialog/input-dialog-example.webp)
+    </Frame>
+  </Tab>
+  <Tab title="Authentication">
+    Login form with password field and remember me toggle.
+
+    ```lua
+    local result = exports.lation_ui:input({
+        title = 'Login',
+        subtitle = 'Enter your credentials to continue',
+        type = 'info',
+        submitText = 'Login',
+        options = {
+            {
+                type = 'input',
+                label = 'Email',
+                placeholder = 'user@example.com',
+                icon = 'fas fa-envelope',
+                required = true
+            },
+            {
+                type = 'input',
+                label = 'Password',
+                placeholder = 'Enter password',
+                icon = 'fas fa-lock',
+                password = true,
+                required = true,
+                min = 8
+            },
+            {
+                type = 'toggle',
+                label = 'Remember me',
+                icon = 'fas fa-history',
+                default = false
+            }
+        }
+    })
+    
+    if result then
+        -- Authenticate user
+        AuthenticateUser(result[1], result[2], result[3])
+    end
+    ```
+  </Tab>
+  <Tab title="Multi-Select">
+    Form with multi-select dropdown and selection limit.
+
+    ```lua
+    local result = exports.lation_ui:input({
+        title = 'Select Skills',
+        subtitle = 'Choose up to 3 skills',
+        type = 'success',
+        options = {
+            {
+                type = 'multi-select',
+                label = 'Skills',
+                description = 'Select your top skills (maximum 3)',
+                icon = 'fas fa-star',
+                max = 3,
+                required = true,
+                options = {
+                    { label = 'JavaScript', value = 'js' },
+                    { label = 'Python', value = 'py' },
+                    { label = 'Lua', value = 'lua' },
+                    { label = 'TypeScript', value = 'ts' },
+                    { label = 'React', value = 'react' },
+                    { label = 'Vue', value = 'vue' },
+                    { label = 'Node.js', value = 'node' }
+                }
+            }
+        }
+    })
+    
+    if result then
+        print('Selected skills:', table.concat(result[1], ', '))
+    end
+    ```
+  </Tab>
+  <Tab title="Color & Date Pickers">
+    Advanced form with color picker and date range selection.
+
+    ```lua
+    local result = exports.lation_ui:input({
+        title = 'Event Planning',
+        subtitle = 'Create a new event',
+        options = {
+            {
+                type = 'input',
+                label = 'Event Name',
+                placeholder = 'Summer Party 2025',
+                icon = 'fas fa-calendar-star',
+                required = true
+            },
+            {
+                type = 'color',
+                label = 'Theme Color',
+                description = 'Choose a color for your event',
+                icon = 'fas fa-palette',
+                format = 'hex',
+                default = '#3B82F6'
+            },
+            {
+                type = 'date',
+                label = 'Event Date',
+                description = 'Select the event date',
+                icon = 'fas fa-calendar',
+                format = 'MM/dd/yyyy',
+                min = '01/01/2025',
+                max = '12/31/2025',
+                required = true,
+                clearable = true
+            },
+            {
+                type = 'textarea',
+                label = 'Description',
+                placeholder = 'Event details...',
+                icon = 'fas fa-align-left',
+                min = 10,
+                max = 500
+            }
+        }
+    })
+    
+    if result then
+        CreateEvent(result[1], result[2], result[3], result[4])
+    end
+    ```
+  </Tab>
+  <Tab title="Settings Panel">
+    Configuration form with various field types and validation.
+
+    ```lua
+    local result = exports.lation_ui:input({
+        title = 'Application Settings',
+        subtitle = 'Configure your preferences',
+        type = 'default',
+        submitText = 'Apply Settings',
+        options = {
+            {
+                type = 'select',
+                label = 'Language',
+                icon = 'fas fa-language',
+                options = {
+                    { label = 'English', value = 'en' },
+                    { label = 'Spanish', value = 'es' },
+                    { label = 'French', value = 'fr' },
+                    { label = 'German', value = 'de' }
+                },
+                default = 'en'
+            },
+            {
+                type = 'select',
+                label = 'Theme',
+                icon = 'fas fa-moon',
+                options = {
+                    { label = 'Light Mode', value = 'light' },
+                    { label = 'Dark Mode', value = 'dark' },
+                    { label = 'Auto', value = 'auto' }
+                },
+                default = 'dark'
+            },
+            {
+                type = 'slider',
+                label = 'Text Size',
+                description = 'Adjust UI text size',
+                icon = 'fas fa-text-height',
+                min = 10,
+                max = 20,
+                step = 1,
+                unit = 'px',
+                default = 14
+            },
+            {
+                type = 'toggle',
+                label = 'Enable Animations',
+                description = 'Smooth UI transitions',
+                icon = 'fas fa-magic',
+                default = true
+            },
+            {
+                type = 'toggle',
+                label = 'Sound Effects',
+                description = 'Play audio feedback',
+                icon = 'fas fa-volume-high',
+                default = false
+            }
+        }
+    })
+    
+    if result then
+        ApplySettings({
+            language = result[1],
+            theme = result[2],
+            textSize = result[3],
+            animations = result[4],
+            sounds = result[5]
+        })
+    end
+    ```
+  </Tab>
+</Tabs>
+
+<Tip>
+  Always check if `result` is not `nil` before processing values, as users can cancel the dialog at any time.
+</Tip>
+
+<Warning>
+  Return values are indexed by field order (`result[1]`, `result[2]`, etc.), not by label. Maintain consistent field ordering for reliable data access.
+</Warning>

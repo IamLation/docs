@@ -220,7 +220,8 @@
                 "group": "Components",
                 "icon": "folder",
                 "pages": [
-                  "modern-ui/components/alert-dialog"
+                  "modern-ui/components/alert-dialog",
+                  "modern-ui/components/input-dialog"
                 ]
               }
             ]
