@@ -1,0 +1,271 @@
+---
+title: "Menu"
+description: "Context menus provide navigation and action selection with hierarchical support"
+icon: "bars"
+---
+
+## Quick Start
+
+```lua
+exports.lation_ui:registerMenu({
+    id = 'my_menu',
+    title = 'My Menu',
+    options = {
+        {
+            title = 'Option 1',
+            description = 'This is a menu option',
+            icon = 'fas fa-circle',
+            onSelect = function()
+                print('Option 1 selected')
+            end
+        },
+        {
+            title = 'Option 2',
+            description = 'Another menu option',
+            icon = 'fas fa-star',
+            onSelect = function()
+                print('Option 2 selected')
+            end
+        }
+    }
+})
+
+exports.lation_ui:showMenu('my_menu')
+```
+
+## Functions
+
+<AccordionGroup>
+  <Accordion title="registerMenu" icon="plus">
+    Register a new menu with the specified configuration.
+
+    ```lua
+    exports.lation_ui:registerMenu(menuData)
+    ```
+
+    **Parameters:**
+
+    - `menuData` (table) - Menu configuration object (see [Registration Options](#registration-options))
+  </Accordion>
+  <Accordion title="showMenu" icon="eye">
+    Display a previously registered menu.
+
+    ```lua
+    exports.lation_ui:showMenu(menuId)
+    ```
+
+    **Parameters:**
+
+    - `menuId` (string) - Unique identifier of the menu to display
+  </Accordion>
+  <Accordion title="hideMenu" icon="eye-slash">
+    Hide the currently displayed menu.
+
+    ```lua
+    exports.lation_ui:hideMenu()
+    ```
+  </Accordion>
+  <Accordion title="getOpenMenu" icon="question">
+    Get the ID of the currently open menu.
+
+    ```lua
+    local menuId = exports.lation_ui:getOpenMenu()
+    ```
+
+    **Returns:**
+
+    - `menuId` (string | nil) - The ID of the currently open menu, or nil if no menu is open
+  </Accordion>
+</AccordionGroup>
+
+## Configuration
+
+### Registration Options
+
+<ParamField path="id" type="string" required>
+  Unique menu identifier
+</ParamField>
+
+<ParamField path="title" type="string">
+  Menu title (supports markdown)
+</ParamField>
+
+<ParamField path="subtitle" type="string">
+  Menu subtitle (supports markdown)
+</ParamField>
+
+<ParamField path="menu" type="string">
+  Parent menu ID (for back navigation)
+</ParamField>
+
+<ParamField path="canClose" default="true" type="boolean">
+  Whether menu can be closed with ESC
+</ParamField>
+
+<ParamField path="position" default="'top-right'" type="string">
+  Menu position. Available options: `'top-left'`, `'top-right'`, `'offcenter-left'`, `'offcenter-right'`
+
+  <Note>
+    Submenus will inherit parent menu positioning
+  </Note>
+</ParamField>
+
+<ParamField path="onExit" type="function">
+  Function called when menu is closed with ESC
+</ParamField>
+
+<ParamField path="options" type="table" required>
+  Array of menu options (see [Option Properties](#option-properties))
+</ParamField>
+
+### Option Properties
+
+<ParamField path="title" type="string" required>
+  Option display text (supports markdown)
+</ParamField>
+
+<ParamField path="icon" type="string">
+  FontAwesome icon class or image URL
+
+  Supported image formats: `.png`, `.webp`, `.jpg`, `.jpeg`, `.gif`, `.svg`
+</ParamField>
+
+<ParamField path="iconColor" default="'#71717A'" type="string">
+  Icon color (hex or [CSS color name](https://htmlcolorcodes.com/color-names/))
+</ParamField>
+
+<ParamField path="iconAnimation" type="string">
+  Icon animation type
+
+  Available options: `'spin'`, `'spinPulse'`, `'spinReverse'`, `'pulse'`, `'beat'`, `'fade'`, `'beatFade'`, `'bounce'`, `'shake'`
+</ParamField>
+
+<ParamField path="description" type="string">
+  Option description (supports markdown)
+</ParamField>
+
+<ParamField path="keybind" type="string">
+  Keybind display text
+</ParamField>
+
+<ParamField path="disabled" default="false" type="boolean">
+  Whether option is disabled
+</ParamField>
+
+<ParamField path="readOnly" default="false" type="boolean">
+  Whether option is read-only (no click)
+</ParamField>
+
+<ParamField path="menu" type="string">
+  Submenu ID to open
+</ParamField>
+
+<ParamField path="arrow" default="false" type="boolean">
+  Show arrow indicator
+
+  <Note>
+    Automatically set to true for submenus
+  </Note>
+</ParamField>
+
+<ParamField path="progress" type="number">
+  Progress bar value (0-100)
+</ParamField>
+
+<ParamField path="progressColor" default="'#3B82F6'" type="string">
+  Progress bar color (hex or [CSS color name](https://htmlcolorcodes.com/color-names/))
+
+  <Note>
+    Can also use `colorScheme` as an alias
+  </Note>
+</ParamField>
+
+<ParamField path="image" type="string">
+  URL to an image displayed in the hover metadata
+</ParamField>
+
+<ParamField path="metadata" type="table">
+  Additional information displayed on hover (see [Metadata](#metadata))
+</ParamField>
+
+<ParamField path="onSelect" type="function">
+  Callback function executed when option is selected
+</ParamField>
+
+<ParamField path="event" type="string">
+  Client event to trigger when option is selected
+</ParamField>
+
+<ParamField path="serverEvent" type="string">
+  Server event to trigger when option is selected
+</ParamField>
+
+<ParamField path="args" type="any">
+  Arguments passed to events
+</ParamField>
+
+### Metadata
+
+The `metadata` property displays additional information in a hover card. It supports three formats:
+
+<Tabs>
+  <Tab title="Structured Array">
+    **Recommended approach** - Provides the most control over formatting and supports progress bars.
+
+    ```lua
+    metadata = {
+        { label = "Health", value = "85%" },
+        { label = "Armor", value = "100%" },
+        { label = "Experience", value = "1,250 XP", progress = 75, progressColor = "#3B82F6" },
+        { label = "Level Progress", value = "3/4", progress = 75, progressColor = "#10B981" }
+    }
+    ```
+
+    **Metadata Item Properties:**
+
+    <ParamField path="label" type="string" required>
+      The label text
+    </ParamField>
+    <ParamField path="value" type="any" required>
+      The value to display
+    </ParamField>
+    <ParamField path="progress" type="number">
+      Progress bar value (0-100)
+    </ParamField>
+    <ParamField path="progressColor" type="string">
+      Progress bar color (hex or CSS color name)
+
+      <Note>
+        Can also use `colorScheme` as an alias
+      </Note>
+    </ParamField>
+  </Tab>
+  <Tab title="Key-Value Object">
+    Simple key-value pairs for basic metadata display.
+
+    ```lua
+    metadata = {
+        ["Property 1"] = "Value 1",
+        ["Property 2"] = "Value 2",
+        ["Status"] = "Active"
+    }
+    ```
+  </Tab>
+  <Tab title="String Array">
+    Basic array of strings for simple information display.
+
+    ```lua
+    metadata = {
+        "Additional info line 1",
+        "Additional info line 2", 
+        "Additional info line 3"
+    }
+    ```
+  </Tab>
+</Tabs>
+
+## Preview
+
+<Frame>
+  ![Menu Preview](/resources/modern-ui/components/menu/preview.webp)
+</Frame>
