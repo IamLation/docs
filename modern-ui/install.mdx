@@ -12,4 +12,17 @@ icon: "gear"
       Do not place this resource in a `[subfolder]` - it should be placed directly in the root.
     </Warning>
   </Step>
+  <Step title="Update server.cfg">
+    Open your `server.cfg` and add `ensure lation_ui` before _all_ other resources; including your framework!
+
+    ```
+    ensure lation_ui
+    ensure qbx_core
+    ensure [standalone]
+    .. etc
+    ```
+  </Step>
+  <Step title="Restart server">
+    Finally, perform a full server restart. Failure to perform a full restart after installation will cause errors.
+  </Step>
 </Steps>

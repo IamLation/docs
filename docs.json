@@ -214,7 +214,8 @@
             "group": "Modern UI",
             "icon": "palette",
             "pages": [
-              "modern-ui/install"
+              "modern-ui/install",
+              "modern-ui/convars"
             ]
           }
         ]

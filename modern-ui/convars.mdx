@@ -1,0 +1,55 @@
+---
+title: "Convars"
+icon: "pencil"
+description: "Configure Modern UI global options via convars"
+---
+
+<Note>
+  Convars must be set in your `server.cfg` file _before_ the resource is started to take effect.
+</Note>
+
+### locale
+
+Assign the default language used.
+
+```cfg
+setr lation:locale "en"
+```
+
+### position
+
+Assign a screen position components will use.
+
+<Tabs>
+  <Tab title="notify">
+    ```cfg
+    setr lation:position:notify "top"
+    ```
+
+    <Info>
+      See all notification positions available here.
+    </Info>
+  </Tab>
+  <Tab title="menu">
+    ```cfg
+    setr lation:position:menu "offcenter-right"
+    ```
+
+    <Info>
+      See all menu positions available here.
+    </Info>
+  </Tab>
+  <Tab title="text ui">
+    ```cfg
+    setr lation:position:textui "left-center"
+    ```
+
+    <Info>
+      See all text UI positions available here.
+    </Info>
+  </Tab>
+</Tabs>
+
+<Warning>
+  Convar positions apply globally and overrides any positions specified in export calls.
+</Warning>
