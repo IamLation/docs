@@ -1,0 +1,2552 @@
+---
+title: "Previews"
+description: "Preview open source files included with this resource"
+icon: "eye"
+---
+
+<CodeGroup>
+
+```lua config/shared.lua expandable
+return {
+
+    -- ⚠️ WARNING: When you are working with this script, never do "restart lation_diving"
+    -- ⚠️ This will cause issues, data loss & more! You must restart the script like this:
+    -- ⚠️ "stop lation_diving" ..wait a couple seconds.. then "ensure lation_diving"
+
+    ----------------------------------------------
+    --        🛠️ Setup the basics below
+    ----------------------------------------------
+
+    setup = {
+        -- Use only if needed, directed by support or know what you're doing
+        -- Notice: enabling debug features will significantly increase resmon
+        -- And should always be disabled in production
+        debug = false,
+        -- Set your interaction system below
+        -- Available options are: 'ox_target', 'qb-target', 'interact' & 'custom'
+        -- 'custom' needs to be added to client/functions.lua
+        -- We also provide support for various textUI: ox_lib, jg-textui, okokTextUI & qbcore
+        -- Go to client/functions.lua line 3 to choose which textUI to use
+        interact = 'ox_target',
+        -- Set your notification system below
+        -- Available options are: 'lation_ui', 'ox_lib', 'esx', 'qb', 'okok', 'sd-notify', 'wasabi_notify' & 'custom'
+        -- 'custom' needs to be added to client/functions.lua
+        notify = 'ox_lib',
+        -- Set your progress bar system below
+        -- Available options are: 'lation_ui', 'ox_lib', 'qbcore' & 'custom'
+        -- 'custom' needs to be added to client/functions.lua
+        -- Any custom progress bar must also support animations
+        progress = 'ox_lib',
+        -- Set your context menu system below
+        -- Available options are: 'lation_ui', 'ox_lib' & 'custom'
+        menu = 'ox_lib',
+        -- Set your alert & input dialog system below
+        -- Available options are: 'lation_ui', 'ox_lib' & 'custom'
+        dialogs = 'ox_lib',
+        -- Do you want to hide player names in the group menu?
+        -- If true, names will instead be replaced with their Player IDs
+        -- If false it will display their character names as normal
+        hideNames = false,
+        -- Do you want to be notified via server console if an update is available?
+        -- True if yes, false if no
+        version = true,
+        -- You have the option to set a job requirement to Scuba Dive if you wish
+        -- Just change the false below to your job name, e.g. job = 'job_name'
+        job = false,
+        -- When a player is diving, they can see their current depth underwater.
+        -- Do you want to show this depth in meters or feet?
+        -- If meteres, set metric to true. If feet, set metric to false.
+        metric = false,
+        -- ⚠️ WARNING: Do not alter the number below unless directed by support
+        -- ⚠️ And/or understand what you are doing - "SetPedMaxTimeUnderWater" value
+        max = 1800.0
+    },
+
+    ----------------------------------------------
+    --       📍 Activity start settings
+    ----------------------------------------------
+
+    start = {
+        -- Where to spawn the main ped to start diving
+        -- If you wish to disable the starting ped, set coords = false
+        coords = vec4(-289.3029, -2770.0029, 2.1953, 48.9145),
+        -- The ped model used
+        -- More models: https://docs.fivem.net/docs/game-references/ped-models/
+        model = 's_m_y_shop_mask',
+        -- The scenario assigned to the ped (or scenario = false for no scenario)
+        -- More scenarios: https://github.com/DioneB/gtav-scenarios
+        scenario = 'WORLD_HUMAN_CLIPBOARD',
+        -- You can limit the hours at which the ped is available here
+        -- By default, this ped is available 24/7
+        -- Min is the earliest the ped is available (in 24hr format)
+        -- Max is the latest the ped is available (in 24hr format)
+        -- For example, if you want the ped only available during daytime set min = 6 & max = 21
+        hours = { min = 0, max = 24 },
+        -- When a group owner selects "Start Diving", this is how long it takes
+        -- (in seconds) to receive an assigned location on the map.
+        cooldown = { min = 15, max = 30 },
+        -- When a diving job is completed, do you want to display the "Continue Diving?"
+        -- Dialog to the group owner? True if yes, false if no
+        continue = true,
+    },
+
+    ----------------------------------------------
+    --       📈 Customize the XP system
+    ----------------------------------------------
+
+    experience = {
+        -- The number in these [brackets] are the level
+        -- The number after = is the exp required to reach that level
+        -- Be sure levels *always* start at level 1 with 0 exp
+        [1] = 0,
+        [2] = 2500,
+        [3] = 10000,
+        [4] = 20000,
+        [5] = 50000,
+        -- You can add or remove levels as you wish
+    },
+
+    ----------------------------------------------
+    --       🤿 Setup your Scuba Gear
+    ----------------------------------------------
+
+    gear = {
+        -- Customize the various Scuba Gear tanks available
+        tanks = {
+            -- The number in [brackets] is the level required to use this tank
+            -- item: is the actual scuba tank item spawn name
+            -- degrade: is how much the tank degrades every 10 seconds underwater
+            -- Level 1 lasts roughly a total of 5 minutes underwater before needing a refill
+            [1] = { item = 'ls_scuba_gear_1', degrade = 3.34 },
+            -- Level 2 lasts roughly a total of 10 minutes underwater before needing a refill
+            [2] = { item = 'ls_scuba_gear_2', degrade = 1.67 },
+            -- Level 3 lasts roughly a total of 15 minutes underwater before needing a refill
+            [3] = { item = 'ls_scuba_gear_3', degrade = 1.11 },
+            -- Level 4 lasts roughly a total of 20 minutes underwater before needing a refill
+            [4] = { item = 'ls_scuba_gear_4', degrade = 0.84 },
+            -- Level 5 lasts roughly a total of 25 minutes underwater before needing a refill
+            [5] = { item = 'ls_scuba_gear_5', degrade = 0.66 },
+            -- The formula to get degradation value based on total time is:
+            -- 100 ÷ (Total time in seconds desired ÷ 10) = degrade
+        },
+        -- The item spawn name for oxygen refill tanks
+        refill = 'ls_oxygen_tank',
+        -- The mask is an object, object spawn name:
+        mask = 'p_d_scuba_mask_s',
+        -- The tank is an object, object spawn name:
+        tank = 'p_s_scuba_tank_s',
+        -- Optional clothing to be worn when scuba diving
+        -- Don't want to change clothes? Set all drawableId's to 0!
+        -- ⚠️ Do not alter componentId
+        clothes = {
+            mask = {
+                -- The compononent id you want to set
+                componentId = 1,
+                -- The drawableId and textureId for males
+                male = { drawableId = 0, textureId = 0 },
+                -- The drawableId and textureId for females
+                female = { drawableId = 0, textureId = 0 }
+            },
+            upperBody = {
+                componentId = 3,
+                male = { drawableId = 8, textureId = 0 },
+                female = { drawableId = 3, textureId = 0 }
+            },
+            lowerBody = {
+                componentId = 4,
+                male = { drawableId = 94, textureId = 0 },
+                female = { drawableId = 97, textureId = 0 }
+            },
+            bags = {
+                componentId = 5,
+                male = { drawableId = 0, textureId = 0 },
+                female = { drawableId = 0, textureId = 0 }
+            },
+            shoes = {
+                componentId = 6,
+                male = { drawableId = 67, textureId = 0 },
+                female = { drawableId = 70, textureId = 0 }
+            },
+            shirt = {
+                componentId = 8,
+                male = { drawableId = 15, textureId = 0 },
+                female = { drawableId = 15, textureId = 0 }
+            },
+            bodyArmor = {
+                componentId = 9,
+                male = { drawableId = 0, textureId = 0 },
+                female = { drawableId = 0, textureId = 0 }
+            },
+            decals = {
+                componentId = 10,
+                male = { drawableId = 0, textureId = 0 },
+                female = { drawableId = 0, textureId = 0 }
+            },
+            jackets = {
+                componentId = 11,
+                male = { drawableId = 243, textureId = 0 },
+                female = { drawableId = 251, textureId = 0 }
+            }
+        }
+    },
+
+    ----------------------------------------------
+    --          🛒 Setup your shops
+    ----------------------------------------------
+
+    shop = {
+        gear = {
+            -- Do you want to enable the scuba gear shop?
+            -- This shop is added to the main diving menu
+            enable = true,
+            -- The account that will be used for purchases
+            -- Available options are: 'cash' or 'bank'
+            account = 'cash',
+            -- The shop items available for purchase
+            items = {
+                -- item: item spawn name
+                -- price: price of item
+                -- icon: icon for item
+                -- level: optional player level requirement to purchase item
+                -- metadata: optional durability level assigned at purchase
+                -- metadata: ⚠️ remove this option if selling non-metadata items
+                [1] = { item = 'ls_oxygen_tank', price = 100, icon = 'fas fa-repeat', metadata = 100 },
+                [2] = { item = 'ls_scuba_gear_1', price = 250, icon = 'fas fa-lungs', level = 1, metadata = 100 },
+                [3] = { item = 'ls_scuba_gear_2', price = 500, icon = 'fas fa-lungs', level = 2, metadata = 100 },
+                [4] = { item = 'ls_scuba_gear_3', price = 1000, icon = 'fas fa-lungs', level = 3, metadata = 100 },
+                [5] = { item = 'ls_scuba_gear_4', price = 2000, icon = 'fas fa-lungs', level = 4, metadata = 100 },
+                [6] = { item = 'ls_scuba_gear_5', price = 5000, icon = 'fas fa-lungs', level = 5, metadata = 100 },
+                [7] = { item = 'burger', price = 5, icon = 'fas fa-burger' },
+                [8] = { item = 'water', price = 5, icon = 'fas fa-glass-water' },
+                -- You can add or remove items as you wish
+            }
+        },
+        pawn = {
+            -- Do you want to enable the scuba gear pawn/sell shop?
+            -- This shop is added to the main diving menu
+            enable = true,
+            -- The account that will be used to pay the player
+            -- Available options are 'cash' or 'bank'
+            account = 'cash',
+            -- The shop items available to sell
+            items = {
+                -- item: item spawn name
+                -- price: how much item sells for
+                -- icon: icon for item
+                [1] = { item = 'ls_old_boot', price = 5, icon = 'fas fa-hand-holding-dollar' },
+                [2] = { item = 'ls_wood_plank', price = 5, icon = 'fas fa-hand-holding-dollar' },
+                [3] = { item = 'ls_rusted_padlock', price = 5, icon = 'fas fa-hand-holding-dollar' },
+                [4] = { item = 'ls_rusted_key', price = 5, icon = 'fas fa-hand-holding-dollar' },
+                [5] = { item = 'ls_rusted_gear', price = 5, icon = 'fas fa-hand-holding-dollar' },
+                [6] = { item = 'ls_seashell', price = 15, icon = 'fas fa-hand-holding-dollar' },
+                [7] = { item = 'ls_seaweed', price = 15, icon = 'fas fa-hand-holding-dollar' },
+                [8] = { item = 'ls_rusted_muffler', price = 15, icon = 'fas fa-hand-holding-dollar' },
+                [9] = { item = 'ls_broken_cd', price = 15, icon = 'fas fa-hand-holding-dollar' },
+                [10] = { item = 'ls_diving_goggles', price = 15, icon = 'fas fa-hand-holding-dollar' },
+                [11] = { item = 'ls_fishing_net', price = 25, icon = 'fas fa-hand-holding-dollar' },
+                [12] = { item = 'ls_old_camera', price = 25, icon = 'fas fa-hand-holding-dollar' },
+                [13] = { item = 'ls_military_helmet', price = 25, icon = 'fas fa-hand-holding-dollar' },
+                [14] = { item = 'ls_old_compass', price = 50, icon = 'fas fa-hand-holding-dollar' },
+                [15] = { item = 'ls_old_watch', price = 50, icon = 'fas fa-hand-holding-dollar' },
+                [16] = { item = 'ls_conch_shell', price = 50, icon = 'fas fa-hand-holding-dollar' },
+                -- You can add or remove items as you wish
+            }
+        }
+    },
+
+    ----------------------------------------------
+    --       🛥️ Customize boat rentals
+    ----------------------------------------------
+
+    rental = {
+        -- Do you want to offer boat rentals?
+        enable = true,
+        -- The account that will be used for rentals
+        -- Available options are: 'cash' or 'bank'
+        account = 'cash',
+        -- Do you want to require payment for boat rentals?
+        -- If not, set deposit = 0
+        deposit = 500,
+        -- Do you want to refund some money when the boat is returned?
+        -- If not, set returnDeposit = 0
+        returnDeposit = 250,
+        -- The script will spawn a random boat from the list below
+        -- If you only want one boat, leave just one in the list
+        models = { 'dinghy' },
+        -- When a boat is rented, do you want to teleport the player into it?
+        teleport = false,
+        -- Where to spawn the rental boat?
+        coords = vec4(-291.7570, -2766.1208, 0.6787, 267.4251),
+        -- Do you want to add a boat anchor option?
+        anchor = true,
+    },
+
+    ----------------------------------------------
+    --       ⛏️ Build the diving zones
+    ----------------------------------------------
+
+    zones = {
+        [1] = {
+            -- The center location of this zone
+            location = vec3(1086.9691, -3575.9382, -50.1214),
+            -- Models selected at random for each crate spawned here
+            models = { 'xm3_prop_xm3_crate_supp_01a' },
+            -- The radius of this zone
+            radius = 150.0,
+            -- Optional highlighting on crates when a player is nearby
+            -- enable: true/false - enable or disable highlighting when nearby
+            -- distance: how close the player must be for the highlight to be visible
+            -- color: the color of the highlight (https://rgbacolorpicker.com/) 
+            highlight = { enable = true, distance = 30, color = { r = 106, g = 226, b = 119 } },
+            -- How many crates can be spawned in this zone?
+            crates = { min = 2, max = 6 },
+            -- How much XP is rewarded for crates found in this zone?
+            xp = { min = 1, max = 5 },
+            -- The exact coords the crates will spawn inside this zone
+            coords = {
+                vec3(1094.7655, -3577.4995, -52.5339),
+                vec3(1086.7635, -3537.7588, -43.1057),
+                vec3(1106.2019, -3583.6062, -17.5417),
+                vec3(1091.3970, -3618.1091, -44.4066),
+                vec3(974.6331, -3567.4514, -47.2678),
+                vec3(1161.8893, -3630.9204, -22.7693),
+                vec3(1066.5341, -3559.0664, -20.8264),
+                vec3(1138.0339, -3581.6411, -39.0230),
+                vec3(1203.7281, -3524.0046, -33.9104),
+                vec3(1191.8622, -3531.3965, -24.0956),
+                vec3(1066.8358, -3485.3047, -32.4555),
+                vec3(1034.0037, -3651.6384, -49.3254),
+                vec3(1108.3530, -3662.9187, -41.3706),
+                vec3(1180.6683, -3558.5405, -38.9220),
+                vec3(1035.1763, -3586.1721, -45.7417),
+                -- Add or remove spawns from this zone
+            }
+        },
+        [2] = {
+            location = vec3(3085.2043, -1853.3246, -14.3668),
+            models = { 'xm3_prop_xm3_crate_supp_01a' },
+            radius = 150.0,
+            highlight = { enable = true, distance = 30, color = { r = 106, g = 226, b = 119 } },
+            crates = { min = 2, max = 6 },
+            xp = { min = 1, max = 5 },
+            coords = {
+                vec3(3085.2043, -1853.3246, -16.0565),
+                vec3(3029.1843, -1820.8015, -24.6999),
+                vec3(2993.0427, -1818.4943, -34.2077),
+                vec3(2997.8711, -1753.7402, -11.0640),
+                vec3(2982.0010, -1912.0287, -28.9325),
+                vec3(3051.9775, -1926.9736, -54.6551),
+                vec3(3011.4712, -1866.9753, -48.1732),
+                vec3(3056.2656, -1761.5493, -43.3554),
+                vec3(2950.1038, -1839.1633, -35.2352),
+                vec3(3019.7561, -1913.2930, -32.4005),
+                vec3(3061.5286, -1866.6348, -35.7668),
+                vec3(3040.8525, -1879.8348, -57.6607),
+                vec3(2974.8582, -1785.8473, -13.5562),
+            }
+        },
+        [3] = {
+            location = vec3(1818.7792, -2984.2068, -41.2811),
+            models = { 'xm3_prop_xm3_crate_supp_01a' },
+            radius = 150.0,
+            highlight = { enable = true, distance = 30, color = { r = 106, g = 226, b = 119 } },
+            crates = { min = 2, max = 6 },
+            xp = { min = 1, max = 5 },
+            coords = {
+                vec3(1815.4813, -2981.9314, -42.1416),
+                vec3(1820.6042, -2943.6421, -39.3650),
+                vec3(1738.9772, -2948.8298, -23.5561),
+                vec3(1732.7568, -3042.6794, -58.3799),
+                vec3(1902.0460, -3026.5271, -45.4950),
+                vec3(1760.1697, -2977.9131, -47.1564),
+                vec3(1760.2402, -3093.1196, -66.6896),
+                vec3(1820.7825, -3068.2268, -39.7288),
+                vec3(1929.2610, -2969.8464, -36.5976),
+                vec3(1777.1892, -2915.6821, -30.6168),
+                vec3(1709.7538, -2952.2861, -24.4798),
+                vec3(1849.2987, -2965.3936, -52.7471),
+                vec3(1891.3480, -2918.0266, -22.7276),
+            }
+        },
+        [4] = {
+            location = vec3(3150.8074, -973.6499, -26.9572),
+            models = { 'xm3_prop_xm3_crate_supp_01a' },
+            radius = 150.0,
+            highlight = { enable = true, distance = 30, color = { r = 106, g = 226, b = 119 } },
+            crates = { min = 2, max = 6 },
+            xp = { min = 1, max = 5 },
+            coords = {
+                vec3(3150.8074, -973.6499, -26.9572),
+                vec3(3132.8245, -1026.0867, -42.3399),
+                vec3(3085.2126, -970.5078, -17.9598),
+                vec3(3088.5186, -859.4744, -36.9759),
+                vec3(3129.6709, -944.6890, -39.5992),
+                vec3(3191.7087, -984.1827, -21.3900),
+                vec3(3112.4922, -1061.3378, -47.8674),
+                vec3(3089.1252, -1030.5328, -43.6450),
+                vec3(3050.0190, -946.1809, -23.7141),
+                vec3(3184.7986, -870.0077, -65.7725),
+                vec3(3125.7749, -890.1265, -43.6622),
+                vec3(3075.5540, -898.0163, -22.6175),
+            }
+        },
+        [5] = {
+            location = vec3(2383.6611, -2451.3289, -32.9255),
+            models = { 'xm3_prop_xm3_crate_supp_01a' },
+            radius = 150.0,
+            highlight = { enable = true, distance = 30, color = { r = 106, g = 226, b = 119 } },
+            crates = { min = 2, max = 6 },
+            xp = { min = 1, max = 5 },
+            coords = {
+                vec3(2383.6611, -2451.3289, -32.9255),
+                vec3(2437.7466, -2411.5706, -32.8800),
+                vec3(2385.5486, -2347.8923, -16.6751),
+                vec3(2313.7725, -2344.6472, -8.4371),
+                vec3(2270.5879, -2393.7388, -26.9309),
+                vec3(2299.5146, -2433.6165, -19.7982),
+                vec3(2301.1694, -2404.3206, -25.4087),
+                vec3(2393.1316, -2410.4976, -32.1512),
+                vec3(2353.0732, -2517.1201, -29.7120),
+                vec3(2442.2646, -2456.6064, -7.9306),
+
+            }
+        },
+        [6] = {
+            location = vec3(280.3442, -3492.5969, -29.2227),
+            models = { 'xm3_prop_xm3_crate_supp_01a' },
+            radius = 150.0,
+            highlight = { enable = true, distance = 30, color = { r = 106, g = 226, b = 119 } },
+            crates = { min = 2, max = 6 },
+            xp = { min = 1, max = 5 },
+            coords = {
+                vec3(280.3442, -3492.5969, -29.2227),
+                vec3(361.8796, -3468.6265, -26.7427),
+                vec3(313.8169, -3376.5999, -24.5615),
+                vec3(214.2739, -3467.3735, -14.0912),
+                vec3(230.4904, -3558.5493, -50.8256),
+                vec3(229.1392, -3405.6541, -19.9491),
+                vec3(263.5007, -3446.9626, -25.7515),
+                vec3(332.7290, -3455.4980, -28.1874),
+                vec3(260.9624, -3362.8247, -18.8871),
+                vec3(183.2011, -3419.6165, -18.7913),
+            }
+        },
+        [7] = {
+            location = vec3(-2080.0508, -876.7839, -38.1838),
+            models = { 'xm3_prop_xm3_crate_supp_01a' },
+            radius = 150.0,
+            highlight = { enable = true, distance = 30, color = { r = 106, g = 226, b = 119 } },
+            crates = { min = 2, max = 6 },
+            xp = { min = 1, max = 5 },
+            coords = {
+                vec3(-2080.0508, -876.7839, -38.1838),
+                vec3(-2013.5044, -984.5208, -15.5007),
+                vec3(-2169.8203, -962.9402, -70.6583),
+                vec3(-2081.6479, -939.0807, -40.9644),
+                vec3(-2142.8997, -880.9988, -38.1233),
+                vec3(-2051.6763, -874.8913, -4.9137),
+                vec3(-2060.8647, -843.3949, -24.2824),
+                vec3(-2101.0276, -856.7371, -32.4969),
+                vec3(-2187.1812, -831.8537, -36.8464),
+                vec3(-2090.7273, -1001.5419, -43.5531),
+                vec3(-2000.4624, -917.0707, -14.9745),
+                vec3(-2035.0875, -833.5734, -14.8460),
+                vec3(-2041.9478, -818.1243, -5.5512),
+                vec3(-2161.8516, -776.5375, -22.6451),
+                vec3(-2142.2932, -839.6798, -32.2059),
+                vec3(-2049.0518, -920.3878, -32.7276),
+            }
+        },
+        [8] = {
+            location = vec3(-2837.9504, -494.8672, -45.7883),
+            models = { 'xm3_prop_xm3_crate_supp_01a' },
+            radius = 150.0,
+            highlight = { enable = true, distance = 30, color = { r = 106, g = 226, b = 119 } },
+            crates = { min = 2, max = 6 },
+            xp = { min = 1, max = 5 },
+            coords = {
+                vec3(-2837.9504, -494.8672, -45.7883),
+                vec3(-2789.4587, -623.3177, -47.6618),
+                vec3(-2854.2878, -578.2092, -75.3579),
+                vec3(-2836.2771, -528.2178, -66.3296),
+                vec3(-2814.6587, -561.5555, -71.3785),
+                vec3(-2749.4819, -543.8317, -46.9659),
+                vec3(-2749.5925, -462.8193, -37.6869),
+                vec3(-2833.0474, -462.1175, -18.8996),
+                vec3(-2921.6694, -434.5992, -37.3384),
+                vec3(-2819.7563, -591.3509, -58.2769),
+                vec3(-2760.0801, -581.4194, -47.1628),
+                vec3(-2808.8740, -409.1779, -38.3897),
+                vec3(-2847.6389, -380.1435, -40.4797),
+                vec3(-2881.4072, -439.8226, -38.2622),
+                vec3(-2785.4697, -524.0317, -54.6307),
+            }
+        },
+        [9] = {
+            location = vec3(-3550.5359, 646.9001, -66.3281),
+            models = { 'xm3_prop_xm3_crate_supp_01a' },
+            radius = 150.0,
+            highlight = { enable = true, distance = 30, color = { r = 106, g = 226, b = 119 } },
+            crates = { min = 2, max = 6 },
+            xp = { min = 1, max = 5 },
+            coords = {
+                vec3(-3550.5359, 646.9001, -66.3281),
+                vec3(-3562.6257, 622.5925, -31.0750),
+                vec3(-3514.4497, 629.0671, -31.9019),
+                vec3(-3464.5229, 618.9487, -39.9314),
+                vec3(-3468.6663, 546.3879, -46.4398),
+                vec3(-3532.4519, 540.3656, -55.3767),
+                vec3(-3576.2854, 742.5957, -47.0631),
+                vec3(-3530.5144, 767.2094, -36.7547),
+                vec3(-3489.9067, 699.1218, -50.1850),
+                vec3(-3503.2341, 591.9188, -46.4599),
+                vec3(-3589.1309, 596.7454, -61.6465),
+                vec3(-3594.2913, 689.3352, -64.4904),
+            }
+        },
+        [10] = {
+            location = vec3(-3416.8613, 1701.7200, -61.6626),
+            models = { 'xm3_prop_xm3_crate_supp_01a' },
+            radius = 150.0,
+            highlight = { enable = true, distance = 30, color = { r = 106, g = 226, b = 119 } },
+            crates = { min = 2, max = 6 },
+            xp = { min = 1, max = 5 },
+            coords = {
+                vec3(-3416.8613, 1701.7200, -61.6626),
+                vec3(-3417.9424, 1653.9034, -42.2417),
+                vec3(-3410.1980, 1589.5227, -42.9441),
+                vec3(-3303.7632, 1705.6891, -23.4423),
+                vec3(-3494.1262, 1706.0807, -65.6907),
+                vec3(-3465.9348, 1698.5503, -45.7951),
+                vec3(-3372.7073, 1669.8127, -45.0799),
+                vec3(-3331.2153, 1686.3544, -42.6237),
+                vec3(-3406.0732, 1780.2509, -37.4121),
+                vec3(-3450.4163, 1663.0955, -40.5404),
+                vec3(-3336.1089, 1611.4885, -40.8837),
+            }
+        }
+    },
+
+    ----------------------------------------------
+    --       📦 Customize your crates
+    ----------------------------------------------
+
+    crates = {
+        -- The item spawn name for the crate
+        item = 'ls_diving_crate',
+        -- The quantity of crates given to the player when picked up
+        quantity = { min = 1, max = 1 },
+        -- The loot table when opening crates
+        -- ⚠️ The way this loot table works is pretty unique - please read :)
+        -- ⚠️ Each number in [brackets] is the level required to get a chance at that loot
+        -- ⚠️ Each item is rolled individually, so you can get multiple items from one crate
+        -- ⚠️ If you are level 1 in Diving, you only get a chance at items from section [1]
+        -- ⚠️ If you are level 3 in Diving, you get a chance at items from sections [1] to [3]
+        -- ⚠️ This gives you the ability to scale rewards based on the players diving experience
+        -- ⚠️ This section is intended to be built by YOU for your specific server and item(s)
+        -- ⚠️ We only provide a base loot table to help get you started with some filler items
+        loot = {
+            [1] = {
+                -- These item(s) are only rolled for players level 1 and above
+                -- item: spawn name | quantity = min/max | chance = 1-100 | metadata (optional): {key = value}
+                { item = 'ls_old_boot', quantity = { min = 1, max = 1 }, chance = 100 },
+                { item = 'ls_wood_plank', quantity = { min = 1, max = 1 }, chance = 80 },
+                { item = 'ls_rusted_padlock', quantity = { min = 1, max = 1 }, chance = 60 },
+                { item = 'ls_rusted_key', quantity = { min = 1, max = 1 }, chance = 40 },
+                { item = 'ls_rusted_gear', quantity = { min = 1, max = 1 }, chance = 30 },
+                { item = 'ls_seashell', quantity = { min = 1, max = 1 }, chance = 30 },
+                { item = 'ls_seaweed', quantity = { min = 1, max = 1 }, chance = 25 },
+                { item = 'ls_rusted_muffler', quantity = { min = 1, max = 1 }, chance = 25 },
+                { item = 'ls_broken_cd', quantity = { min = 1, max = 1 }, chance = 20 },
+                { item = 'ls_diving_goggles', quantity = { min = 1, max = 1 }, chance = 20 },
+                { item = 'ls_fishing_net', quantity = { min = 1, max = 1 }, chance = 15 },
+                { item = 'ls_old_camera', quantity = { min = 1, max = 1 }, chance = 15 },
+                { item = 'ls_military_helmet', quantity = { min = 1, max = 1 }, chance = 10 },
+                { item = 'ls_old_compass', quantity = { min = 1, max = 1 }, chance = 10 },
+                { item = 'ls_old_watch', quantity = { min = 1, max = 1 }, chance = 5 },
+                { item = 'ls_conch_shell', quantity = { min = 1, max = 1 }, chance = 5 },
+                -- Add or remove items as you wish
+            },
+            [2] = {
+                -- These item(s) are only rolled for players level 2 and above
+                { item = 'ls_bottle_of_rum', quantity = { min = 1, max = 1 }, chance = 50 },
+            },
+            [3] = {
+                -- These item(s) are only rolled for players level 3 and above
+                { item = 'ls_treasure_map', quantity = { min = 1, max = 1 }, chance = 50 },
+            },
+            [4] = {
+                -- These item(s) are only rolled for players level 4 and above
+                { item = 'ls_silver_bracelet', quantity = { min = 1, max = 1 }, chance = 50 },
+            },
+            [5] = {
+                -- These item(s) are only rolled for players level 5 and above
+                { item = 'ls_ancient_artifact', quantity = { min = 1, max = 1 }, chance = 50 },
+            }
+        }
+    }
+
+}
+```
+
+
+```lua config/client.lua expandable
+return {
+    ----------------------------------------------
+    --     📊 Customize stats & leaderboard
+    ----------------------------------------------
+
+    -- Don't want to show the stats menu option at all?
+    -- Set all stats below to false!
+    stats = {
+        -- Do you want to show the crates collected stat?
+        crates = true,
+        -- Do you want to show the lowest depth recorded stat?
+        depth = true,
+        -- Do you want to show the total distance swam stat?
+        swam = true
+    },
+
+    -- Do you want to display the leaderboard?
+    -- This shows the top 10 divers by XP
+    -- 🗒️ Note: the leaderboard is not updated constantly
+    -- It is only updated on server restarts & player logouts
+    leaderboard = true,
+
+    ----------------------------------------------
+    --          🗺️ Customize blips
+    ----------------------------------------------
+
+    blips = {
+        -- The location of the starting/main ped
+        start = {
+            -- Enable or disable the blip
+            enable = true,
+            -- Sprite ID (https://docs.fivem.net/docs/game-references/blips/)
+            sprite = 729,
+            -- Color (https://docs.fivem.net/docs/game-references/blips/#blip-colors)
+            color = 3,
+            -- Size/scale
+            scale = 0.9,
+            -- Label
+            label = 'Scuba Diving'
+        },
+        -- The diving zone radius blip
+        zone = {
+            color = 1,
+            alpha = 100
+        }
+    },
+
+    ----------------------------------------------
+    --     💃 Customize animations & props
+    ----------------------------------------------
+
+    anims = {
+        anchorBoat = {
+            label = 'Toggling anchor..',
+            icon = 'fas fa-anchor',
+            duration = 1000,
+            position = 'bottom',
+            useWhileDead = false,
+            canCancel = true,
+            disable = { car = true, move = true, comat = true },
+            anim = { dict = 'random@domestic', clip = 'pickup_low' },
+            prop = { }
+        },
+        openCrate = {
+            label = 'Opening crate..',
+            duration = 2000,
+            position = 'bottom',
+            useWhileDead = false,
+            canCancel = true,
+            disable = { move = false, car = true, combat = true },
+            anim = { dict = 'anim@heists@box_carry@', clip = 'idle' },
+            prop = { model = 'v_serv_abox_04', bone = 57005, pos = vec3(0.24531, 0.0, -0.21094), rot = vec3(-109.6165, -5.7869, 32.9873) }
+        },
+        toggleGear = {
+            label = 'Changing clothes..',
+            icon = 'fas fa-shirt',
+            duration = 5000,
+            position = 'bottom',
+            useWhileDead = false,
+            allowSwimming = true,
+            canCancel = true,
+            disable = { car = true },
+            anim = { dict = 'clothingshirt', clip = 'try_shirt_positive_d' },
+            prop = { }
+        },
+        pickupCrate = {
+            label = 'Picking up..',
+            icon = 'fas fa-hand',
+            duration = 3000,
+            position = 'bottom',
+            useWhileDead = false,
+            allowSwimming = true,
+            canCancel = false,
+            disable = { move = true, car = true, combat = true },
+            anim = { },
+            prop = { }
+        },
+        createGroup = {
+            label = 'Creating group..',
+            icon = 'fas fa-users',
+            duration = 1000,
+            position = 'bottom',
+            useWhileDead = false,
+            canCancel = true,
+            disable = { car = true, move = true, comat = true },
+            anim = { },
+            prop = { }
+        },
+    },
+
+}
+```
+
+
+```lua config/server.lua expandable
+return {
+    ----------------------------------------------
+    --        💬 Setup logging system
+    ----------------------------------------------
+
+    logs = {
+        -- What logging service do you want to use?
+        -- Available options: 'fivemanage', 'fivemerr', 'discord' & 'none'
+        -- It is highly recommended to use a proper logging service such as Fivemanage or Fivemerr
+        service = 'none',
+        -- Do you want to include screenshots with your logs?
+        -- This is only applicable to Fivemanage and Fivemerr
+        screenshots = false,
+        -- You can enable (true) or disable (false) specific player events to log here
+        events = {
+            -- Log when a player picks up a crate
+            crateFound = false,
+            -- Log when a player opens a crate
+            crateOpened = false,
+            -- Log when a player makes a purchase from The Dive Shop
+            itemPurchased = false,
+            -- Log when a player sells an item to The Pawn Shop
+            itemPawned = false,
+            -- Log when a player rents a boat
+            boatRented = false,
+            -- Log when a player returns a rented boat
+            boatReturned = false,
+        },
+        -- If service = 'discord', you can customize the webhook data here
+        -- If not using Discord, this section can be ignored
+        discord = {
+            -- The name of the webhook
+            name = 'Scuba Diving',
+            -- The webhook link
+            link = '',
+            -- The webhook profile image
+            image = 'https://i.imgur.com/ILTkWBh.png',
+            -- The webhook footer image
+            footer = 'https://i.imgur.com/ILTkWBh.png'
+        }
+    },
+
+}
+```
+
+
+```lua config/icons.lua expandable
+return {
+    -- Misc interaction(s)
+    talk = 'fas fa-comment',
+    talk_color = '',
+
+    anchor = 'fas fa-anchor',
+    anchor_color = '',
+
+    pickup_crate = 'fas fa-box',
+    pickup_crate_color = '',
+
+    -- TextUI
+    underwater = 'fas fa-lungs',
+
+    -- Input dialog(s)
+    quantity = 'fas fa-hashtag',
+    player_id = 'fas fa-hashtag',
+
+    -- Player data
+    player_level = 'fas fa-chart-simple',
+    player_level_color = '',
+
+    view_stats = 'fas fa-chart-pie',
+    view_stats_color = '',
+
+    -- Stats menu
+    stats_crates = 'fas fa-box-open',
+    stats_crates_color = '',
+
+    stats_depth = 'fas fa-water',
+    stats_depth_color = '',
+
+    stats_swam = 'fas fa-person-swimming',
+    stats_swam_color = '',
+
+    -- Diving menu
+    diving_leaderboard = 'fas fa-ranking-star',
+    diving_leaderboard_color = '',
+
+    shop = 'fas fa-basket-shopping',
+    shop_color = '',
+
+    pawn = 'fas fa-hand-holding-dollar',
+    pawn_color = '',
+
+    rental = 'fas fa-ship',
+    rental_color = '',
+
+    create_group = 'fas fa-people-group',
+    create_group_color = '',
+
+    manage_group = 'fas fa-people-group',
+    manage_group_color = '',
+
+    -- Manage group menu
+    start_diving = 'fas fa-circle-play',
+    start_diving_color = '#82E58B',
+
+    stop_diving = 'fas fa-circle-stop',
+    stop_diving_color = '#FF5C5C',
+
+    add_group_member = 'fas fa-user-plus',
+    add_group_member_color = '',
+
+    remove_group_member = 'fas fa-user-minus',
+    remove_group_member_color = '',
+
+    leave_group = 'fas fa-users-slash',
+    leave_group_color = '',
+
+    -- Leaderboard menu
+    leaderboard = 'fas fa-trophy',
+}
+```
+
+</CodeGroup>
+
+<CodeGroup>
+
+```lua bridge/client.lua expandable
+-- Initialize global variables to store framework & inventory
+Framework, Inventory = nil, nil
+
+-- Initialize global player variables
+PlayerLoaded, PlayerData = false, {}
+
+-- Get framework
+local function InitializeFramework()
+    if GetResourceState('es_extended') == 'started' then
+        ESX = exports['es_extended']:getSharedObject()
+        Framework = 'esx'
+
+        RegisterNetEvent('esx:playerLoaded', function(xPlayer)
+            PlayerData = xPlayer
+            PlayerLoaded = true
+            TriggerEvent('lation_diving:playerLoaded')
+        end)
+
+        RegisterNetEvent('esx:onPlayerLogout', function()
+            table.wipe(PlayerData)
+            PlayerLoaded = false
+            TriggerEvent('lation_diving:playerDropped')
+        end)
+
+        AddEventHandler('onResourceStart', function(resourceName)
+            if GetCurrentResourceName() ~= resourceName then return end
+            PlayerData = GetPlayerData()
+            PlayerLoaded = true
+            TriggerEvent('lation_diving:playerLoaded')
+        end)
+
+    elseif GetResourceState('qbx_core') == 'started' then
+        Framework = 'qbx'
+
+        AddEventHandler('QBCore:Client:OnPlayerLoaded', function()
+            PlayerData = GetPlayerData()
+            PlayerLoaded = true
+            TriggerEvent('lation_diving:playerLoaded')
+        end)
+
+        RegisterNetEvent('qbx_core:client:playerLoggedOut', function()
+            table.wipe(PlayerData)
+            PlayerLoaded = false
+            TriggerEvent('lation_diving:playerDropped')
+        end)
+
+        AddEventHandler('onResourceStart', function(resourceName)
+            if GetCurrentResourceName() ~= resourceName then return end
+            PlayerData = GetPlayerData()
+            PlayerLoaded = true
+            TriggerEvent('lation_diving:playerLoaded')
+        end)
+    elseif GetResourceState('qb-core') == 'started' then
+        QBCore = exports['qb-core']:GetCoreObject()
+        Framework = 'qb'
+
+        AddEventHandler('QBCore:Client:OnPlayerLoaded', function()
+            PlayerData = GetPlayerData()
+            PlayerLoaded = true
+            TriggerEvent('lation_diving:playerLoaded')
+        end)
+
+        RegisterNetEvent('QBCore:Client:OnPlayerUnload', function()
+            table.wipe(PlayerData)
+            PlayerLoaded = false
+            TriggerEvent('lation_diving:playerDropped')
+        end)
+
+        AddEventHandler('onResourceStart', function(resourceName)
+            if GetCurrentResourceName() ~= resourceName then return end
+            PlayerData = GetPlayerData()
+            PlayerLoaded = true
+            TriggerEvent('lation_diving:playerLoaded')
+        end)
+    elseif GetResourceState('ox_core') == 'started' then
+        Ox = require '@ox_core.lib.init'
+        Framework = 'ox'
+
+        AddEventHandler('ox:playerLoaded', function()
+            PlayerData = GetPlayerData()
+            PlayerLoaded = true
+            TriggerEvent('lation_diving:playerLoaded')
+        end)
+
+        AddEventHandler('ox:playerLogout', function()
+            table.wipe(PlayerData)
+            PlayerLoaded = false
+            TriggerEvent('lation_diving:playerDropped')
+        end)
+
+        AddEventHandler('onResourceStart', function(resourceName)
+            if GetCurrentResourceName() ~= resourceName then return end
+            PlayerData = GetPlayerData()
+            PlayerLoaded = true
+            TriggerEvent('lation_diving:playerLoaded')
+        end)
+    else
+        -- Add custom framework here
+    end
+end
+
+-- Get inventory
+local function InitializeInventory()
+    if GetResourceState('ox_inventory') == 'started' then
+        Inventory = 'ox_inventory'
+    elseif GetResourceState('qb-inventory') == 'started' then
+        Inventory = 'qb-inventory'
+    elseif GetResourceState('qs-inventory') == 'started' then
+        Inventory = 'qs-inventory'
+    elseif GetResourceState('ps-inventory') == 'started' then
+        Inventory = 'ps-inventory'
+    elseif GetResourceState('origen_inventory') == 'started' then
+        Inventory = 'origen_inventory'
+    elseif GetResourceState('codem-inventory') == 'started' then
+        Inventory = 'codem-inventory'
+    elseif GetResourceState('core_inventory') == 'started' then
+        Inventory = 'core_inventory'
+    else
+        -- Add custom inventory here
+    end
+end
+
+-- Returns player data
+function GetPlayerData()
+    if Framework == 'esx' then
+        return ESX.GetPlayerData()
+    elseif Framework == 'qb' then
+        return QBCore.Functions.GetPlayerData()
+    elseif Framework == 'qbx' then
+        return exports.qbx_core:GetPlayerData()
+    elseif Framework == 'ox' then
+        return Ox.GetPlayer()
+    else
+        -- Add custom framework here
+    end
+end
+
+-- Returns player job
+function GetJob()
+    local player = GetPlayerData()
+    if not player then return end
+    if Framework == 'esx' then
+        return player?.job?.name
+    elseif Framework == 'qb' then
+        return player.job.name
+    elseif Framework == 'qbx' then
+        return player.job.name
+    elseif Framework == 'ox' then
+        return player.getGroupByType('job')
+    else
+        -- Add custom framework here
+    end
+    return 'unemployed'
+end
+
+-- Return data for item
+--- @param item string
+function GetItemData(item)
+    if not item then return end
+    if Inventory then
+        if Inventory == 'ox_inventory' then
+            return exports[Inventory]:Items(item)
+        elseif Inventory == 'qb-inventory' or Inventory == 'ps-inventory' then
+            return QBCore.Shared.Items[item]
+        elseif Inventory == 'qs-inventory' then
+            local items = exports[Inventory]:GetItemList()
+            if not items then return end
+            return items[item]
+        elseif Inventory == 'origen_inventory' then
+            local items = exports[Inventory]:GetItems()
+            if not items then return end
+            return items[item]
+        elseif Inventory == 'codem-inventory' then
+            local items = exports[Inventory]:GetItemList()
+            if not items then return end
+            return items[item]
+        elseif Inventory == 'core_inventory' then
+            -- No available client-side export to get item list
+            if Framework == 'qb' then
+                return QBCore.Shared.Items[item]
+            else
+                print('^1[ERROR]: An issue has occured, please contact support at: https://discord.gg/9EbY4nM5uu^0')
+            end
+        else
+            -- Add custom inventory here
+        end
+    else
+        if Framework == 'esx' then
+            -- Unlikely to need anything here but.. just in case..
+            print('^1[ERROR]: An error has occured with lation_diving - please contact support^0')
+        elseif Framework == 'qb' then
+            return QBCore.Shared.Items[item]
+        elseif Framework == 'qbx' then
+            -- Unlikely to need anything here but.. just in case..
+            print('^1[ERROR]: Are you really not using ox_inventory? Contact support please lul.^0')
+        end
+    end
+end
+
+-- Returns boolean if player has specified amount of item
+--- @param item string
+--- @param amount number
+--- @return boolean
+function HasItem(item, amount)
+    if not item or not amount then return false end
+    if Inventory then
+        if Inventory == 'ox_inventory' then
+            return exports[Inventory]:Search('count', item) >= amount
+        elseif Inventory == 'core_inventory' then
+            return exports[Inventory]:hasItem(item, amount)
+        else
+            return exports[Inventory]:HasItem(item, amount)
+        end
+    else
+        local playerData = GetPlayerData()
+        if not playerData then return false end
+        local inventory = Framework == 'esx' and playerData.inventory or playerData.items
+        if not inventory then return false end
+        for _, itemData in pairs(inventory) do
+            if itemData and itemData.name == item then
+                local count = itemData.amount or itemData.count or 0
+                if count >= amount then
+                    return true
+                end
+            end
+        end
+        return false
+    end
+end
+
+-- Disables access to open/view inventory
+function DisableInventory()
+    if Inventory == 'ox_inventory' then
+        LocalPlayer.state.invBusy = true
+    elseif Inventory == 'qb-inventory' then
+        LocalPlayer.state.inv_busy = true
+    elseif Inventory == 'qs-inventory' then
+        exports[Inventory]:setInventoryDisabled(true)
+    elseif Inventory == 'core_inventory' then
+        exports[Inventory]:lockInventory()
+    else
+        -- Add custom inventory here
+    end
+end
+
+-- Enables access to open/view inventory
+function EnableInventory()
+    if Inventory == 'ox_inventory' then
+        LocalPlayer.state.invBusy = false
+    elseif Inventory == 'qb-inventory' then
+        LocalPlayer.state.inv_busy = false
+    elseif Inventory == 'qs-inventory' then
+        exports[Inventory]:setInventoryDisabled(false)
+    elseif Inventory == 'core_inventory' then
+        exports[Inventory]:unlockInventory()
+    else
+        -- Add custom inventory here
+    end
+end
+
+-- Initialize defaults
+InitializeFramework()
+InitializeInventory()
+```
+
+
+```lua bridge/server.lua expandable
+-- Initialize global variables to store framework & inventory
+Framework, Inventory = nil, nil
+
+-- Get framework
+local function InitializeFramework()
+    if GetResourceState('es_extended') == 'started' then
+        ESX = exports['es_extended']:getSharedObject()
+        Framework = 'esx'
+    elseif GetResourceState('qbx_core') == 'started' then
+        Framework = 'qbx'
+    elseif GetResourceState('qb-core') == 'started' then
+        QBCore = exports['qb-core']:GetCoreObject()
+        Framework = 'qb'
+    elseif GetResourceState('ox_core') == 'started' then
+        Ox = require '@ox_core.lib.init'
+        Framework = 'ox'
+    else
+        -- Add custom framework here
+    end
+end
+
+-- Get inventory
+local function InitializeInventory()
+    if GetResourceState('ox_inventory') == 'started' then
+        Inventory = 'ox_inventory'
+    elseif GetResourceState('qb-inventory') == 'started' then
+        Inventory = 'qb-inventory'
+    elseif GetResourceState('qs-inventory') == 'started' then
+        Inventory = 'qs-inventory'
+    elseif GetResourceState('ps-inventory') == 'started' then
+        Inventory = 'ps-inventory'
+    elseif GetResourceState('origen_inventory') == 'started' then
+        Inventory = 'origen_inventory'
+    elseif GetResourceState('codem-inventory') == 'started' then
+        Inventory = 'codem-inventory'
+    elseif GetResourceState('core_inventory') == 'started' then
+        Inventory = 'core_inventory'
+    else
+        -- Add custom inventory here
+    end
+end
+
+-- Get player from source
+--- @param source number Player ID
+function GetPlayer(source)
+    if not source then return end
+    if Framework == 'esx' then
+        return ESX.GetPlayerFromId(source)
+    elseif Framework == 'qb' then
+        return QBCore.Functions.GetPlayer(source)
+    elseif Framework == 'qbx' then
+        return exports.qbx_core:GetPlayer(source)
+    elseif Framework == 'ox' then
+        return Ox.GetPlayer(source)
+    else
+        -- Add custom framework here
+    end
+end
+
+-- Function to get a player identifier by source
+--- @param source number Player ID
+function GetIdentifier(source)
+    local player = GetPlayer(source)
+    if not player then return end
+    if Framework == 'esx' then
+        return player.identifier
+    elseif Framework == 'qb' or Framework == 'qbx' then
+        return player.PlayerData.citizenid
+    elseif Framework == 'ox' then
+        return player.stateId
+    else
+        -- Add custom framework here
+    end
+end
+
+-- Return player's name
+--- @param source number Player ID
+--- @return string
+function GetName(source)
+    local player = GetPlayer(source)
+    if not player then return 'Unknown' end
+    if Framework == 'esx' then
+        return player.getName()
+    elseif Framework == 'qb' or Framework == 'qbx' then
+        return player.PlayerData.charinfo.firstname.. ' ' ..player.PlayerData.charinfo.lastname
+    elseif Framework == 'ox' then
+        return player.get('firstName').. ' ' ..player.get('lastName')
+    else
+        -- Add custom framework here
+    end
+    return 'Unknown'
+end
+
+-- Return player job
+--- @param source number Player ID
+function GetJob(source)
+    local player = GetPlayer(source)
+    if not player then return 'unemployed' end
+    if Framework == 'esx' then
+        return player.getJob().name
+    elseif Framework == 'qb' or Framework == 'qbx' then
+        return player.PlayerData.job.name
+    elseif Framework == 'ox' then
+        return player.getGroupByType('job')
+    else
+        -- Add custom framework here
+    end
+    return 'unemployed'
+end
+
+-- Returns number of specified item in players inventory
+--- @param source number Player ID
+--- @param item string Item to search
+--- @return number
+function GetItemCount(source, item)
+    if not source or not item then return 0 end
+    local player = GetPlayer(source)
+    if not player then return 0 end
+    if Inventory then
+        if Inventory == 'ox_inventory' then
+            return exports[Inventory]:Search(source, 'count', item) or 0
+        elseif Inventory == 'core_inventory' then
+            return exports[Inventory]:getItemCount(source, item)
+        else
+            local itemData = exports[Inventory]:GetItemByName(source, item)
+            if not itemData then return 0 end
+            return itemData.amount or itemData.count or 0
+        end
+    else
+        if Framework == 'esx' then
+            local itemData = player.getInventoryItem(item)
+            if not itemData then return 0 end
+            return itemData.count or itemData.amount or 0
+        elseif Framework == 'qb' then
+            local itemData = player.Functions.GetItemByName(item)
+            if not itemData then return 0 end
+            return itemData.amount or itemData.count or 0
+        else
+            -- Add custom framework here
+        end
+    end
+    return 0
+end
+
+-- Returns if player can carry item
+--- @param source number Player ID
+--- @param item string Item name
+--- @param count number Item quantity
+function CanCarry(source, item, count)
+    if count <= 0 then return true end
+    local player = GetPlayer(source)
+    if not player then return end
+    if Inventory then
+        if Inventory == 'ox_inventory' then
+            return exports[Inventory]:CanCarryItem(source, item, count)
+        elseif Inventory == 'qb-inventory' then
+            return exports[Inventory]:CanAddItem(source, item, count)
+        elseif Inventory == 'qs-inventory' then
+            return exports[Inventory]:CanCarryItem(source, item, count)
+        elseif Inventory == 'ps-inventory' then
+            -- ps sucks, why do they not have a dedicated export for this..?
+            local totalWeight = exports[Inventory]:GetTotalWeight(player.PlayerData.items)
+            if not totalWeight then return false end
+            local itemInfo = QBCore.Shared.Items[item:lower()]
+            if not itemInfo then return false end
+            if (totalWeight + (itemInfo['weight'] * count)) <= 120000 then
+                return true
+            end
+            return false
+        elseif Inventory == 'origen_inventory' then
+            -- origen's CanCarry export not working as expected, just return true
+            return true
+        elseif Inventory == 'codem-inventory' then
+            -- CodeM docs dont specify an export for this so..
+            return true
+        elseif Inventory == 'core_inventory' then
+            -- core's canCarry export not working as expected, just return true
+            return true
+        else
+            -- Add custom inventory here
+            return true
+        end
+    else
+        if Framework == 'esx' then
+            if player.canCarryItem(item, count) then
+                return true
+            end
+            return false
+        elseif Framework == 'qb' then
+            local totalWeight = QBCore.Player.GetTotalWeight(player.PlayerData.items)
+            if not totalWeight then return false end
+            local itemInfo = QBCore.Shared.Items[item:lower()]
+            if not itemInfo then return false end
+            if (totalWeight + (itemInfo['weight'] * count)) <= 120000 then
+                return true
+            end
+            return false
+        else
+            -- Add custom framework here
+        end
+    end
+end
+
+-- Adds an item to players inventory
+--- @param source number Player ID
+--- @param item string Item to add
+--- @param count number Quantity to add
+--- @param metadata any|table Optional metadata
+function AddItem(source, item, count, metadata)
+    if count <= 0 then return end
+    local player = GetPlayer(source)
+    if not player then return end
+    if Inventory then
+        if Inventory == 'ox_inventory' then
+            exports[Inventory]:AddItem(source, item, count, metadata)
+        elseif Inventory == 'core_inventory' then
+            exports[Inventory]:addItem(source, item, count, metadata)
+        else
+            exports[Inventory]:AddItem(source, item, count, nil, metadata)
+            -- TriggerClientEvent(Inventory.. ':client:ItemBox', source, QBCore.Shared.Items[item], 'add')
+        end
+    else
+        if Framework == 'esx' then
+            player.addInventoryItem(item, count)
+        elseif Framework == 'qb' then
+            player.Functions.AddItem(item, count, nil, metadata)
+        else
+            -- Add custom framework here
+        end
+    end
+end
+
+-- Removes an item from players inventory
+--- @param source number Player ID
+--- @param item string Item to remove
+--- @param count number Quantity to remove
+function RemoveItem(source, item, count)
+    local player = GetPlayer(source)
+    if not player then return end
+    if Inventory then
+        if Inventory == 'core_inventory' then
+            exports[Inventory]:removeItem(source, item, count)
+        else
+            exports[Inventory]:RemoveItem(source, item, count)
+            -- TriggerClientEvent(Inventory.. ':client:ItemBox', source, QBCore.Shared.Items[item], 'remove')
+        end
+    else
+        if Framework == 'esx' then
+            player.removeInventoryItem(item, count)
+        elseif Framework == 'qb' then
+            player.Functions.RemoveItem(item, count)
+        else
+            -- Add custom framework here
+        end
+    end
+end
+
+-- Returns correct framework money type if needed
+--- @param type string Money type
+--- @return string
+local function ConvertMoneyType(type)
+    if type == 'money' and (Framework == 'qb' or Framework == 'qbx') then
+        type = 'cash'
+    elseif type == 'cash' and (Framework == 'esx' or Framework == 'ox') then
+        type = 'money'
+    else
+        -- Add custom framework here
+    end
+    return type
+end
+
+-- Returns balance of players account
+--- @param source number Player ID
+--- @param type string Account
+--- @return number
+function GetPlayerBalance(source, type)
+    local player = GetPlayer(source)
+    if not player then return 0 end
+    if Framework == 'esx' then
+        return player.getAccount(ConvertMoneyType(type)).money or 0
+    elseif Framework == 'qb' then
+        return player.PlayerData.money[ConvertMoneyType(type)] or 0
+    elseif Framework == 'qbx' then
+        return player.Functions.GetMoney(ConvertMoneyType(type)) or 0
+    elseif Framework == 'ox' then
+        if type == 'cash' or type == 'money' then
+            return GetItemCount(source, ConvertMoneyType(type)) or 0
+        end
+        return Ox.GetCharacterAccount(source).balance or 0
+    else
+        -- Add custom framework here
+    end
+    return 0
+end
+
+-- Callback to return players balance to client
+--- @param source number Player ID
+--- @param type string Account
+--- @return number
+lib.callback.register('lation_diving:getPlayerBalance', function(source, type)
+    return GetPlayerBalance(source, type)
+end)
+
+-- Add money to players account
+--- @param source number Player ID
+--- @param type string Account to add to
+--- @param amount number Amount to add
+function AddMoney(source, type, amount)
+    local player = GetPlayer(source)
+    if not player then return end
+    if Framework == 'esx' then
+        player.addAccountMoney(ConvertMoneyType(type), amount)
+    elseif Framework == 'qb' or Framework == 'qbx' then
+        player.Functions.AddMoney(ConvertMoneyType(type), amount)
+    elseif Framework == 'ox' then
+        if type == 'cash' or type == 'money' then
+            exports.ox_inventory:AddItem(source, ConvertMoneyType(type), amount)
+        else
+            local accountId = Ox.GetCharacterAccount(source).id
+            Ox.DepositMoney(source, accountId, amount)
+        end
+    else
+        -- Add custom framework here
+    end
+end
+
+-- Remove money from players account
+--- @param source number Player ID
+--- @param type string Account to remove from
+--- @param amount number Amount to remove
+function RemoveMoney(source, type, amount)
+    local player = GetPlayer(source)
+    if not player then return end
+    if Framework == 'esx' then
+        player.removeAccountMoney(ConvertMoneyType(type), amount)
+    elseif Framework == 'qb' or Framework == 'qbx' then
+        player.Functions.RemoveMoney(ConvertMoneyType(type), amount)
+    elseif Framework == 'ox' then
+        if type == 'cash' or type == 'money' then
+            RemoveItem(source, ConvertMoneyType(type), amount)
+        else
+            local accountId = Ox.GetCharacterAccount(source).id
+            Ox.WithdrawMoney(source, accountId, amount)
+        end
+    else
+        -- Add custom framework here
+    end
+end
+
+-- Function to register a usable item
+--- @param item string
+--- @param cb function
+function RegisterUsableItem(item, cb)
+    if not item then return end
+    if Framework == 'esx' then
+        ESX.RegisterUsableItem(item, cb)
+    elseif Framework == 'qb' then
+        QBCore.Functions.CreateUseableItem(item, cb)
+    elseif Framework == 'qbx' then
+        exports.qbx_core:CreateUseableItem(item, cb)
+    elseif Framework == 'ox' then
+        exports(item, function(event, _, inventory)
+            if event ~= 'usingItem' then return false end
+            cb(inventory.id)
+        end)
+    else
+        -- Add custom framework here
+    end
+end
+
+-- Initialize defaults
+InitializeFramework()
+InitializeInventory()
+```
+
+</CodeGroup>
+
+<CodeGroup>
+
+```lua client/functions.lua expandable
+-- Initialize global variable to store phone, keys & disaptch
+Phone, Keys, Fuel = nil, nil, nil
+
+-- Initialize config(s)
+local shared = require 'config.shared'
+local client = require 'config.client'
+
+-- Localize export
+local diving = exports.lation_diving
+
+-- You can change the textUI script here
+-- Options: 'lation_ui', 'ox_lib', 'jg-textui', 'okokTextUI', 'qbcore' & 'custom'
+local textui = 'ox_lib'
+
+-- Get phone
+local function InitializePhone()
+    if GetResourceState('lb-phone') == 'started' then
+        Phone = 'lb-phone'
+    elseif GetResourceState('qb-phone') == 'started' then
+        Phone = 'qb-phone'
+    elseif GetResourceState('qs-smartphone-pro') == 'started' then
+        Phone = 'qs-smartphone-pro'
+    elseif GetResourceState('qs-smartphone') == 'started' then
+        Phone = 'qs-smartphone'
+    elseif GetResourceState('gksphone') == 'started' then
+        Phone = 'gksphone'
+    elseif GetResourceState('roadphone') == 'started' then
+        Phone = 'roadphone'
+    elseif GetResourceState('npwd') == 'started' then
+        Phone = 'npwd'
+    elseif GetResourceState('yseries') == 'started' then
+        Phone = 'yseries'
+    elseif GetResourceState('okokPhone') == 'started' then
+        Phone = 'okokPhone'
+    else
+        -- Add custom phone here
+    end
+end
+
+-- Get keys
+local function InitializeKeys()
+    if GetResourceState('qb-vehiclekeys') == 'started' then
+        Keys = 'qb-vehiclekeys'
+    elseif GetResourceState('cd_garage') == 'started' then
+        Keys = 'cd_garage'
+    elseif GetResourceState('wasabi_carlock') == 'started' then
+        Keys = 'wasabi_carlock'
+    elseif GetResourceState('qbx_vehiclekeys') == 'started' then
+        Keys = 'qbx_vehiclekeys'
+    elseif GetResourceState('vehicles_keys') == 'started' then
+        Keys = 'vehicles_keys'
+    elseif GetResourceState('okokGarage') == 'started' then
+        Keys = 'okokGarage'
+    elseif GetResourceState('qs-vehiclekeys') == 'started' then
+        Keys = 'qs-vehiclekeys'
+    elseif GetResourceState('Renewed-Vehiclekeys') == 'started' then
+        Keys = 'Renewed-Vehiclekeys'
+    elseif GetResourceState('t1ger_keys') == 'started' then
+        Keys = 't1ger_keys'
+    else
+        -- Add custom keys here
+    end
+end
+
+-- Get fuel
+local function InitializeFuel()
+    if GetResourceState('LegacyFuel') == 'started' then
+        Fuel = 'LegacyFuel'
+    elseif GetResourceState('ox_fuel') == 'started' then
+        Fuel = 'ox_fuel'
+    elseif GetResourceState('cdn-fuel') == 'started' then
+        Fuel = 'cdn-fuel'
+    elseif GetResourceState('x-fuel') == 'started' then
+        Fuel = 'x-fuel'
+    elseif GetResourceState('okokGasStation') == 'started' then
+        Fuel = 'okokGasStation'
+    elseif GetResourceState('rcore_fuel') == 'started' then
+        Fuel = 'rcore_fuel'
+    elseif GetResourceState('qs-fuelstations') == 'started' then
+        Fuel = 'qs-fuelstations'
+    elseif GetResourceState('ps-fuel') == 'started' then
+        Fuel = 'ps-fuel'
+    else
+        -- Add custom fuel system here
+    end
+end
+
+-- Display a notification
+--- @param message string
+--- @param type any
+function ShowNotification(message, type)
+    if shared.setup.notify == 'lation_ui' then
+        exports.lation_ui:notify({ title = 'Scuba Diving', message = message, type = type or 'info', icon = 'fas fa-anchor' })
+    elseif shared.setup.notify == 'ox_lib' then
+        lib.notify({ description = message, type = type or 'inform', position = 'top', icon = 'fas fa-anchor' })
+    elseif shared.setup.notify == 'esx' then
+        ESX.ShowNotification(message)
+    elseif shared.setup.notify == 'qb' then
+        QBCore.Functions.Notify(message, type or 'primary')
+    elseif shared.setup.notify == 'okok' then
+        exports['okokNotify']:Alert('Scuba Diving', message, 5000, type or 'info', false)
+    elseif shared.setup.notify == 'sd-notify' then
+        exports['sd-notify']:Notify('Scuba Diving', message, type or 'primary')
+    elseif shared.setup.notify == 'wasabi_notify' then
+        exports.wasabi_notify:notify('Scuba Diving', message, 5000, type or 'info', false, 'fas fa-anchor')
+    elseif shared.setup.notify == 'custom' then
+        -- Add custom notification export/event here
+    end
+end
+
+-- Display notifications from server
+--- @param message string
+--- @param type string
+RegisterNetEvent('lation_diving:notify', function(message, type)
+    ShowNotification(message, type)
+end)
+
+-- Set fuel
+--- @param vehicle number Entity ID
+function SetFuel(vehicle)
+    if not Fuel then print('^1[ERROR]: No fuel system detected - cannot set fuel^0') return end
+    if not vehicle or not DoesEntityExist(vehicle) then return end
+    if Fuel == 'LegacyFuel' then
+        exports[Fuel]:SetFuel(vehicle, 100.0)
+    elseif Fuel == 'ox_fuel' then
+        Entity(vehicle).state.fuel = 100.0
+    elseif Fuel == 'cdn-fuel' then
+        exports[Fuel]:SetFuel(vehicle, 100.0)
+    elseif Fuel == 'x-fuel' then
+        exports[Fuel]:SetFuel(vehicle, 100.0)
+    elseif Fuel == 'okokGasStation' then
+        exports[Fuel]:SetFuel(vehicle, 100.0)
+    elseif Fuel == 'rcore_fuel' then
+        exports[Fuel]:SetVehicleFuel(vehicle, 100.0)
+    elseif Fuel == 'qs-fuelstations' then
+        exports[Fuel]:SetFuel(vehicle, 100.0)
+    elseif Fuel == 'ps-fuel' then
+        exports[Fuel]:SetFuel(vehicle, 100.0)
+    else
+        -- Add custom fuel system here
+    end
+end
+
+-- Give keys
+--- @param vehicle number Entity ID
+function GiveKeys(vehicle)
+    if not Keys then print('^1[ERROR]: No vehicle keys detected - cannot give keys^0') return end
+    if not vehicle or not DoesEntityExist(vehicle) then return end
+    local plate = GetVehicleNumberPlateText(vehicle)
+    local model = GetDisplayNameFromVehicleModel(GetEntityModel(vehicle))
+    if not plate or not model then return end
+    if Keys == 'qb-vehiclekeys' then
+        TriggerEvent('qb-vehiclekeys:client:AddKeys', plate)
+    elseif Keys == 'cd_garage' then
+        TriggerEvent('cd_garage:AddKeys', plate)
+    elseif Keys == 'wasabi_carlock' then
+        exports[Keys]:GiveKey(plate)
+    elseif Keys == 'qbx_vehiclekeys' then
+        -- @qbox: doesn't have a native client-side export, #sad
+        TriggerEvent('qb-vehiclekeys:client:AddKeys', plate)
+    elseif Keys == 'vehicles_keys' then
+        TriggerServerEvent("vehicles_keys:selfGiveVehicleKeys", plate)
+    elseif Keys == 'okokGarage' then
+        TriggerServerEvent("okokGarage:GiveKeys", plate)
+    elseif Keys == 'qs-vehiclekeys' then
+        exports[Keys]:GiveKeys(plate, model, true)
+    elseif Keys == 'Renewed-Vehiclekeys' then
+        exports[Keys]:addKey(plate)
+    elseif Keys == 't1ger_keys' then
+        TriggerServerEvent('t1ger_keys:updateOwnedKeys', plate, true)
+    else
+        -- Add custom vehicle keys
+    end
+end
+
+-- Remove keys
+--- @param vehicle number Entity ID
+function RemoveKeys(vehicle)
+    if not Keys then print('^1[ERROR]: No vehicle keys detected - cannot remove keys^0') return end
+    if not vehicle or not DoesEntityExist(vehicle) then return end
+    local plate = GetVehicleNumberPlateText(vehicle)
+    local model = GetDisplayNameFromVehicleModel(GetEntityModel(vehicle))
+    if not plate or not model then return end
+    if Keys == 'qb-vehiclekeys' then
+        TriggerEvent('qb-vehiclekeys:client:RemoveKeys', plate)
+    elseif Keys == 'cd_garage' then
+        -- @cd_garage: no known way to remove keys
+    elseif Keys == 'wasabi_carlock' then
+        exports[Keys]:RemoveKey(plate)
+    elseif Keys == 'qbx_vehiclekeys' then
+        -- @qbox: doesn't have a native client-side export, #dumb
+        TriggerEvent('qb-vehiclekeys:client:RemoveKeys', plate)
+    elseif Keys == 'vehicles_keys' then
+        TriggerServerEvent("vehicles_keys:selfRemoveKeys", plate)
+    elseif Keys == 'okokGarage' then
+        -- @okokGarage: source as a second param? weird, but it's from the docs
+        TriggerServerEvent("okokGarage:RemoveKeys", plate, cache.serverId)
+    elseif Keys == 'qs-vehiclekeys' then
+        exports[Keys]:RemoveKeys(plate, model)
+    elseif Keys == 'Renewed-Vehiclekeys' then
+        exports[Keys]:removeKey(plate)
+    elseif Keys == 't1ger_keys' then
+        TriggerServerEvent('t1ger_keys:updateOwnedKeys', plate, false)
+    else
+        -- Add custom vehicle keys
+    end
+end
+
+-- Send an email
+--- @param message string
+RegisterNetEvent('lation_diving:sendEmail', function(message)
+    if not message then return end
+    if Phone == 'qs-smartphone' then
+        TriggerServerEvent('qs-smartphone:server:sendNewMail', {
+            sender = 'Diving Expert',
+            subject = 'Scuba Diving',
+            message = message
+        })
+    elseif Phone == 'roadphone' then
+        exports[Phone]:sendMail({
+            sender = 'Diving Expert',
+            subject = 'Scuba Diving',
+            message = message
+        })
+    else
+        ShowAlert({
+            header = 'Scuba Diving',
+            content = message,
+            centered = true,
+            cancel = true
+        })
+    end
+end)
+
+-- Change player clothes
+--- @param isDiving boolean 
+function ChangeClothes(isDiving)
+    if isDiving then
+        local isMale = IsPedModel(cache.ped, `mp_m_freemode_01`)
+        for _, clothes in pairs(shared.gear.clothes) do
+            local drawableId = isMale and clothes.male.drawableId or clothes.female.drawableId
+            local textureId = isMale and clothes.male.textureId or clothes.female.textureId
+            SetPedComponentVariation(cache.ped, clothes.componentId, drawableId, textureId, 0)
+        end
+    else
+        if Framework == 'esx' then
+            ESX.TriggerServerCallback('esx_skin:getPlayerSkin', function(skin)
+                TriggerEvent('skinchanger:loadSkin', skin)
+            end)
+        elseif Framework == 'qb' then
+            TriggerServerEvent('qb-clothes:loadPlayerSkin')
+        end
+        TriggerEvent('illenium-appearance:client:reloadSkin')
+        TriggerEvent('fivem-appearance:client:reloadSkin')
+    end
+end
+
+-- Return an inventory's "durability/quality" types
+function GetDurabilityType()
+    if Inventory == 'ox_inventory' then
+        return 'durability'
+    else
+        return 'quality'
+    end
+end
+
+-- Returns an items metadata
+--- @param item string Item name
+function GetMetadata(item)
+    return lib.callback.await('lation_diving:getMetadata', false, item)
+end
+
+-- Display a progress bar
+--- @param data table
+function ProgressBar(data)
+    if shared.setup.progress == 'lation_ui' then
+        if exports.lation_ui:progressBar({
+            label = data.label,
+            description = data.description or nil,
+            icon = data.icon or nil,
+            duration = data.duration,
+            useWhileDead = data.useWhileDead,
+            allowSwimming = data.allowSwimming or false,
+            canCancel = data.canCancel,
+            steps = data.steps or nil,
+            disable = data.disable,
+            anim = {
+                dict = data.anim.dict or nil,
+                clip = data.anim.clip or nil,
+                flag = data.anim.flag or nil
+            },
+            prop = {
+                model = data.prop.model or nil,
+                bone = data.prop.bone or nil,
+                pos = data.prop.pos or nil,
+                rot = data.prop.rot or nil
+            }
+        }) then
+            return true
+        end
+        return false
+    elseif shared.setup.progress == 'ox_lib' then
+        -- Want to use ox_lib's progress circle instead of bar?
+        -- Change "progressBar" to "progressCircle" below & done!
+        if lib.progressBar({
+            label = data.label,
+            duration = data.duration,
+            position = data.position or 'bottom',
+            useWhileDead = data.useWhileDead,
+            allowSwimming = data.allowSwimming or false,
+            canCancel = data.canCancel,
+            disable = data.disable,
+            anim = {
+                dict = data.anim.dict or nil,
+                clip = data.anim.clip or nil,
+                flag = data.anim.flag or nil
+            },
+            prop = {
+                model = data.prop.model or nil,
+                bone = data.prop.bone or nil,
+                pos = data.prop.pos or nil,
+                rot = data.prop.rot or nil
+            }
+        }) then
+            return true
+        end
+        return false
+    elseif shared.setup.progress == 'qbcore' then
+        local p = promise.new()
+        QBCore.Functions.Progressbar(data.label, data.label, data.duration, data.useWhileDead, data.canCancel, {
+            disableMovement = data.disable.move,
+            disableCarMovement = data.disable.car,
+            disableMouse = false,
+            disableCombat = data.disable.combat
+        }, {
+            animDict = data.anim.dict or nil,
+            anim = data.anim.clip or nil,
+            flags = data.anim.flag or nil
+        }, {
+            model = data.prop.model or nil,
+            bone = data.prop.bone or nil,
+            coords = data.prop.pos or nil,
+            rotation = data.prop.rot or nil
+        }, {},
+        function()
+            ClearPedTasks(cache.ped)
+            p:resolve(true)
+        end,
+        function()
+            ClearPedTasks(cache.ped)
+            p:resolve(false)
+        end)
+        return Citizen.Await(p)
+    else
+        -- Add 'custom' progress bar here
+    end
+end
+
+-- Register menu
+--- @param data table
+function RegisterMenu(data)
+    if shared.setup.menu == 'lation_ui' then
+        exports.lation_ui:registerMenu(data)
+    elseif shared.setup.menu == 'ox_lib' then
+        lib.registerContext(data)
+    elseif shared.setup.menu == 'custom' then
+        -- Add 'custom' menu system here
+    end
+end
+
+-- Show menu
+--- @param menuId string
+function ShowMenu(menuId)
+    if shared.setup.menu == 'lation_ui' then
+        exports.lation_ui:showMenu(menuId)
+    elseif shared.setup.menu == 'ox_lib' then
+        lib.showContext(menuId)
+    elseif shared.setup.menu == 'custom' then
+        -- Add 'custom' menu system here
+    end
+end
+
+-- Display an alert dialog
+--- @param data table
+function ShowAlert(data)
+    if shared.setup.dialogs == 'lation_ui' then
+        return exports.lation_ui:alert(data)
+    elseif shared.setup.dialogs == 'ox_lib' then
+        return lib.alertDialog(data)
+    elseif shared.setup.dialogs == 'custom' then
+        -- Add your custom alert dialog here
+    end
+end
+
+-- Display an input dialog
+--- @param data table
+function ShowInput(data)
+    if shared.setup.dialogs == 'lation_ui' then
+        return exports.lation_ui:input({ title = data.title, options = data.options })
+    elseif shared.setup.dialogs == 'ox_lib' then
+        return lib.inputDialog(data.title, data.options)
+    elseif shared.setup.dialogss == 'custom' then
+        -- Add your custom input dialog here
+    end
+end
+
+-- Display TextUI
+--- @param text string 
+--- @param icon string
+function ShowTextUI(text, icon)
+    if textui == 'lation_ui' then
+        exports.lation_ui:showText({
+            description = text,
+            icon = icon,
+            iconAnimation = 'beat'
+        })
+    elseif textui == 'ox_lib' then
+        lib.showTextUI(text, {
+            position = 'left-center',
+            icon = icon
+        })
+    elseif textui == 'jg-textui' then
+        exports['jg-textui']:DrawText(text)
+    elseif textui == 'okokTextUI' then
+        exports['okokTextUI']:Open(text, 'lightblue ', 'left', false)
+    elseif textui == 'qbcore' then
+        exports['qb-core']:DrawText(text, 'left')
+    else
+        -- Add custom textUI here
+    end
+end
+
+-- Hide TextUI
+--- @param label string
+function HideTextUI(label)
+    if textui == 'lation_ui' then
+        local isOpen, text = exports.lation_ui:isOpen()
+        if isOpen and text == label then
+            exports.lation_ui:hideText()
+        end
+    elseif textui == 'ox_lib' then
+        local isOpen, text = lib.isTextUIOpen()
+        if isOpen and text == label then
+            lib.hideTextUI()
+        end
+    elseif textui == 'jg-textui' then
+        exports['jg-textui']:HideText()
+    elseif textui == 'okokTextUI' then
+        exports['okokTextUI']:Close()
+    elseif textui == 'qbcore' then
+        exports['qb-core']:HideText()
+    else
+        -- Add custom textUI here
+    end
+end
+
+-- Add entity target
+--- @param entity number Entity number
+--- @param data table Options table
+function AddTargetEntity(entity, data)
+    if shared.setup.interact == 'ox_target' then
+        exports.ox_target:addLocalEntity(entity, data)
+    elseif shared.setup.interact == 'qb-target' then
+        exports['qb-target']:AddTargetEntity(entity, {options = data, distance = 5})
+    elseif shared.setup.interact == 'interact' then
+        exports.interact:AddLocalEntityInteraction({
+            entity = entity,
+            interactDst = 5.0,
+            offset = vec3(0.0, 0.0, 1.0),
+            options = data
+        })
+    elseif shared.setup.interact == 'custom' then
+        -- Add support for a custom target system here
+    else
+        print('^1[ERROR]: No interaction system defined in the config/shared.lua file^0')
+    end
+end
+
+-- Add circle target zones
+--- @param data table
+function AddCircleZone(data)
+    if shared.setup.interact == 'ox_target' then
+        exports.ox_target:addSphereZone(data)
+    elseif shared.setup.interact == 'qb-target' then
+        exports['qb-target']:AddCircleZone(data.name, data.coords, data.radius, {
+            name = data.name,
+            debugPoly = shared.setup.debug}, {
+            options = data.options,
+            distance = 2,
+        })
+    elseif shared.setup.interact == 'interact' then
+        exports.interact:AddInteraction({
+            coords = data.coords,
+            interactDst = 2.0,
+            id = data.name,
+            options = data.options
+        })
+    elseif shared.setup.interact == 'custom' then
+        -- Add support for a custom target system here
+    else
+        print('^1[ERROR]: No interaction system defined in the config/shared.lua file^0')
+    end
+end
+
+-- Remove target from entity
+--- @param entity any|number
+--- @param data table|string
+function RemoveTargetEntity(entity, data)
+    if shared.setup.interact == 'ox_target' then
+        exports.ox_target:removeLocalEntity(entity, data)
+    elseif shared.setup.interact == 'qb-target' then
+        exports['qb-target']:RemoveTargetEntity(entity, data)
+    elseif shared.setup.interact == 'interact' then
+        exports.interact:RemoveLocalEntityInteraction(entity, data)
+    elseif shared.setup.interact == 'custom' then
+        -- Add support for a custom target system here
+    else
+        print('^1[ERROR]: No interaction system defined in the config/shared.lua file^0')
+    end
+end
+
+-- Remove circle zone
+--- @param name string
+function RemoveCircleZone(name)
+    if shared.setup.interact == 'ox_target' then
+        exports.ox_target:removeZone(name)
+    elseif shared.setup.interact == 'qb-target' then
+        exports['qb-target']:RemoveZone(name)
+    elseif shared.setup.interact == 'interact' then
+        exports.interact:RemoveInteraction(name)
+    elseif shared.setup.interact == 'custom' then
+        -- Add support for a custom target system here
+    else
+        print('^1[ERROR]: No interaction system defined in the config/shared.lua file^0')
+    end
+end
+
+-- Function to spawn NPCs
+--- @param model string
+--- @param position vector4
+function SpawnPed(model, position)
+    lib.requestModel(model)
+    while not HasModelLoaded(model) do Wait(0) end
+    local ped = CreatePed(0, model, position.x, position.y, position.z - 1.0, position.w, false, true)
+    FreezeEntityPosition(ped, true)
+    SetBlockingOfNonTemporaryEvents(ped, true)
+    SetEntityInvincible(ped, true)
+    return ped
+end
+
+-- Play anim on crate open
+local function openCrate()
+    if ProgressBar(client.anims.openCrate) then
+        return true
+    end
+    return false
+end
+
+-- Use oxygen refill item
+local function useRefill()
+    local tankMetadata, metatype = GetMetadata(shared.gear.refill), GetDurabilityType()
+
+    if not tankMetadata or not metatype or not tankMetadata[metatype] then
+        print('^1[ERROR]: Missing or invalid metadata on oxygen tank item^0')
+        print('^1[ERROR]: These items cannot be spawned - you must purchase from the shop^0')
+        print('^1[ERROR]: Visit https://docs.lationscripts.com/scuba-diving/common for more info^0')
+        return
+    end
+
+    local tankDurability = tankMetadata[metatype]
+    if tankDurability <= 0 then
+        ShowNotification(locale('notify.no-durability'), 'error')
+        return
+    end
+
+    local level = diving:getPlayerData('level')
+    if not level then return end
+
+    local hasGear, gearItem, gearMetadata, gearDurability = false, nil, nil, 0
+
+    for requiredLevel, gear in pairs(shared.gear.tanks) do
+        if level >= requiredLevel and HasItem(gear.item, 1) then
+            gearMetadata = GetMetadata(gear.item)
+            if gearMetadata and gearMetadata[metatype] then
+                gearDurability = gearMetadata[metatype]
+                hasGear = true
+                gearItem = gear.item
+                break
+            end
+        end
+    end
+
+    if not hasGear then
+        ShowNotification(locale('notify.no-scuba-gear'), 'error')
+        return
+    end
+
+    local maxTransfer = math.min(tankDurability, 100 - gearDurability)
+    ---@diagnostic disable-next-line: undefined-field
+    maxTransfer = math.round(maxTransfer, 2)
+    if maxTransfer <= 0 then
+        ShowNotification(locale('notify.scuba-gear-full'), 'error')
+        return
+    end
+
+    local input = ShowInput({
+        title = 'Refill Tank',
+        options = {
+            { type = 'slider', label = locale('Select how much oxygen to transfer'), required = true, min = 0, max = maxTransfer, step = 0.01 }
+        }
+    })
+    if not input or not input[1] then return end
+
+    local transferAmount = input[1]
+
+    gearDurability = math.min(gearDurability + transferAmount, 100)
+    ---@diagnostic disable-next-line: undefined-field
+    gearDurability = math.round(gearDurability, 2)
+
+    tankDurability = tankDurability - transferAmount
+    ---@diagnostic disable-next-line: undefined-field
+    tankDurability = math.round(tankDurability, 2)
+
+    TriggerServerEvent('lation_diving:setMetadata', cache.serverId, gearItem, metatype, gearDurability)
+    TriggerServerEvent('lation_diving:setMetadata', cache.serverId, shared.gear.refill, metatype, tankDurability)
+
+    ShowNotification(locale('notify.refill-success'), 'success')
+end
+
+if shared.setup.debug then
+    RegisterCommand('debugzones', function()
+        local crates = {}
+
+        for id, zone in pairs(shared.zones) do
+            lib.zones.sphere({
+                coords = zone.location,
+                radius = zone.radius,
+                onEnter = function()
+                    print(('You entered zoneId %s'):format(id))
+
+                    for _, coords in pairs(zone.coords) do
+                        local model = zone.models and zone.models[math.random(#zone.models)] or `prop_box_wood02a`
+                        lib.requestModel(model)
+
+                        local crate = CreateObject(model, coords.x, coords.y, coords.z, false, true, false)
+                        PlaceObjectOnGroundProperly(crate)
+                        FreezeEntityPosition(crate, true)
+                        SetModelAsNoLongerNeeded(model)
+
+                        crates[#crates + 1] = crate
+
+                        AddCircleZone({
+                            coords = GetEntityCoords(crate),
+                            name = 'debug-crate' ..crate,
+                            radius = 1.5,
+                            debug = shared.setup.debug,
+                            options = {
+                                label = 'Debug crate ' .. id,
+                                distance = 5.0,
+                                icon = 'fas fa-bug',
+                                onSelect = function()
+                                    print(('Crate coords: %s'):format(coords))
+                                end,
+                                action = function()
+                                    print(('Crate coords: %s'):format(coords))
+                                end
+                            }
+                        })
+                    end
+                end,
+                onExit = function()
+                    print(('You exited zoneId %s'):format(id))
+
+                    for _, crate in ipairs(crates) do
+                        RemoveCircleZone('debug-crate' ..crate)
+                        if DoesEntityExist(crate) then
+                            DeleteEntity(crate)
+                        end
+                    end
+
+                    crates = {}
+                end,
+                debug = shared.setup.debug
+            })
+        end
+
+    end, false)
+end
+
+-- Register callback(s)
+lib.callback.register('lation_diving:openCrate', openCrate)
+
+-- Register net event(s)
+RegisterNetEvent('lation_diving:useRefill', useRefill)
+
+-- Initialize default(s)
+InitializePhone()
+InitializeKeys()
+InitializeFuel()
+```
+
+
+```lua server/functions.lua expandable
+-- Initialize global variable to store phone
+Phone = nil
+
+-- Initialize config(s)
+local shared = require 'config.shared'
+local server = require 'config.server'
+
+-- Check to see if fm-logs or fmsdk is started
+local fmlogs = GetResourceState('fm-logs') == 'started'
+local fmsdk = GetResourceState('fmsdk') == 'started'
+
+-- Localize export
+local diving = exports.lation_diving
+
+-- Get phone
+local function InitializePhone()
+    if GetResourceState('lb-phone') == 'started' then
+        Phone = 'lb-phone'
+    elseif GetResourceState('qb-phone') == 'started' then
+        Phone = 'qb-phone'
+    elseif GetResourceState('qs-smartphone-pro') == 'started' then
+        Phone = 'qs-smartphone-pro'
+    elseif GetResourceState('qs-smartphone') == 'started' then
+        Phone = 'qs-smartphone'
+    elseif GetResourceState('gksphone') == 'started' then
+        Phone = 'gksphone'
+    elseif GetResourceState('roadphone') == 'started' then
+        Phone = 'roadphone'
+    elseif GetResourceState('npwd') == 'started' then
+        Phone = 'npwd'
+    elseif GetResourceState('yseries') == 'started' then
+        Phone = 'yseries'
+    elseif GetResourceState('okokPhone') == 'started' then
+        Phone = 'okokPhone'
+    else
+        -- Add custom phone here
+    end
+end
+
+-- Empty function for crate collected event
+--- @param source number Player ID
+--- @param quantity number Quantity of crates collected
+function CrateCollected(source, quantity)
+    -- print('x%s crate(s) collected by player ID: %s':format(quantity, source))
+end
+
+-- Send an email
+--- @param message string
+function SendEmail(source, message)
+    if not source or not message then return end
+    if Phone == 'lb-phone' then
+        local number = exports[Phone]:GetEquippedPhoneNumber(source)
+        if not number then return end
+        local email = exports[Phone]:GetEmailAddress(number)
+        if not email then return end
+        exports[Phone]:SendMail({
+            to = email,
+            subject = 'Scuba Diving',
+            message = message
+        })
+    elseif Phone == 'qb-phone' then
+        exports[Phone]:sendNewMailToOffline(GetIdentifier(source), {
+            sender = 'Diving Expert',
+            subject = 'Scuba Diving',
+            message = message
+        })
+    elseif Phone == 'qs-smartphone-pro' then
+        exports[Phone]:sendNewMail(source, {
+            sender = 'Diving Expert',
+            subject = 'Scuba Diving',
+            message = message
+        })
+    elseif Phone == 'qs-smartphone' then
+        TriggerClientEvent('lation_diving:sendEmail', source, message)
+    elseif Phone == 'gksphone' then
+        exports[Phone]:SendNewMail(source, {
+            sender = 'Diving Expert',
+            image = '/html/static/img/icons/mail.png',
+            subject = 'Scuba Diving',
+            message = message
+        })
+    elseif Phone == 'roadphone' then
+        TriggerClientEvent('lation_diving:sendEmail', source, message)
+    elseif Phone == 'npwd' then
+        local player = exports[Phone]:getPlayerData({ source = source })
+        if not player then return end
+        exports[Phone]:emitMessage({
+            senderNumber = exports[Phone]:generatePhoneNumber(),
+            targetNumber = player.phoneNumber,
+            message = message
+        })
+    elseif Phone == 'yseries' then
+        local number = exports[Phone]:GetPhoneNumberBySourceId(source)
+        if not number then return end
+        exports[Phone]:SendMail({
+            title = 'Scuba Diving',
+            sender = 'Diving Expert',
+            senderDisplayName = 'Diving Expert',
+            content = message
+        }, 'phoneNumber', number)
+    elseif Phone == 'okokPhone' then
+        local email = exports[Phone]:getEmailAddressFromSource(source)
+        if not email then return end
+        exports[Phone]:sendEmail({
+            sender = 'Diving Expert',
+            recipients = {email},
+            subject = 'Scuba Diving',
+            body = message
+        })
+    else
+        TriggerClientEvent('lation_diving:sendEmail', source, message)
+    end
+end
+
+-- Return an inventory's "durability/quality" types
+function GetDurabilityType()
+    if Inventory == 'ox_inventory' then
+        return 'durability'
+    else
+        return 'quality'
+    end
+end
+
+-- Returns an items metadata
+--- @param source number Player ID
+--- @param item string Item name
+function GetMetadata(source, item)
+    if not source or not item then return end
+    local player = GetPlayer(source)
+    if not player then return end
+    if Inventory == 'ox_inventory' then
+        local data = exports[Inventory]:Search(source, 'slots', item)
+        if not data or #data == 0 then return end
+        return data[1].metadata
+    elseif Inventory == 'core_inventory' then
+        local data = exports[Inventory]:getItem(source, item)
+        if not data then return end
+        return data.info
+    else
+        local data = exports[Inventory]:GetItemByName(source, item)
+        if not data then return end
+        return data.info
+    end
+end
+
+-- Set an items metadata
+--- @param source number Player ID 
+--- @param item string Item name
+--- @param metatype string Metadata type
+--- @param metavalue any Metadata value
+function SetMetadata(source, item, metatype, metavalue)
+    if not source or not item or not metatype or not metavalue then return end
+    local player = GetPlayer(source)
+    if not player then return end
+    if Inventory == 'ox_inventory' then
+        local itemData = exports[Inventory]:Search(source, 'slots', item)
+        if not next(itemData) then return end
+        itemData[1].metadata[metatype] = metavalue
+        exports[Inventory]:SetMetadata(source, itemData[1].slot, itemData[1].metadata)
+    elseif Inventory == 'codem-inventory' then
+        local itemData = exports[Inventory]:GetItemByName(source, item)
+        if not itemData then return end
+        itemData.info[metatype] = metavalue
+        exports[Inventory]:SetItemMetadata(source, itemData.slot, itemData.info)
+    elseif Inventory == 'core_inventory' then
+        local itemData = exports[Inventory]:getItem(source, item)
+        if not itemData then return end
+        local slot = exports[Inventory]:getFirstSlotByItem(source, item)
+        if not slot then return end
+        itemData.info[metatype] = metavalue
+        exports[Inventory]:setMetadata(source, slot, itemData.info)
+    else
+        local itemData = exports[Inventory]:GetItemByName(source, item)
+        if not itemData then return end
+        itemData.info[metatype] = metavalue
+        exports[Inventory]:SetItemData(source, item, 'info', itemData.info)
+    end
+end
+
+-- Register usable item(s)
+for gearId, gear in pairs(shared.gear.tanks) do
+    RegisterUsableItem(gear.item, function(source)
+        TriggerClientEvent('lation_diving:useGear', source, gearId)
+    end)
+end
+
+-- Register hook if ox_inventory is detected
+if Inventory and Inventory == 'ox_inventory' then
+    local filter = {}
+
+    -- Build item filter
+    local function buildFilter()
+        for _, gear in pairs(shared.gear.tanks) do
+            filter[gear.item] = true
+        end
+        filter[shared.gear.refill] = true
+    end
+
+    -- Return if item is a tank
+    --- @param item string
+    local function isTank(item)
+        for _, gear in ipairs(shared.gear.tanks) do
+            if gear.item == item then
+                return true
+            end
+        end
+        return false
+    end
+
+    -- Merge items durability
+    --- @param payload table
+    local function mergeItems(payload)
+        if not payload or type(payload) ~= 'table' then return false end
+
+        local fromType, toType = payload.fromType, payload.toType
+        local fromItem, toItem = payload.fromSlot, payload.toSlot
+
+        if type(toItem) == 'table' and fromItem.name == shared.gear.refill and isTank(toItem.name) then
+            local fromDurability, toDurability = fromItem.metadata.durability, toItem.metadata.durability
+
+            if fromDurability and toDurability and fromType == toType then
+                local maxDurability = 100
+                local availableSpace = maxDurability - toDurability
+                local transferAmount = math.min(fromDurability, availableSpace)
+
+                toItem.metadata.durability = toDurability + transferAmount
+                fromItem.metadata.durability = fromDurability - transferAmount
+
+                exports[Inventory]:SetMetadata(payload.fromInventory, fromItem.slot, fromItem.metadata)
+                exports[Inventory]:SetMetadata(payload.toInventory, toItem.slot, toItem.metadata)
+            end
+        end
+
+        return true
+    end
+
+    buildFilter()
+
+    exports[Inventory]:registerHook('swapItems', function(payload)
+        return mergeItems(payload)
+    end, {itemFilter = filter})
+
+end
+
+-- Item merging for other inventory types
+if Inventory and Inventory ~= 'ox_inventory' then
+    RegisterUsableItem(shared.gear.refill, function(source)
+        TriggerClientEvent('lation_diving:useRefill', source)
+    end)
+end
+
+-- Register usable item(s)
+--- @param source number
+RegisterUsableItem(shared.crates.item, function(source)
+    if not source then return end
+
+    local source = source
+
+    local level = diving:getPlayerData(source, 'level')
+    if not level then return end
+
+    local anim = lib.callback.await('lation_diving:openCrate', source)
+    if not anim then return end
+
+    local rewards = {}
+
+    for requiredLvl, items in pairs(shared.crates.loot) do
+        if level >= requiredLvl then
+            for _, data in ipairs(items) do
+                if math.random(100) <= data.chance then
+                    rewards[#rewards + 1] = {
+                        item = data.item,
+                        quantity = math.random(data.quantity.min, data.quantity.max),
+                        metadata = data.metadata or false
+                    }
+                end
+            end
+        end
+    end
+
+    if #rewards == 0 then
+        print('^1[ERROR]: A player has tried opening ls_diving_crate but no rewards were assigned^0')
+        print('^1[ERROR]: This issue occurs when the loot table does not have enough items with a high enough chance to be rolled successfully^0')
+        print('^1[ERROR]: Please check your loot table configuration in config/shared.lua crate.loot section^0')
+        print('^1[ERROR]: Ensure that at least one item has a high enough chance (e.g., 100) to guarantee a reward^0')
+        return
+    end
+
+    RemoveItem(source, shared.crates.item, 1)
+
+    for _, reward in ipairs(rewards) do
+        if CanCarry(source, reward.item, reward.quantity) then
+            if reward.metadata then
+                AddItem(source, reward.item, reward.quantity, reward.metadata)
+            else
+                AddItem(source, reward.item, reward.quantity)
+            end
+        else
+            TriggerClientEvent('lation_diving:notify', source, locale('notify.cant-carry'), 'error')
+        end
+    end
+
+    if server.logs.events.crateOpened then
+        local baseStr = {}
+        for _, reward in ipairs(rewards) do
+            table.insert(baseStr, ('x%d %s'):format(reward.quantity, reward.item))
+        end
+
+        local finalStr = table.concat(baseStr, ', ')
+
+        PlayerLog(source, locale('logs.crate-opened-title'), locale('logs.crate-opened-message', GetName(source), GetIdentifier(source), finalStr))
+    end
+end)
+
+-- Log player events if applicable
+--- @param source number Player ID
+--- @param title string Log title
+--- @param message string Message contents
+function PlayerLog(source, title, message)
+    if server.logs.service == 'fivemanage' then
+        if not fmsdk then return end
+        if server.logs.screenshots then
+            exports.fmsdk:takeServerImage(source, {
+                name = title,
+                description = message,
+            })
+        else
+            exports.fmsdk:LogMessage('info', message)
+        end
+    elseif server.logs.service == 'fivemerr' then
+        if not fmlogs then return end
+        exports['fm-logs']:createLog({
+            LogType = 'Player',
+            Message = message,
+            Resource = 'lation_coke',
+            Source = source,
+        }, { Screenshot = server.logs.screenshots })
+    elseif server.logs.service == 'discord' then
+        local embed = {
+            {
+                ["color"] = 16711680,
+                ["title"] = "**".. title .."**",
+                ["description"] = message,
+                ["footer"] = {
+                    ["text"] = os.date("%a %b %d, %I:%M%p"),
+                    ["icon_url"] = server.logs.discord.footer
+                }
+            }
+        }
+        PerformHttpRequest(server.logs.discord.link, function()
+        end, 'POST', json.encode({username = server.logs.discord.name, embeds = embed, avatar_url = server.logs.discord.image}),
+        {['Content-Type'] = 'application/json'})
+    end
+end
+
+-- Register callback(s)
+lib.callback.register('lation_diving:getMetadata', GetMetadata)
+
+-- Register net event(s)
+RegisterNetEvent('lation_diving:setMetadata', SetMetadata)
+RegisterNetEvent('lation_diving:sendEmail', SendEmail)
+
+-- Initialize default(s)
+InitializePhone()
+```
+
+</CodeGroup>

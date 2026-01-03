@@ -171,6 +171,25 @@
               "metal-detecting/changelog",
               "metal-detecting/previews"
             ]
+          },
+          {
+            "group": "Scuba Diving",
+            "icon": "sailboat",
+            "pages": [
+              "scuba-diving/install",
+              {
+                "group": "Exports",
+                "icon": "code",
+                "pages": [
+                  "scuba-diving/exports/shared",
+                  "scuba-diving/exports/client",
+                  "scuba-diving/exports/server"
+                ]
+              },
+              "scuba-diving/faqs",
+              "scuba-diving/changelog",
+              "scuba-diving/previews"
+            ]
           }
         ]
       }
