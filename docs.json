@@ -152,6 +152,25 @@
               "money-laundering/changelog",
               "money-laundering/previews"
             ]
+          },
+          {
+            "group": "Metal Detecting",
+            "icon": "magnifying-glass",
+            "pages": [
+              "metal-detecting/install",
+              {
+                "group": "Exports",
+                "icon": "code",
+                "pages": [
+                  "metal-detecting/exports/shared",
+                  "metal-detecting/exports/client",
+                  "metal-detecting/exports/server"
+                ]
+              },
+              "metal-detecting/faqs",
+              "metal-detecting/changelog",
+              "metal-detecting/previews"
+            ]
           }
         ]
       }

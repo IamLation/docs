@@ -1,0 +1,29 @@
+---
+title: "Server"
+description: "All exports available on the server"
+icon: "database"
+---
+
+### **AddPlayerData**
+
+Adds an amount to a player’s specified data field.
+
+```lua
+exports.lation_detecting:AddPlayerData(source, type, amount)
+```
+
+<ParamField path="source" type="string" required>
+  The source (_player ID_) to add data too.
+</ParamField>
+
+<ParamField path="type" type="string" required>
+  The data type to modify (e.g., `"level"`, `"experience"`, etc).
+</ParamField>
+
+<ParamField path="amount" type="number" required>
+  The amount to add to the specified data type.
+</ParamField>
+
+<Note>
+  Looking for an export we don’t have listed here? Contact us and we’ll do what we can!
+</Note>
