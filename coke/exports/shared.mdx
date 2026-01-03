@@ -10,7 +10,7 @@ Retrieves player data. Optionally, you can pass a string to get a specific piece
 
 <Tabs>
   <Tab title="Client">
-    ```javascript
+    ```lua
     exports.lation_coke:getPlayerData(key)
     ```
 
@@ -19,7 +19,7 @@ Retrieves player data. Optionally, you can pass a string to get a specific piece
     </ParamField>
   </Tab>
   <Tab title="Server">
-    ```javascript
+    ```lua
     exports.lation_coke:getPlayerData(source, key)
     ```
 
@@ -38,7 +38,7 @@ Retrieves plant data for a given plant ID.
 
 <Tabs>
   <Tab title="Client">
-    ```javascript
+    ```lua
     exports.lation_coke:getPlantData(plantId)
     ```
 
@@ -47,7 +47,7 @@ Retrieves plant data for a given plant ID.
     </ParamField>
   </Tab>
   <Tab title="Server">
-    ```javascript
+    ```lua
     exports.lation_coke:getPlantData(plantId)
     ```
 
@@ -63,7 +63,7 @@ Retrieves table data for a given table ID.
 
 <Tabs>
   <Tab title="Client">
-    ```javascript
+    ```lua
     exports.lation_coke:getTableData(tableId)
     ```
 
@@ -72,7 +72,7 @@ Retrieves table data for a given table ID.
     </ParamField>
   </Tab>
   <Tab title="Server">
-    ```javascript
+    ```lua
     exports.lation_coke:getTableData(tableId)
     ```
 
@@ -88,7 +88,7 @@ Retrieves lab data for a given lab ID.
 
 <Tabs>
   <Tab title="Client">
-    ```javascript
+    ```lua
     exports.lation_coke:getLabData(labId)
     ```
 
@@ -97,7 +97,7 @@ Retrieves lab data for a given lab ID.
     </ParamField>
   </Tab>
   <Tab title="Server">
-    ```javascript
+    ```lua
     exports.lation_coke:getLabData(labId)
     ```
 
@@ -113,12 +113,12 @@ Retrieves all labs data.
 
 <Tabs>
   <Tab title="Client">
-    ```javascript
+    ```lua
     exports.lation_coke:getAllLabs()
     ```
   </Tab>
   <Tab title="Server">
-    ```javascript
+    ```lua
     exports.lation_coke:getAllLabs()
     ```
   </Tab>
@@ -130,7 +130,7 @@ Returns a table containing `true` or `false` for each permission the user has in
 
 <Tabs>
   <Tab title="Client">
-    ```javascript
+    ```lua
     exports.lation_coke:getUserPermissions(labId)
     ```
 
@@ -139,7 +139,7 @@ Returns a table containing `true` or `false` for each permission the user has in
     </ParamField>
   </Tab>
   <Tab title="Server">
-    ```javascript
+    ```lua
     exports.lation_coke:getUserPermissions(source, labId)
     ```
 
@@ -158,7 +158,7 @@ Returns `true` or `false` if the lab is available for sale.
 
 <Tabs>
   <Tab title="Client">
-    ```javascript
+    ```lua
     exports.lation_coke:isLabAvailable(labId)
     ```
 
@@ -167,7 +167,7 @@ Returns `true` or `false` if the lab is available for sale.
     </ParamField>
   </Tab>
   <Tab title="Server">
-    ```javascript
+    ```lua
     exports.lation_coke:isLabAvailable(labId)
     ```
 
@@ -183,7 +183,7 @@ Returns `true` or `false` if the player is the owner of the lab.
 
 <Tabs>
   <Tab title="Client">
-    ```javascript
+    ```lua
     exports.lation_coke:isOwner(labId)
     ```
 
@@ -192,7 +192,7 @@ Returns `true` or `false` if the player is the owner of the lab.
     </ParamField>
   </Tab>
   <Tab title="Server">
-    ```javascript
+    ```lua
     exports.lation_coke:isOwner(source, labId)
     ```
 
@@ -211,7 +211,7 @@ Returns `true` or `false` if the player is an authorized user of the lab.
 
 <Tabs>
   <Tab title="Client">
-    ```javascript
+    ```lua
     exports.lation_coke:isAuthUser(labId)
     ```
 
@@ -220,7 +220,7 @@ Returns `true` or `false` if the player is an authorized user of the lab.
     </ParamField>
   </Tab>
   <Tab title="Server">
-    ```javascript
+    ```lua
     exports.lation_coke:isAuthUser(source, labId)
     ```
 
