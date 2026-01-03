@@ -1,6 +1,6 @@
 ---
 title: "Alert Dialog"
-description: "Alert dialogs used for confirmations, warnings, informational messages and more."
+description: "Alert dialogs used for confirmations, warnings, info messages and more."
 icon: "triangle-exclamation"
 ---
 
@@ -8,9 +8,7 @@ Alert dialogs provide a flexible way to show confirmations, warnings, informatio
 
 ## Quick Start
 
-<CodeGroup>
-
-```lua Basic Usage
+```lua
 local result = exports.lation_ui:alert({
     header = 'Delete Item',
     content = 'Are you sure you want to delete this item?',
@@ -23,30 +21,6 @@ if result == 'confirm' then
     print('Item deleted!')
 end
 ```
-
-
-```lua With Callouts
-local result = exports.lation_ui:alert({
-    header = 'Important Information',
-    content = 'Please review the information below before proceeding.',
-    icon = 'fas fa-info-circle',
-    callouts = {
-        {
-            label = 'Warning',
-            description = 'This action cannot be undone',
-            type = 'warning'
-        },
-        {
-            label = 'Note',
-            description = 'Make sure you have a backup before continuing',
-            type = 'info',
-            icon = 'fas fa-database'
-        }
-    }
-})
-```
-
-</CodeGroup>
 
 ## Functions
 
@@ -169,118 +143,6 @@ Callouts are styled information boxes that can be added to alert dialogs to emph
   ```
 </ParamField>
 
-## Examples
-
-<Tabs>
-  <Tab title="Basic Alert">
-    Simple confirmation dialog with icon and custom colors.
-
-    ```lua
-    local result = exports.lation_ui:alert({
-        header = 'Delete Item',
-        content = 'Are you sure you want to delete this item? This action cannot be undone.',
-        icon = 'fas fa-trash',
-        iconColor = '#EF4444',
-        type = 'error',
-        labels = {
-            cancel = 'No, keep it',
-            confirm = 'Yes, delete'
-        }
-    })
-    
-    if result == 'confirm' then
-        -- Delete the item
-        DeleteItem()
-        print('Item deleted successfully')
-    else
-        print('Deletion cancelled')
-    end
-    ```
-
-    <Frame>
-      ![Destructive alert example](/resources/modern-ui/components/alert-dialog/destructive-example.webp)
-    </Frame>
-  </Tab>
-  <Tab title="With Callouts">
-    Alert dialog showcasing multiple callout types for highlighting important information.
-
-    ```lua
-    local result = exports.lation_ui:alert({
-        header = 'System Update Available',
-        content = 'A new system update is ready to install. Please review the information below.',
-        icon = 'fas fa-download',
-        iconColor = '#3B82F6',
-        type = 'info',
-        callouts = {
-            {
-                label = 'Important',
-                description = 'This update includes critical security patches',
-                type = 'warning',
-                icon = 'fas fa-shield-alt'
-            },
-            {
-                label = 'What\'s New',
-                description = 'Bug fixes, performance improvements, and new features',
-                type = 'success',
-                icon = 'fas fa-sparkles'
-            },
-            {
-                label = 'Backup Recommended',
-                description = 'Please backup your data before proceeding with the update',
-                type = 'error',
-                icon = 'fas fa-database'
-            }
-        }
-    })
-    
-    if result == 'confirm' then
-        StartSystemUpdate()
-    end
-    ```
-
-    <Frame>
-      ![Alert with callouts](/resources/modern-ui/components/alert-dialog/callouts-example.webp)
-    </Frame>
-  </Tab>
-  <Tab title="Information Only">
-    Information dialog without a cancel button.
-
-    ```lua
-    exports.lation_ui:alert({
-        header = 'Welcome!',
-        content = 'Thank you for using our system. Click OK to continue.',
-        icon = 'fas fa-hand-wave',
-        iconColor = '#10B981',
-        type = 'success',
-        cancel = false,
-        labels = {
-            confirm = 'OK'
-        }
-    })
-    ```
-  </Tab>
-  <Tab title="Custom Styling">
-    Advanced example with custom size and multiple configuration options.
-
-    ```lua
-    local result = exports.lation_ui:alert({
-        header = '## Account Verification',
-        content = 'Please verify your account details:\n\n- Email: user@example.com\n- Phone: +1 234 567 8900',
-        icon = 'fas fa-user-check',
-        iconColor = '#8B5CF6',
-        type = 'default',
-        size = 'lg',
-        labels = {
-            cancel = 'Update Details',
-            confirm = 'Confirm'
-        },
-        callouts = {
-            {
-                description = 'Make sure your contact information is up to date for security purposes',
-                type = 'info'
-            }
-        }
-    })
-    ```
-  </Tab>
-</Tabs>
+<Frame>
+  ![Alert dialog example](/resources/modern-ui/components/alert-dialog/destructive-example.webp)
+</Frame>
