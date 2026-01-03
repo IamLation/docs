@@ -1,0 +1,1388 @@
+---
+title: "Previews"
+description: "Preview open source files included with this resource"
+icon: "eye"
+---
+
+<CodeGroup>
+
+```lua config/setup.lua expandable
+return {
+
+    -- Use only if needed, directed by support or know what you're doing
+    -- Notice: enabling debug features will significantly increase resmon
+    -- And should always be disabled in production
+    debug = false,
+
+    -- Set your interaction system below
+    -- Available options are: 'auto', 'ox_target', 'qb-target', 'interact' & 'custom'
+    -- 'auto' will automatically detect and use the available interaction system
+    -- 'custom' needs to be added to client/utils/interact.lua
+    interact = 'auto',
+
+    -- Set your notification system below
+    -- Available options are: 'lation_ui', 'ox_lib', 'esx', 'qb', 'okok', 'sd-notify', 'wasabi_notify' & 'custom'
+    -- 'custom' needs to be added to client/utils/notify.lua
+    notify = 'ox_lib',
+
+    -- Do you want to be notified via server console if an update is available?
+    -- True if yes, false if no
+    version = true,
+
+    -- Set your society banking system below
+    -- Available options are: 'auto', 'qb-banking', 'qb-management', 'esx_addonaccount', 'Renewed-Banking',
+    -- 'okokBanking', 'fd_banking', 'tgg-banking' or 'custom'
+    -- 'auto' will automatically detect based on your framework and available banking resources
+    -- 'custom' needs to be added to server/utils/banking.lua
+    banking = 'auto',
+}
+```
+
+
+```lua config/logs.lua expandable
+return {
+
+    -- What logging service do you want to use?
+    -- Available options: 'fivemanage', 'fivemerr', 'discord' & 'none'
+    -- It is highly recommended to use a proper logging service such as Fivemanage or Fivemerr
+    service = 'none',
+
+    -- Do you want to include screenshots with your logs?
+    -- This is only applicable to Fivemanage and Fivemerr
+    screenshots = false,
+
+    -- You can enable (true) or disable (false) specific events to log here
+    events = {
+        -- Log player purchases
+        purchase = false,
+        -- Log admin shop creation
+        shopCreated = false,
+        -- Log admin shop edits
+        shopEdited = false,
+        -- Log admin shop deletions
+        shopDeleted = false,
+    },
+
+    -- If service = 'discord', you can customize the webhook data here
+    -- If not using Discord, this section can be ignored
+    discord = {
+        -- The name of the webhook
+        name = 'Shops',
+        -- The webhook link
+        link = '',
+        -- The webhook profile image
+        image = 'https://i.imgur.com/ILTkWBh.png',
+        -- The webhook footer image
+        footer = 'https://i.imgur.com/ILTkWBh.png'
+    }
+
+}
+```
+
+</CodeGroup>
+
+<CodeGroup>
+
+```lua bridge/client.lua expandable
+Framework, Inventory = nil, nil
+PlayerLoaded = false
+
+-- Handle player login
+function OnPlayerLoaded()
+    PlayerLoaded = true
+    TriggerEvent('lation_shops:playerLoaded')
+end
+
+-- Handle player logout
+function OnPlayerLogout()
+    PlayerLoaded = false
+    TriggerEvent('lation_shops:playerDropped')
+end
+
+-- Initialize framework
+local function InitFramework()
+    if GetResourceState('es_extended') == 'started' then
+        ESX = exports['es_extended']:getSharedObject()
+        Framework = 'esx'
+
+        RegisterNetEvent('esx:playerLoaded', function() OnPlayerLoaded() end)
+        RegisterNetEvent('esx:onPlayerLogout', function() OnPlayerLogout() end)
+    elseif GetResourceState('qbx_core') == 'started' then
+        Framework = 'qbx'
+
+        AddEventHandler('QBCore:Client:OnPlayerLoaded', function() OnPlayerLoaded() end)
+        RegisterNetEvent('qbx_core:client:playerLoggedOut', function() OnPlayerLogout() end)
+    elseif GetResourceState('qb-core') == 'started' then
+        QBCore = exports['qb-core']:GetCoreObject()
+        Framework = 'qb'
+
+        RegisterNetEvent('QBCore:Client:OnPlayerLoaded', function() OnPlayerLoaded() end)
+        RegisterNetEvent('QBCore:Client:OnPlayerUnload', function() OnPlayerLogout() end)
+    elseif GetResourceState('ox_core') == 'started' then
+        Ox = require '@ox_core.lib.init'
+        Framework = 'ox'
+
+        AddEventHandler('ox:playerLoaded', function() OnPlayerLoaded() end)
+        AddEventHandler('ox:playerLogout', function() OnPlayerLogout() end)
+    else
+        -- Add custom framework here
+    end
+
+    AddEventHandler('onResourceStart', function(resourceName)
+        if GetCurrentResourceName() == resourceName then
+            OnPlayerLoaded()
+        end
+    end)
+
+    AddEventHandler('onResourceStop', function(resourceName)
+        if GetCurrentResourceName() == resourceName then
+            OnPlayerLogout()
+        end
+    end)
+end
+
+-- Initialize inventory
+local function InitInventory()
+    if GetResourceState('ox_inventory') == 'started' then
+        Inventory = 'ox_inventory'
+    elseif GetResourceState('qb-inventory') == 'started' then
+        Inventory = 'qb-inventory'
+    elseif GetResourceState('qs-inventory') == 'started' then
+        Inventory = 'qs-inventory'
+    elseif GetResourceState('ps-inventory') == 'started' then
+        Inventory = 'ps-inventory'
+    elseif GetResourceState('origen_inventory') == 'started' then
+        Inventory = 'origen_inventory'
+    elseif GetResourceState('codem-inventory') == 'started' then
+        Inventory = 'codem-inventory'
+    elseif GetResourceState('core_inventory') == 'started' then
+        Inventory = 'core_inventory'
+    elseif GetResourceState('tgiann-inventory') == 'started' then
+        Inventory = 'tgiann-inventory'
+    elseif GetResourceState('jaksam_inventory') == 'started' then
+        Inventory = 'jaksam_inventory'
+    else
+        -- Add custom inventory here
+    end
+end
+
+-- Returns player data
+function GetPlayerData()
+    if Framework == 'esx' then
+        return ESX.GetPlayerData()
+    elseif Framework == 'qb' then
+        return QBCore.Functions.GetPlayerData()
+    elseif Framework == 'qbx' then
+        return exports.qbx_core:GetPlayerData()
+    elseif Framework == 'ox' then
+        return Ox.GetPlayer()
+    else
+        -- Add custom framework here
+    end
+end
+
+-- Returns player licenses
+--- @param license string|nil Specific licence to get
+function GetPlayerLicense(license)
+    local player = GetPlayerData()
+    if not player then return end
+    if Framework == 'esx' then
+        return lib.callback.await('lation_shops:getPlayerLicense', false, license)
+    elseif Framework == 'qb' then
+        return player.metadata.licences[license] or false
+    elseif Framework == 'qbx' then
+        return player.metadata.licences[license] or false
+    elseif Framework == 'ox' then
+        -- TODO
+    else
+        -- Add custom framework here
+    end
+end
+
+-- Returns player job
+function GetPlayerJob()
+    local player = GetPlayerData()
+    if not player then return {} end
+
+    if Framework == 'esx' then
+        return {
+            name = player.job.name,
+            label = player.job.label,
+            grade = player.job.grade
+        }
+    elseif Framework == 'qb' then
+        return {
+            name = player.job.name,
+            label = player.job.label,
+            grade = player.job.grade.level
+        }
+    elseif Framework == 'qbx' then
+        return {
+            name = player.job.name,
+            label = player.job.label,
+            grade = player.job.grade.level
+        }
+    else
+        -- Add custom framework here
+    end
+
+    return {}
+end
+
+-- Return all jobs
+function GetAllJobs()
+    if Framework == 'esx' then
+        return lib.callback.await('lation_shops:getAllJobs', false)
+    elseif Framework == 'qb' then
+        return QBCore.Shared.Jobs
+    elseif Framework == 'qbx' then
+        return exports.qbx_core:GetJobs()
+    elseif Framework == 'ox' then
+        return Ox.GetGroupsByType('job')
+    else
+        -- Add custom framework here
+    end
+    return {}
+end
+
+-- Sanitize item data for certain inventories
+local function sanitize(items)
+    local sanitized = {}
+    for itemName, itemData in pairs(items or {}) do
+        if type(itemData) == 'table' then
+            sanitized[itemName] = {}
+            for key, value in pairs(itemData) do
+                if type(key) == 'string' and not tonumber(key) and type(value) ~= 'function' then
+                    if (key == 'label' or key == 'description') and type(value) == 'table' then
+                        sanitized[itemName][key] = select(2, next(value)) or "INVALID"
+                    elseif type(value) == 'table' then
+                        local clean = {}
+                        for k, v in pairs(value) do
+                            if type(v) ~= 'function' then clean[k] = v end
+                        end
+                        if next(clean) then sanitized[itemName][key] = clean end
+                    else
+                        sanitized[itemName][key] = value
+                    end
+                end
+            end
+        end
+    end
+    return sanitized
+end
+
+-- Return data for item and image path
+function GetAllItems()
+    local items
+    if Inventory then
+        if Inventory == 'ox_inventory' then
+            items = exports[Inventory]:Items()
+        elseif Inventory == 'qb-inventory' then
+            items = QBCore.Shared.Items
+        elseif Inventory == 'ps-inventory' then
+            items = QBCore.Shared.Items
+        elseif Inventory == 'qs-inventory' then
+            items = exports[Inventory]:GetItemList()
+        elseif Inventory == 'origen_inventory' then
+            items = exports[Inventory]:GetItems()
+        elseif Inventory == 'codem-inventory' then
+            items = exports[Inventory]:GetItemList()
+        elseif Inventory == 'core_inventory' then
+            -- No available client-side export to get item list
+            if Framework == 'qb' then
+                items = QBCore.Shared.Items
+            else
+                print('^1[ERROR]: An issue has occured, please contact support at https://discord.gg/9EbY4nM5uu^0')
+                return nil
+            end
+        elseif Inventory == 'tgiann-inventory' then
+            items = exports[Inventory]:GetItemList()
+        elseif Inventory == 'jaksam_inventory' then
+            items = exports[Inventory]:getStaticItemsList()
+        else
+            -- Add custom inventory here
+            return nil
+        end
+    else
+        if Framework == 'esx' then
+            -- Unlikely to need anything here but.. just in case..
+            print('^1[ERROR]: An error has occured with lation_shops - please contact support^0')
+            return nil
+        elseif Framework == 'qb' then
+            items = QBCore.Shared.Items
+        elseif Framework == 'qbx' then
+            -- Unlikely to need anything here but.. just in case..
+            print('^1[ERROR]: Are you really not using ox_inventory? Contact support please lul.^0')
+            return nil
+        end
+    end
+    return sanitize(items)
+end
+
+-- Return image path for inventory items
+function GetImagePath()
+    if Inventory then
+        if Inventory == 'ox_inventory' then
+            return 'nui://ox_inventory/web/images/'
+        elseif Inventory == 'qb-inventory' then
+            return 'nui://qb-inventory/html/images/'
+        elseif Inventory == 'ps-inventory' then
+            return 'nui://ps-inventory/html/images/'
+        elseif Inventory == 'qs-inventory' then
+            return 'nui://qs-inventory/html/images/'
+        elseif Inventory == 'origen_inventory' then
+            return 'nui://origen_inventory/html/images/'
+        elseif Inventory == 'codem-inventory' then
+            return 'nui://codem-inventory/html/itemimages/'
+        elseif Inventory == 'core_inventory' then
+            return 'nui://core_inventory/html/images/'
+        elseif Inventory == 'tgiann-inventory' then
+            return 'nui://inventory_images/images/'
+        elseif Inventory == 'jaksam_inventory' then
+            return 'nui://jaksam_inventory/_images/'
+        else
+            -- Add custom inventory here
+        end
+    end
+end
+
+-- Check if player has item
+--- @param item string
+--- @param amount number
+--- @return boolean
+function HasItem(item, amount)
+    if not item or not amount then return false end
+    if Inventory then
+        if Inventory == 'ox_inventory' then
+            return exports[Inventory]:Search('count', item) >= amount
+        elseif Inventory == 'core_inventory' then
+            return exports[Inventory]:hasItem(item, amount)
+        elseif Inventory == 'jaksam_inventory' then
+            return exports[Inventory]:getTotalItemAmount(item) >= amount
+        else
+            return exports[Inventory]:HasItem(item, amount)
+        end
+    else
+        local playerData = GetPlayerData()
+        if not playerData then return false end
+        local inventory = Framework == 'esx' and playerData.inventory or playerData.items
+        if not inventory then return false end
+        for _, itemData in pairs(inventory) do
+            if itemData and itemData.name == item then
+                local count = itemData.amount or itemData.count or 0
+                if count >= amount then
+                    return true
+                end
+            end
+        end
+        return false
+    end
+end
+
+-- Disables access to open/view inventory
+function DisableInventory()
+    if Inventory == 'ox_inventory' then
+        LocalPlayer.state.invBusy = true
+    elseif Inventory == 'qb-inventory' then
+        LocalPlayer.state.inv_busy = true
+    elseif Inventory == 'qs-inventory' then
+        exports[Inventory]:setInventoryDisabled(true)
+    elseif Inventory == 'core_inventory' then
+        exports[Inventory]:lockInventory()
+    elseif Inventory == 'tgiann-inventory' then
+        exports[Inventory]:SetInventoryActive(false)
+    else
+        -- Add custom inventory here
+    end
+end
+
+-- Enables access to open/view inventory
+function EnableInventory()
+    if Inventory == 'ox_inventory' then
+        LocalPlayer.state.invBusy = false
+    elseif Inventory == 'qb-inventory' then
+        LocalPlayer.state.inv_busy = false
+    elseif Inventory == 'qs-inventory' then
+        exports[Inventory]:setInventoryDisabled(false)
+    elseif Inventory == 'core_inventory' then
+        exports[Inventory]:unlockInventory()
+    elseif Inventory == 'tgiann-inventory' then
+        exports[Inventory]:SetInventoryActive(true)
+    else
+        -- Add custom inventory here
+    end
+end
+
+InitFramework()
+InitInventory()
+```
+
+
+```lua bridge/server.lua expandable
+Framework, Inventory = nil, nil
+
+-- Get framework
+local function InitFramework()
+    if GetResourceState('es_extended') == 'started' then
+        ESX = exports['es_extended']:getSharedObject()
+        Framework = 'esx'
+    elseif GetResourceState('qbx_core') == 'started' then
+        Framework = 'qbx'
+    elseif GetResourceState('qb-core') == 'started' then
+        QBCore = exports['qb-core']:GetCoreObject()
+        Framework = 'qb'
+    elseif GetResourceState('ox_core') == 'started' then
+        Ox = require '@ox_core.lib.init'
+        Framework = 'ox'
+    else
+        -- Add custom framework here
+    end
+end
+
+-- Get inventory
+local function InitInventory()
+    if GetResourceState('ox_inventory') == 'started' then
+        Inventory = 'ox_inventory'
+    elseif GetResourceState('qb-inventory') == 'started' then
+        Inventory = 'qb-inventory'
+    elseif GetResourceState('qs-inventory') == 'started' then
+        Inventory = 'qs-inventory'
+    elseif GetResourceState('ps-inventory') == 'started' then
+        Inventory = 'ps-inventory'
+    elseif GetResourceState('origen_inventory') == 'started' then
+        Inventory = 'origen_inventory'
+    elseif GetResourceState('codem-inventory') == 'started' then
+        Inventory = 'codem-inventory'
+    elseif GetResourceState('core_inventory') == 'started' then
+        Inventory = 'core_inventory'
+    elseif GetResourceState('tgiann-inventory') == 'started' then
+        Inventory = 'tgiann-inventory'
+    elseif GetResourceState('jaksam_inventory') == 'started' then
+        Inventory = 'jaksam_inventory'
+    else
+        -- Add custom inventory here
+    end
+end
+
+-- Get player from source
+--- @param source number Player ID
+function GetPlayer(source)
+    if not source then return end
+    if Framework == 'esx' then
+        return ESX.GetPlayerFromId(source)
+    elseif Framework == 'qb' then
+        return QBCore.Functions.GetPlayer(source)
+    elseif Framework == 'qbx' then
+        return exports.qbx_core:GetPlayer(source)
+    else
+        -- Add custom framework here
+    end
+end
+
+-- Return player's name
+--- @param source number Player ID
+--- @return string
+function GetPlayerFullName(source)
+    local player = GetPlayer(source)
+    if not player then return 'Unknown' end
+    if Framework == 'esx' then
+        return player.getName()
+    elseif Framework == 'qb' then
+        return player.PlayerData.charinfo.firstname.. ' ' ..player.PlayerData.charinfo.lastname
+    elseif Framework == 'qbx' then
+        return player.PlayerData.charinfo.firstname.. ' ' ..player.PlayerData.charinfo.lastname
+    else
+        -- Add custom framework here
+    end
+    return 'Unknown'
+end
+
+-- Returns player licences
+--- @param source number Player ID
+--- @param license string|nil Specific licence to get
+function GetPlayerLicense(source, license)
+    local player = GetPlayer(source)
+    if not player then return end
+    if Framework == 'esx' then
+        local result = promise.new()
+        TriggerEvent('esx_license:getLicenses', source, function(licenses)
+            result:resolve(licenses)
+        end)
+        local licenses = Citizen.Await(result)
+        for _, lic in ipairs(licenses) do
+            if lic.type == license then return true end
+        end
+        return false
+    elseif Framework == 'qb' then
+        return player.PlayerData.metadata.licences[license] or false
+    elseif Framework == 'qbx' then
+        return player.PlayerData.metadata.licences[license] or false
+    else
+        -- Add custom framework here
+    end
+end
+
+-- Callback to get player licenses
+---@param source number Player ID
+---@param license string|nil Specific licence to get
+--- @return any|boolean
+lib.callback.register('lation_shops:getPlayerLicense', function(source, license)
+    return GetPlayerLicense(source, license)
+end)
+
+-- Returns player job
+--- @param source number Player ID
+--- @return table
+function GetPlayerJob(source)
+    local player = GetPlayer(source)
+    if not player then return {} end
+
+    if Framework == 'esx' then
+        return {
+            name = player.getJob().name,
+            label = player.getJob().label,
+            grade = player.getJob().grade
+        }
+    elseif Framework == 'qb' then
+        return {
+            name = player.PlayerData.job.name,
+            label = player.PlayerData.job.label,
+            grade = player.PlayerData.job.grade.level
+        }
+    elseif Framework == 'qbx' then
+        return {
+            name = player.PlayerData.job.name,
+            label = player.PlayerData.job.label,
+            grade = player.PlayerData.job.grade.level
+        }
+    else
+        -- Add custom framework here
+    end
+
+    return {}
+end
+
+-- Returns all jobs
+function GetAllJobs()
+    if Framework == 'esx' then
+        return ESX.GetJobs()
+    elseif Framework == 'qb' then
+        return QBCore.Shared.Jobs
+    elseif Framework == 'qbx' then
+        return exports.qbx_core:GetJobs()
+    else
+        -- Add custom framework here
+    end
+
+    return {}
+end
+
+-- Callback to get all jobs
+lib.callback.register('lation_shops:getAllJobs', function()
+    return GetAllJobs()
+end)
+
+-- Function to get a player identifier by source
+--- @param source number Player ID
+function GetIdentifier(source)
+    local player = GetPlayer(source)
+    if not player then return end
+    if Framework == 'esx' then
+        return player.identifier
+    elseif Framework == 'qb' then
+        return player.PlayerData.citizenid
+    elseif Framework == 'qbx' then
+        return player.PlayerData.citizenid
+    else
+        -- Add custom framework here
+    end
+end
+
+-- Returns number of specified item in players inventory
+--- @param source number Player ID
+--- @param item string Item to search
+--- @return number
+function GetItemCount(source, item)
+    if not source or not item then return 0 end
+    local player = GetPlayer(source)
+    if not player then return 0 end
+    if Inventory then
+        if Inventory == 'ox_inventory' then
+            return exports[Inventory]:Search(source, 'count', item) or 0
+        elseif Inventory == 'core_inventory' then
+            return exports[Inventory]:getItemCount(source, item)
+        elseif Inventory == 'jaksam_inventory' then
+            return exports[Inventory]:getTotalItemAmount(source, item) or 0
+        else
+            local itemData = exports[Inventory]:GetItemByName(source, item)
+            if not itemData then return 0 end
+            return itemData.amount or itemData.count or 0
+        end
+    else
+        if Framework == 'esx' then
+            local itemData = player.getInventoryItem(item)
+            if not itemData then return 0 end
+            return itemData.count or itemData.amount or 0
+        elseif Framework == 'qb' then
+            local itemData = player.Functions.GetItemByName(item)
+            if not itemData then return 0 end
+            return itemData.amount or itemData.count or 0
+        else
+            -- Add custom framework here
+        end
+    end
+    return 0
+end
+
+-- Returns if player can carry item
+--- @param source number Player ID
+--- @param item string Item name
+--- @param count number Item quantity
+--- @return boolean
+function CanCarry(source, item, count)
+    if count <= 0 then return true end
+    local player = GetPlayer(source)
+    if not player then return false end
+    if Inventory then
+        if Inventory == 'ox_inventory' then
+            return exports[Inventory]:CanCarryItem(source, item, count)
+        elseif Inventory == 'qb-inventory' then
+            return exports[Inventory]:CanAddItem(source, item, count)
+        elseif Inventory == 'qs-inventory' then
+            return exports[Inventory]:CanCarryItem(source, item, count)
+        elseif Inventory == 'ps-inventory' then
+            -- ps sucks, why do they not have a dedicated export for this..?
+            local totalWeight = exports[Inventory]:GetTotalWeight(player.PlayerData.items)
+            if not totalWeight then return false end
+            local itemInfo = QBCore.Shared.Items[item:lower()]
+            if not itemInfo then return false end
+            if (totalWeight + (itemInfo['weight'] * count)) <= 120000 then
+                return true
+            end
+            return false
+        elseif Inventory == 'origen_inventory' then
+            -- origen's CanCarry export not working as expected, just return true
+            return true
+        elseif Inventory == 'codem-inventory' then
+            -- CodeM docs dont specify an export for this so..
+            return true
+        elseif Inventory == 'core_inventory' then
+            -- core's canCarry export not working as expected, just return true
+            return true
+        elseif Inventory == 'tgiann-inventory' then
+            return exports[Inventory]:CanCarryItem(source, item, count)
+        elseif Inventory == 'jaksam_inventory' then
+            return exports[Inventory]:canCarryItem(source, item, count)
+        else
+            -- Add custom inventory here
+            return true
+        end
+    else
+        if Framework == 'esx' then
+            if player.canCarryItem(item, count) then
+                return true
+            end
+            return false
+        elseif Framework == 'qb' then
+            local totalWeight = QBCore.Player.GetTotalWeight(player.PlayerData.items)
+            if not totalWeight then return false end
+            local itemInfo = QBCore.Shared.Items[item:lower()]
+            if not itemInfo then return false end
+            if (totalWeight + (itemInfo['weight'] * count)) <= 120000 then
+                return true
+            end
+            return false
+        else
+            -- Add custom framework here
+        end
+    end
+    return true
+end
+
+-- Adds an item to players inventory
+--- @param source number Player ID
+--- @param item string Item to add
+--- @param count number Quantity to add
+--- @param metadata any|table Optional metadata
+function AddItem(source, item, count, metadata)
+    if count <= 0 then return end
+    local player = GetPlayer(source)
+    if not player then return end
+    if Inventory then
+        if Inventory == 'ox_inventory' then
+            exports[Inventory]:AddItem(source, item, count, metadata)
+        elseif Inventory == 'core_inventory' or Inventory == 'jaksam_inventory' then
+            exports[Inventory]:addItem(source, item, count, metadata)
+        else
+            exports[Inventory]:AddItem(source, item, count, nil, metadata)
+        end
+    else
+        if Framework == 'esx' then
+            player.addInventoryItem(item, count)
+        elseif Framework == 'qb' then
+            player.Functions.AddItem(item, count, nil, metadata)
+        else
+            -- Add custom framework here
+        end
+    end
+end
+
+-- Removes an item from players inventory
+--- @param source number Player ID
+--- @param item string Item to remove
+--- @param count number Quantity to remove
+function RemoveItem(source, item, count)
+    local player = GetPlayer(source)
+    if not player then return end
+    if Inventory then
+        if Inventory == 'core_inventory' or Inventory == 'jaksam_inventory' then
+            exports[Inventory]:removeItem(source, item, count)
+        else
+            exports[Inventory]:RemoveItem(source, item, count)
+        end
+    else
+        if Framework == 'esx' then
+            player.removeInventoryItem(item, count)
+        elseif Framework == 'qb' then
+            player.Functions.RemoveItem(item, count)
+        else
+            -- Add custom framework here
+        end
+    end
+end
+
+-- Returns correct framework money type if needed
+--- @param type string Money type
+--- @return string
+local function ConvertMoneyType(type)
+    if type == 'money' and (Framework == 'qb' or Framework == 'qbx') then
+        type = 'cash'
+    elseif type == 'cash' and Framework == 'esx' then
+        type = 'money'
+    else
+        -- Add custom framework here
+    end
+    return type
+end
+
+-- Returns balance of players account
+--- @param source number Player ID
+--- @param type string Account
+--- @param shopId string|nil Shop ID for tracking
+--- @return number
+function GetPlayerBalance(source, type, shopId)
+    local player = GetPlayer(source)
+    if not player then return 0 end
+    if Framework == 'esx' then
+        return player.getAccount(ConvertMoneyType(type)).money or 0
+    elseif Framework == 'qb' then
+        return player.PlayerData.money[ConvertMoneyType(type)] or 0
+    elseif Framework == 'qbx' then
+        return player.Functions.GetMoney(ConvertMoneyType(type)) or 0
+    else
+        -- Add custom framework here
+    end
+    return 0
+end
+
+-- Add money to players account
+--- @param source number Player ID
+--- @param type string Account to add to
+--- @param amount number Amount to add
+--- @param shopId string|nil Shop ID for tracking
+function AddPlayerMoney(source, type, amount, shopId)
+    local player = GetPlayer(source)
+    if not player then return end
+    if Framework == 'esx' then
+        player.addAccountMoney(ConvertMoneyType(type), amount)
+    elseif Framework == 'qb' then
+        player.Functions.AddMoney(ConvertMoneyType(type), amount)
+    elseif Framework == 'qbx' then
+        player.Functions.AddMoney(ConvertMoneyType(type), amount)
+    else
+        -- Add custom framework here
+    end
+end
+
+-- Remove money from players account
+--- @param source number Player ID
+--- @param type string Account to remove from
+--- @param amount number Amount to remove
+--- @param shopId string|nil Shop ID for tracking
+function RemovePlayerMoney(source, type, amount, shopId)
+    local player = GetPlayer(source)
+    if not player then return end
+    if Framework == 'esx' then
+        player.removeAccountMoney(ConvertMoneyType(type), amount)
+    elseif Framework == 'qb' then
+        player.Functions.RemoveMoney(ConvertMoneyType(type), amount)
+    elseif Framework == 'qbx' then
+        player.Functions.RemoveMoney(ConvertMoneyType(type), amount)
+    else
+        -- Add custom framework here
+    end
+end
+
+InitFramework()
+InitInventory()
+```
+
+</CodeGroup>
+
+<CodeGroup>
+
+```lua client/utils/interact.lua expandable
+local setup = require 'config.setup'
+
+-- Auto-detect interaction system
+local function DetectInteractSystem()
+    if GetResourceState('ox_target') == 'started' then
+        return 'ox_target'
+    elseif GetResourceState('qb-target') == 'started' then
+        return 'qb-target'
+    elseif GetResourceState('interact') == 'started' then
+        return 'interact'
+    else
+        print('^1[ERROR]: No interaction system was auto-detected.^0')
+        return nil
+    end
+end
+
+-- Get the interaction system to use
+local interact = setup.interact == 'auto' and DetectInteractSystem() or setup.interact
+
+-- Add interaction
+--- @param data table
+local function AddInteraction(data)
+    if interact == 'ox_target' then
+        exports.ox_target:addSphereZone(data)
+    elseif interact == 'qb-target' then
+        exports['qb-target']:AddCircleZone(data.name, data.coords, data.radius, {
+            name = data.name,
+            debugPoly = setup.debug}, {
+            options = data.options,
+            distance = 2,
+        })
+    elseif interact == 'interact' then
+        exports.interact:AddInteraction({
+            coords = data.coords,
+            interactDst = 2.0,
+            id = data.name,
+            options = data.options
+        })
+    elseif interact == 'custom' then
+        -- Add support for a custom target system here
+    else
+        print('^1[ERROR]: No interaction system defined in the config/setup.lua file^0')
+    end
+end
+
+-- Add entity interaction
+--- @param entity number Entity number
+--- @param data table Options table
+local function AddEntityInteraction(entity, data)
+    if interact == 'ox_target' then
+        exports.ox_target:addLocalEntity(entity, data)
+    elseif interact == 'qb-target' then
+        exports['qb-target']:AddTargetEntity(entity, {options = data, distance = 1.75})
+    elseif interact == 'interact' then
+        exports.interact:AddLocalEntityInteraction({
+            entity = entity,
+            interactDst = 1.75,
+            options = data
+        })
+    elseif interact == 'custom' then
+        -- Add support for a custom interaction system here
+    else
+        print('^1[ERROR]: No interaction system defined in the config/setup.lua file^0')
+    end
+end
+
+-- Add model interaction
+--- @param model string Model
+--- @param data table Options table
+local function AddModelInteraction(model, data)
+    if interact == 'ox_target' then
+        exports.ox_target:addModel(model, data)
+    elseif interact == 'qb-target' then
+        exports['qb-target']:AddTargetModel(model, {options = data, distance = 1.75})
+    elseif interact == 'interact' then
+        exports.interact:AddModelInteraction({
+            model = model,
+            id = model,
+            interactDst = 1.75,
+            options = data
+        })
+    elseif interact == 'custom' then
+        -- Add support for a custom interaction system here
+    else
+        print('^1[ERROR]: No interaction system defined in the config/setup.lua file^0')
+    end
+end
+
+-- Remove interaction
+--- @param name string
+local function RemoveInteraction(name)
+    if interact == 'ox_target' then
+        exports.ox_target:removeZone(name)
+    elseif interact == 'qb-target' then
+        exports['qb-target']:RemoveZone(name)
+    elseif interact == 'interact' then
+        exports.interact:RemoveInteraction(name)
+    elseif interact == 'custom' then
+        -- Add support for a custom target system here
+    else
+        print('^1[ERROR]: No interaction system defined in the config/setup.lua file^0')
+    end
+end
+
+-- Remove entity interaction
+--- @param entity any|number
+--- @param data table|string
+local function RemoveEntityInteraction(entity, data)
+    if interact == 'ox_target' then
+        exports.ox_target:removeLocalEntity(entity, data)
+    elseif interact == 'qb-target' then
+        exports['qb-target']:RemoveTargetEntity(entity, data)
+    elseif interact == 'interact' then
+        exports.interact:RemoveLocalEntityInteraction(entity, data)
+    elseif interact == 'custom' then
+        -- Add support for a custom interaction system here
+    else
+        print('^1[ERROR]: No interaction system defined in the config/setup.lua file^0')
+    end
+end
+
+-- Remove model interaction
+--- @param model string Model
+local function RemoveModelInteraction(model)
+    if interact == 'ox_target' then
+        exports.ox_target:removeModel(model, nil)
+    elseif interact == 'qb-target' then
+        exports['qb-target']:RemoveTargetModel(model, nil)
+    elseif interact == 'interact' then
+        exports.interact:RemoveModelInteraction(model, model)
+    elseif interact == 'custom' then
+        -- Add support for a custom interaction system here
+    else
+        print('^1[ERROR]: No interaction system defined in the config/setup.lua file^0')
+    end
+end
+
+return {
+    AddInteraction = AddInteraction,
+    AddEntityInteraction = AddEntityInteraction,
+    AddModelInteraction = AddModelInteraction,
+    RemoveInteraction = RemoveInteraction,
+    RemoveEntityInteraction = RemoveEntityInteraction,
+    RemoveModelInteraction = RemoveModelInteraction
+}
+```
+
+
+```lua client/utils/notify.lua expandable
+local setup =  require 'config.setup'
+
+-- Display a notification
+--- @param message string
+--- @param type any
+function ShowNotification(message, type)
+    if setup.notify == 'lation_ui' then
+        exports.lation_ui:notify({ message = message, type = type or 'info', icon = 'fas fa-shop' })
+    elseif setup.notify == 'ox_lib' then
+        lib.notify({ description = message, type = type or 'inform', position = 'top', icon = 'fas fa-shop' })
+    elseif setup.notify == 'esx' then
+        ESX.ShowNotification(message)
+    elseif setup.notify == 'qb' then
+        QBCore.Functions.Notify(message, type or 'primary')
+    elseif setup.notify == 'okok' then
+        exports['okokNotify']:Alert('Shops', message, 5000, type or 'info', false)
+    elseif setup.notify == 'sd-notify' then
+        exports['sd-notify']:Notify('Shops', message, type or 'primary')
+    elseif setup.notify == 'wasabi_notify' then
+        exports.wasabi_notify:notify('Shops', message, 5000, type or 'info', false, 'fas fa-shop')
+    elseif setup.notify == 'custom' then
+        -- Add custom notifications here
+    end
+end
+
+-- Display notifications from server
+--- @param message string
+--- @param type string
+RegisterNetEvent('lation_shops:notify', function(message, type)
+    ShowNotification(message, type)
+end)
+```
+
+
+```lua client/utils/peds.lua expandable
+-- Spawn ped
+--- @param model string Model
+--- @param position vector4 Position
+--- @return number Ped entity
+local function SpawnPed(model, position)
+    lib.requestModel(model)
+    local ped = CreatePed(0, model, position.x, position.y, position.z - 1.0, position.w, false, true)
+    FreezeEntityPosition(ped, true)
+    SetBlockingOfNonTemporaryEvents(ped, true)
+    SetEntityInvincible(ped, true)
+    return ped
+end
+
+-- Delete ped
+--- @param ped number Ped entity
+local function DeletePed(ped)
+    if DoesEntityExist(ped) then
+        DeleteEntity(ped)
+    end
+end
+
+return {
+    SpawnPed = SpawnPed,
+    DeletePed = DeletePed
+}
+```
+
+</CodeGroup>
+
+<CodeGroup>
+
+```lua server/utils/banking.lua expandable
+local setup = require 'config.setup'
+
+-- Auto-detect banking system
+local function DetectBankingSystem()
+    if GetResourceState('okokBanking') == 'started' then
+        return 'okokBanking'
+    elseif GetResourceState('Renewed-Banking') == 'started' then
+        return 'Renewed-Banking'
+    elseif GetResourceState('fd_banking') == 'started' then
+        return 'fd_banking'
+    elseif GetResourceState('tgg-banking') == 'started' then
+        return 'tgg-banking'
+    elseif GetResourceState('wasabi_banking') == 'started' then
+        return 'wasabi_banking'
+    end
+
+    if Framework == 'qb' then
+        if GetResourceState('qb-banking') == 'started' then
+            local version = GetResourceMetadata('qb-banking', 'version', 0)
+            if version and tonumber(string.sub(version, 1, 3)) >= 2 then
+                return 'qb-banking'
+            end
+        end
+        if GetResourceState('qb-management') == 'started' then
+            return 'qb-management'
+        end
+    elseif Framework == 'esx' then
+        if GetResourceState('esx_society') == 'started' then
+            return 'esx_addonaccount'
+        end
+    end
+
+    print('^1[ERROR]: No banking system auto-detected.^0')
+    return nil
+end
+
+-- Get the banking system to use
+local banking = setup.banking == 'auto' and DetectBankingSystem() or setup.banking
+
+-- Get society account balance
+--- @param society string Society name
+--- @param shopId string|nil Shop ID for tracking
+--- @return number
+local function GetSocietyBalance(society, shopId)
+    if banking == 'qb-banking' then
+        return exports['qb-banking']:GetAccountBalance(society) or 0
+    elseif banking == 'qb-management' then
+        return exports['qb-management']:GetAccount(society) or 0
+    elseif banking == 'esx_addonaccount' then
+        local balance = promise.new()
+        TriggerEvent("esx_society:getSociety", society, function(data)
+            if not data then return balance:resolve(0) end
+
+            TriggerEvent("esx_addonaccount:getSharedAccount", data.account, function(account)
+                return balance:resolve(account.money)
+            end)
+        end)
+        return Citizen.Await(balance)
+    elseif banking == 'Renewed-Banking' then
+        return exports['Renewed-Banking']:getAccountMoney(society) or 0
+    elseif banking == 'okokBanking' then
+        return exports.okokBanking:GetAccount(society) or 0
+    elseif banking == 'fd_banking' then
+        return exports.fd_banking:GetAccount(society) or 0
+    elseif banking == 'tgg-banking' then
+        return exports['tgg-banking']:GetSocietyAccountMoney(society) or 0
+    elseif banking == 'wasabi_banking' then
+        return exports.wasabi_banking:GetAccountBalance(society, 'society') or 0
+    else
+        -- Add custom banking here
+    end
+    return 0
+end
+
+-- Add money to society account
+--- @param society string Society name
+--- @param amount number Amount to add
+--- @param shopId string|nil Shop ID for tracking
+local function AddSocietyMoney(society, amount, shopId)
+    if banking == 'qb-banking' then
+        exports['qb-banking']:AddMoney(society, amount)
+    elseif banking == 'qb-management' then
+        exports['qb-management']:AddMoney(society, amount)
+    elseif banking == 'esx_addonaccount' then
+        TriggerEvent("esx_society:getSociety", society, function(data)
+            TriggerEvent("esx_addonaccount:getSharedAccount", data.account, function(account)
+                account.addMoney(amount)
+            end)
+        end)
+    elseif banking == 'Renewed-Banking' then
+        exports['Renewed-Banking']:addAccountMoney(society, amount)
+    elseif banking == 'okokBanking' then
+        exports.okokBanking:AddMoney(society, amount)
+    elseif banking == 'fd_banking' then
+        exports.fd_banking:AddMoney(society, amount)
+    elseif banking == 'tgg-banking' then
+        exports['tgg-banking']:AddSocietyMoney(society, amount)
+    elseif banking == 'wasabi_banking' then
+        exports.wasabi_banking:AddMoney('society', society, amount)
+    else
+        -- Add custom banking here
+    end
+end
+
+-- Remove money from society account
+--- @param society string Society name
+--- @param amount number Amount to remove
+--- @param shopId string|nil Shop ID for tracking
+local function RemoveSocietyMoney(society, amount, shopId)
+    if banking == 'qb-banking' then
+        exports['qb-banking']:RemoveMoney(society, amount)
+    elseif banking == 'qb-management' then
+        exports['qb-management']:RemoveMoney(society, amount)
+    elseif banking == 'esx_addonaccount' then
+        TriggerEvent("esx_society:getSociety", society, function(data)
+            TriggerEvent("esx_addonaccount:getSharedAccount", data.account, function(account)
+                account.removeMoney(amount)
+            end)
+        end)
+    elseif banking == 'Renewed-Banking' then
+        exports['Renewed-Banking']:removeAccountMoney(society, amount)
+    elseif banking == 'okokBanking' then
+        exports.okokBanking:RemoveMoney(society, amount)
+    elseif banking == 'fd_banking' then
+        exports.fd_banking:RemoveMoney(society, amount)
+    elseif banking == 'tgg-banking' then
+        exports['tgg-banking']:RemoveSocietyMoney(society, amount)
+    elseif banking == 'wasabi_banking' then
+        exports.wasabi_banking:RemoveMoney('society', society, amount)
+    else
+        -- Add custom banking here
+    end
+end
+
+-- Get custom payment method balance
+--- @param source number Player ID
+--- @param paymentId string Payment method ID
+--- @param shopId string|nil Shop ID for tracking
+--- @return number Balance
+local function GetCustomBalance(source, paymentId, shopId)
+    -- Example: Handle special custom payment methods here
+    -- By default, paymentId is treated as an item name
+
+    if paymentId == 'example_special_currency' then
+        -- return exports.your_resource:GetBalance(source) or 0
+    else
+        -- Use paymentId as item name (e.g., 'black_money', 'crypto', 'gold')
+        return GetItemCount(source, paymentId) or 0
+    end
+
+    return 0
+end
+
+-- Remove custom payment method
+--- @param source number Player ID
+--- @param paymentId string Payment method ID
+--- @param amount number Amount to remove
+--- @param shopId string|nil Shop ID for tracking
+local function RemoveCustomMoney(source, paymentId, amount, shopId)
+    -- Example: Handle special custom payment methods here
+    -- By default, paymentId is treated as an item name
+
+    if paymentId == 'example_special_currency' then
+        -- exports.your_resource:RemoveMoney(source, amount)
+    else
+        -- Use paymentId as item name (e.g., 'black_money', 'crypto', 'gold')
+        RemoveItem(source, paymentId, amount)
+    end
+end
+
+return {
+    GetSocietyBalance = GetSocietyBalance,
+    AddSocietyMoney = AddSocietyMoney,
+    RemoveSocietyMoney = RemoveSocietyMoney,
+    GetCustomBalance = GetCustomBalance,
+    RemoveCustomMoney = RemoveCustomMoney
+}
+```
+
+
+```lua server/utils/hooks.lua expandable
+--- ===========================================================================
+--- CUSTOM HOOKS
+--- ===========================================================================
+--- These are empty functions that you can fill with custom logic for your server.
+--- They are called at specific points during shop operations.
+
+--- Called BEFORE a player purchases an item from a shop
+--- Return false to deny the purchase, or true to allow it
+--- @param source number Player ID
+--- @param shopId string Shop ID (e.g., '24_7', 'weapon_shop')
+--- @param item string Item name being purchased
+--- @param quantity number Quantity being purchased
+--- @param price number Price per item
+--- @param metadata table|nil Item metadata
+--- @return boolean allowed Whether the purchase should be allowed
+function OnBeforeItemPurchase(source, shopId, item, quantity, price, metadata)
+    -- Example: Limit purchases based on player level
+    -- local playerLevel = exports.xp_system:GetLevel(source)
+    -- if item == 'advanced_rifle' and playerLevel < 10 then
+    --     return false
+    -- end
+
+    return true -- Allow the purchase
+end
+
+--- Called to modify item metadata BEFORE the item is added to inventory
+--- Return a table to use custom metadata, or nil to use the shop's default metadata
+--- This is useful for items that need player-specific data (e.g., ID cards)
+--- @param source number Player ID
+--- @param shopId string Shop ID (e.g., '24_7', 'weapon_shop')
+--- @param item string Item name being purchased
+--- @param quantity number Quantity being purchased
+--- @param price number Price per item
+--- @param metadata table|nil Original item metadata from shop
+--- @return table|nil customMetadata Custom metadata to use, or nil to use original
+function OnPurchaseItemMetadata(source, shopId, item, quantity, price, metadata)
+    -- Example: Add player data to ID card
+    -- if item == 'id_card' then
+    --     return exports.qbx_idcard:GetMetaLicense(source, 'id_card')
+    -- end
+
+    return nil -- Return nil to use shop's original metadata and/or no metadata
+end
+
+--- Called when a player purchases an item from a shop
+--- @param source number Player ID
+--- @param shopId string Shop ID (e.g., '24_7', 'weapon_shop')
+--- @param item string Item name that was purchased
+--- @param quantity number Quantity purchased
+--- @param price number Price per item
+--- @param metadata table|nil Item metadata
+function OnItemPurchased(source, shopId, item, quantity, price, metadata)
+    -- Example: Register weapon purchase
+    -- if shopId == 'weapon_shop' then
+    --     exports['your_mdt']:RegisterWeapon(source, item)
+    -- end
+
+    -- Example: Alert police for illegal purchases
+    -- if shopId == 'illegal_shop' then
+    --     TriggerEvent('police:alert', 'Illegal purchase detected')
+    -- end
+end
+
+--- Called when a shop is created by an admin
+--- @param source number Admin player ID
+--- @param shopId string Shop ID
+--- @param shopData table Complete shop data
+function OnShopCreated(source, shopId, shopData)
+
+end
+
+--- Called when a shop is edited by an admin
+--- @param source number Admin player ID
+--- @param shopId string Shop ID
+--- @param shopData table Updated shop data
+function OnShopEdited(source, shopId, shopData)
+
+end
+
+--- Called when a shop is deleted by an admin
+--- @param source number Admin player ID
+--- @param shopId string Shop ID
+function OnShopDeleted(source, shopId)
+
+end
+
+--- Called when revenue is shared to a society account
+--- @param shopId string Shop ID
+--- @param society string Society/job name
+--- @param amount number Amount shared
+--- @param percentage number Percentage of revenue shared
+function OnRevenueShared(shopId, society, amount, percentage)
+
+end
+
+return {
+    OnBeforeItemPurchase = OnBeforeItemPurchase,
+    OnPurchaseItemMetadata = OnPurchaseItemMetadata,
+    OnItemPurchased = OnItemPurchased,
+    OnShopCreated = OnShopCreated,
+    OnShopEdited = OnShopEdited,
+    OnShopDeleted = OnShopDeleted,
+    OnRevenueShared = OnRevenueShared
+}
+```
+
+
+```lua server/utils/logging.lua expandable
+local logs = require 'config.logs'
+
+-- Check to see if fm-logs or fmsdk is started
+local fmlogs = GetResourceState('fm-logs') == 'started'
+local fmsdk = GetResourceState('fmsdk') == 'started'
+
+-- Log player events if applicable
+--- @param source number Player ID
+--- @param title string Log title
+--- @param message string Message contents
+function LogEvent(source, title, message)
+    if logs.service == 'fivemanage' then
+        if not fmsdk then return end
+        if logs.screenshots then
+            exports.fmsdk:takeServerImage(source, {
+                name = title,
+                description = message,
+            })
+        else
+            exports.fmsdk:LogMessage('info', message)
+        end
+    elseif logs.service == 'fivemerr' then
+        if not fmlogs then return end
+        exports['fm-logs']:createLog({
+            LogType = 'Player',
+            Message = message,
+            Resource = 'lation_shops',
+            Source = source,
+        }, { Screenshot = logs.screenshots })
+    elseif logs.service == 'discord' then
+        local embed = {
+            {
+                ["color"] = 16711680,
+                ["title"] = "**".. title .."**",
+                ["description"] = message,
+                ["footer"] = {
+                    ["text"] = os.date("%a %b %d, %I:%M%p"),
+                    ["icon_url"] = logs.discord.footer
+                }
+            }
+        }
+        PerformHttpRequest(logs.discord.link, function()
+        end, 'POST', json.encode({username = logs.discord.name, embeds = embed, avatar_url = logs.discord.image}),
+        {['Content-Type'] = 'application/json'})
+    end
+end
+```
+
+</CodeGroup>
