@@ -1,0 +1,164 @@
+---
+title: "Notify"
+description: "Customizable notifications with positioning, styling, and type-based appearance"
+icon: "bell"
+---
+
+## Quick Start
+
+```lua
+exports.lation_ui:notify({
+    title = 'Success',
+    message = 'Profile updated successfully',
+    type = 'success'
+})
+```
+
+## Functions
+
+<AccordionGroup>
+  <Accordion title="notify" icon="bell">
+    Display a notification to the player.
+
+    ```lua
+    exports.lation_ui:notify(data)
+    ```
+
+    **Parameters:**
+
+    - `data` (table) - Notification configuration object (see [Options](#options))
+  </Accordion>
+</AccordionGroup>
+
+## Configuration
+
+### Options
+
+<ParamField path="id" type="string">
+  Unique identifier - when provided will only show once when spammed or update the same notification
+</ParamField>
+
+<ParamField path="title" type="string">
+  Notification title (supports markdown)
+
+  <Note>
+    Either `title` or `message` is required
+  </Note>
+</ParamField>
+
+<ParamField path="message" type="string">
+  Notification message (supports markdown)
+
+  <Note>
+    Either `title` or `message` is required. Can also use `description` as an alias
+  </Note>
+</ParamField>
+
+<ParamField path="type" default="'info'" type="string">
+  Notification type
+
+  Available options: `'info'`, `'success'`, `'warning'`, `'error'`
+</ParamField>
+
+<ParamField path="duration" default="5000" type="number">
+  Duration in milliseconds
+</ParamField>
+
+<ParamField path="position" default="'top-right'" type="string">
+  Notification position
+
+  Available options: `'top-left'`, `'top'`, `'top-right'`, `'center-left'`, `'center-right'`, `'bottom-left'`, `'bottom'`, `'bottom-right'`
+
+  <Note>
+    `'top'` is an alias for `'top-center'`
+  </Note>
+</ParamField>
+
+<ParamField path="icon" type="string">
+  FontAwesome icon class
+</ParamField>
+
+<ParamField path="iconColor" default="Auto" type="string">
+  Icon color (hex or [CSS color name](https://htmlcolorcodes.com/color-names/))
+
+  <Note>
+    Automatically determined by notification type if not specified
+  </Note>
+</ParamField>
+
+<ParamField path="iconAnimation" type="string">
+  Icon animation type
+
+  Available options: `'spin'`, `'spinPulse'`, `'spinReverse'`, `'pulse'`, `'beat'`, `'fade'`, `'beatFade'`, `'bounce'`, `'shake'`
+</ParamField>
+
+<ParamField path="bgColor" default="Auto" type="string">
+  Background color (hex or [CSS color name](https://htmlcolorcodes.com/color-names/))
+
+  <Note>
+    Automatically determined by notification type if not specified
+  </Note>
+</ParamField>
+
+<ParamField path="txtColor" default="Auto" type="string">
+  Text color (hex or [CSS color name](https://htmlcolorcodes.com/color-names/))
+
+  <Note>
+    Automatically determined by notification type if not specified
+  </Note>
+</ParamField>
+
+<ParamField path="titleColor" default="Auto" type="string">
+  Title text color (hex or [CSS color name](https://htmlcolorcodes.com/color-names/))
+
+  <Note>
+    Automatically determined by notification type if not specified
+  </Note>
+</ParamField>
+
+<ParamField path="sound" type="table">
+  Sound configuration (see [Sound Options](#sound-options))
+</ParamField>
+
+### Sound Options
+
+<ParamField path="bank" type="string">
+  Name of audio bank that contains the soundset
+</ParamField>
+
+<ParamField path="set" type="string" required>
+  Soundset the soundname is a member of
+</ParamField>
+
+<ParamField path="name" type="string" required>
+  Sound name to play
+</ParamField>
+
+## Server-Side Usage
+
+To send notifications from the server, use the client event:
+
+```lua
+TriggerClientEvent('lation_ui:notify', source, data)
+```
+
+**Parameters:**
+
+- `source` (number) - The player's server ID
+- `data` (table) - Notification data table (see [Options](#options))
+
+**Example:**
+
+```lua
+TriggerClientEvent('lation_ui:notify', source, {
+    title = 'Server Message',
+    message = 'You received a reward',
+    type = 'success'
+})
+```
+
+## Preview
+
+<Frame>
+  ![Notification Preview](/resources/modern-ui/components/notify/example.webp)
+</Frame>

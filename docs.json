@@ -222,7 +222,8 @@
                 "pages": [
                   "modern-ui/components/alert-dialog",
                   "modern-ui/components/input-dialog",
-                  "modern-ui/components/menu"
+                  "modern-ui/components/menu",
+                  "modern-ui/components/notify"
                 ]
               }
             ]
