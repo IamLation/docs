@@ -1,7 +1,7 @@
 ---
-title: 'Progress'
-description: 'Progress bar with optional multi-step feature & more'
-icon: 'bars-progress'
+title: "Progress"
+description: "Progress bar with optional multi-step feature & more"
+icon: "bars-progress"
 ---
 
 ## Quick Start
@@ -32,12 +32,13 @@ end
     ```
 
     **Parameters:**
+
     - `data` (table) - Progress bar configuration object (see [Options](#options))
 
     **Returns:**
+
     - `success` (boolean) - `true` if completed, `false` if cancelled/failed
   </Accordion>
-
   <Accordion title="progressActive" icon="circle-question">
     Check if a progress bar is currently active.
 
@@ -46,9 +47,9 @@ end
     ```
 
     **Returns:**
+
     - `isActive` (boolean) - `true` if progress is active, `false` otherwise
   </Accordion>
-
   <Accordion title="cancelProgress" icon="xmark">
     Cancel the currently active progress bar.
 
@@ -68,8 +69,10 @@ end
 
 <ParamField path="description" type="string">
   Progress description text
-  
-  <Note>Overridden by steps if multi-step feature is used</Note>
+
+  <Note>
+    Overridden by steps if multi-step feature is used
+  </Note>
 </ParamField>
 
 <ParamField path="duration" type="number" required>
@@ -80,17 +83,17 @@ end
   FontAwesome icon class
 </ParamField>
 
-<ParamField path="iconColor" type="string" default="'#71717A'">
+<ParamField path="iconColor" default="#71717A" type="string">
   Icon color (hex or [CSS color name](https://htmlcolorcodes.com/color-names/))
 </ParamField>
 
 <ParamField path="iconAnimation" type="string">
   Icon animation type
-  
+
   Available options: `'spin'`, `'spinPulse'`, `'spinReverse'`, `'pulse'`, `'beat'`, `'fade'`, `'beatFade'`, `'bounce'`, `'shake'`
 </ParamField>
 
-<ParamField path="color" type="string" default="#3B82F6">
+<ParamField path="color" default="#3B82F6" type="string">
   Progress bar color (hex or [CSS color name](https://htmlcolorcodes.com/color-names/))
 </ParamField>
 
@@ -98,27 +101,27 @@ end
   Array of step objects with descriptions for multi-step progress (see [Steps](#steps))
 </ParamField>
 
-<ParamField path="canCancel" type="boolean" default="true">
+<ParamField path="canCancel" default="true" type="boolean">
   Whether progress can be cancelled with X key
 </ParamField>
 
-<ParamField path="useWhileDead" type="boolean" default="false">
+<ParamField path="useWhileDead" default="false" type="boolean">
   Allow progress while player is dead
 </ParamField>
 
-<ParamField path="allowRagdoll" type="boolean" default="false">
+<ParamField path="allowRagdoll" default="false" type="boolean">
   Allow progress while player is ragdolled
 </ParamField>
 
-<ParamField path="allowCuffed" type="boolean" default="false">
+<ParamField path="allowCuffed" default="false" type="boolean">
   Allow progress while player is cuffed
 </ParamField>
 
-<ParamField path="allowFalling" type="boolean" default="false">
+<ParamField path="allowFalling" default="false" type="boolean">
   Allow progress while player is falling
 </ParamField>
 
-<ParamField path="allowSwimming" type="boolean" default="false">
+<ParamField path="allowSwimming" default="false" type="boolean">
   Allow progress while player is swimming
 </ParamField>
 
@@ -157,53 +160,57 @@ steps = {
 
 <ParamField path="dict" type="string">
   Animation dictionary
-  
-  <Note>Either `dict` or `scenario` is required if using animations</Note>
+
+  <Note>
+    Either `dict` or `scenario` is required if using animations
+  </Note>
 </ParamField>
 
 <ParamField path="clip" type="string" required>
   Animation clip name
 </ParamField>
 
-<ParamField path="flag" type="number" default="49">
+<ParamField path="flag" default="49" type="number">
   Animation flags
 </ParamField>
 
-<ParamField path="blendIn" type="number" default="3.0">
+<ParamField path="blendIn" default="3.0" type="number">
   Blend in speed
 </ParamField>
 
-<ParamField path="blendOut" type="number" default="1.0">
+<ParamField path="blendOut" default="1.0" type="number">
   Blend out speed
 </ParamField>
 
-<ParamField path="duration" type="number" default="-1">
+<ParamField path="duration" default="-1" type="number">
   Animation duration (-1 for loop)
 </ParamField>
 
-<ParamField path="playbackRate" type="number" default="0">
+<ParamField path="playbackRate" default="0" type="number">
   Playback rate
 </ParamField>
 
-<ParamField path="lockX" type="boolean" default="false">
+<ParamField path="lockX" default="false" type="boolean">
   Lock X axis
 </ParamField>
 
-<ParamField path="lockY" type="boolean" default="false">
+<ParamField path="lockY" default="false" type="boolean">
   Lock Y axis
 </ParamField>
 
-<ParamField path="lockZ" type="boolean" default="false">
+<ParamField path="lockZ" default="false" type="boolean">
   Lock Z axis
 </ParamField>
 
 <ParamField path="scenario" type="string">
   Scenario name (alternative to dict/clip)
-  
-  <Note>Either `dict` or `scenario` is required if using animations</Note>
+
+  <Note>
+    Either `dict` or `scenario` is required if using animations
+  </Note>
 </ParamField>
 
-<ParamField path="playEnter" type="boolean" default="true">
+<ParamField path="playEnter" default="true" type="boolean">
   Play enter animation for scenarios
 </ParamField>
 
@@ -213,7 +220,7 @@ steps = {
   Prop model hash
 </ParamField>
 
-<ParamField path="bone" type="number" default="60309">
+<ParamField path="bone" default="60309" type="number">
   Bone index to attach prop to
 </ParamField>
 
@@ -225,34 +232,34 @@ steps = {
   Rotation offset as table: `{x, y, z}`
 </ParamField>
 
-<ParamField path="rotOrder" type="number" default="0">
+<ParamField path="rotOrder" default="0" type="number">
   Rotation order
 </ParamField>
 
 ### Disable
 
-<ParamField path="move" type="boolean" default="false">
+<ParamField path="move" default="false" type="boolean">
   Disable player movement
 </ParamField>
 
-<ParamField path="sprint" type="boolean" default="false">
+<ParamField path="sprint" default="false" type="boolean">
   Disable sprinting only
 </ParamField>
 
-<ParamField path="car" type="boolean" default="false">
+<ParamField path="car" default="false" type="boolean">
   Disable vehicle controls
 </ParamField>
 
-<ParamField path="combat" type="boolean" default="false">
+<ParamField path="combat" default="false" type="boolean">
   Disable combat actions
 </ParamField>
 
-<ParamField path="mouse" type="boolean" default="false">
+<ParamField path="mouse" default="false" type="boolean">
   Disable mouse look
 </ParamField>
 
 ## Preview
 
 <Frame>
-  <img src="/resources/modern-ui/components/progress-bar/preview.webp" alt="Progress Bar Preview" />
+  ![Progress Bar Preview](/resources/modern-ui/components/progress/example.webp)
 </Frame>
