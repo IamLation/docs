@@ -1,0 +1,221 @@
+---
+title: "Radial"
+description: "Radial menu with hierarchical menus, progress rings, and status badges"
+icon: "circle-dot"
+---
+
+## Quick Start
+
+```lua
+exports.lation_ui:registerRadial({
+    id = 'my_menu',
+    items = {
+        {
+            label = 'Option 1',
+            icon = 'user',
+            onSelect = function()
+                print('Option 1 selected')
+            end
+        },
+        {
+            label = 'Option 2',
+            icon = 'car',
+            onSelect = function()
+                print('Option 2 selected')
+            end
+        }
+    }
+})
+
+exports.lation_ui:addRadialItem({
+    id = 'my_item',
+    label = 'My Menu',
+    icon = 'circle',
+    menu = 'my_menu'
+})
+```
+
+## Functions
+
+<AccordionGroup>
+  <Accordion title="registerRadial" icon="plus">
+    Register a radial submenu with the specified configuration.
+
+    ```lua
+    exports.lation_ui:registerRadial(radialData)
+    ```
+
+    **Parameters:**
+    - `radialData` (table) - Radial menu configuration object (see [Registration Options](#registration-options))
+  </Accordion>
+
+  <Accordion title="addRadialItem" icon="circle-plus">
+    Add one or more items to the global radial menu.
+
+    ```lua
+    exports.lation_ui:addRadialItem(item) -- Single item
+    exports.lation_ui:addRadialItem({item1, item2}) -- Multiple items
+    ```
+
+    **Parameters:**
+    - `item` (table | table[]) - Single item or array of items (see [Item Properties](#item-properties))
+  </Accordion>
+
+  <Accordion title="removeRadialItem" icon="circle-minus">
+    Remove an item from the global radial menu.
+
+    ```lua
+    exports.lation_ui:removeRadialItem(itemId)
+    ```
+
+    **Parameters:**
+    - `itemId` (string) - Unique identifier of the item to remove
+  </Accordion>
+
+  <Accordion title="clearRadialItems" icon="trash">
+    Clear all items from the global radial menu.
+
+    ```lua
+    exports.lation_ui:clearRadialItems()
+    ```
+  </Accordion>
+
+  <Accordion title="hideRadial" icon="eye-slash">
+    Hide the radial menu.
+
+    ```lua
+    exports.lation_ui:hideRadial()
+    ```
+  </Accordion>
+
+  <Accordion title="disableRadial" icon="ban">
+    Enable or disable the radial menu.
+
+    ```lua
+    exports.lation_ui:disableRadial(state)
+    ```
+
+    **Parameters:**
+    - `state` (boolean) - `true` to disable, `false` to enable
+  </Accordion>
+
+  <Accordion title="getCurrentRadialId" icon="question">
+    Get the ID of the currently open radial menu.
+
+    ```lua
+    local menuId = exports.lation_ui:getCurrentRadialId()
+    ```
+
+    **Returns:**
+    - `menuId` (string | nil) - The ID of the currently open menu, or nil if no menu is open
+  </Accordion>
+</AccordionGroup>
+
+## Configuration
+
+### Registration Options
+
+<ParamField path="id" type="string" required>
+  Unique menu identifier
+</ParamField>
+
+<ParamField path="items" type="table" required>
+  Array of menu items (see [Item Properties](#item-properties))
+</ParamField>
+
+### Item Properties
+
+<ParamField path="id" type="string">
+  Unique item identifier (required for global items)
+</ParamField>
+
+<ParamField path="label" type="string" required>
+  Item display text
+</ParamField>
+
+<ParamField path="icon" type="string">
+  FontAwesome icon class or image URL
+  
+  Supported image formats: `.png`, `.webp`, `.jpg`, `.jpeg`, `.gif`, `.svg`
+</ParamField>
+
+<ParamField path="iconColor" type="string" default="'#9CA3AF'">
+  Icon color (hex or [CSS color name](https://htmlcolorcodes.com/color-names/))
+</ParamField>
+
+<ParamField path="iconAnimation" type="string">
+  Icon animation type
+  
+  Available options: `'spin'`, `'spinPulse'`, `'spinReverse'`, `'pulse'`, `'beat'`, `'fade'`, `'beatFade'`, `'bounce'`, `'shake'`
+</ParamField>
+
+<ParamField path="iconAnimateOnHover" type="boolean" default="false">
+  If `true`, icon only animates on hover instead of continuously
+</ParamField>
+
+<ParamField path="menu" type="string">
+  Submenu ID to open
+</ParamField>
+
+<ParamField path="progress" type="number">
+  Progress ring value (0-100)
+</ParamField>
+
+<ParamField path="progressColor" type="string" default="'#3B82F6'">
+  Progress ring color (hex or [CSS color name](https://htmlcolorcodes.com/color-names/))
+</ParamField>
+
+<ParamField path="badge" type="number | string">
+  Badge text or count
+  
+  <Note>Numbers greater than 99 display as "99"</Note>
+</ParamField>
+
+<ParamField path="badgeColor" type="string" default="'#EF4444'">
+  Badge color (hex or [CSS color name](https://htmlcolorcodes.com/color-names/))
+</ParamField>
+
+<ParamField path="readOnly" type="boolean" default="false">
+  Display only, no hover or click
+</ParamField>
+
+<ParamField path="keepOpen" type="boolean" default="false">
+  Keep menu open after clicking
+</ParamField>
+
+<ParamField path="onSelect" type="function">
+  Callback function executed when item is selected
+  
+  **Parameters:**
+  - `currentMenu` (string | nil) - The current menu ID (or `nil` for global menu)
+  - `itemIndex` (number) - The clicked item's index
+</ParamField>
+
+## Usage Notes
+
+<Note>
+  Press **Z** to open/close the global radial menu (will only display when there is at least one item)
+</Note>
+
+**Controls:**
+- **Left click** to select an item
+- **Right click** or click center button to go back
+
+**Features:**
+- Progress rings display 0-100% around icons
+- Badges show counts (1-99) or text (single character recommended)
+- Read-only items are informational and cannot be clicked
+
+## Preview
+
+<Frame>
+  <img src="/resources/modern-ui/components/radial/global-menu.webp" alt="Radial Menu Global" />
+</Frame>
+
+<Frame>
+  <img src="/resources/modern-ui/components/radial/player-submenu.webp" alt="Radial Menu Submenu" />
+</Frame>
+
+<Frame>
+  <img src="/resources/modern-ui/components/radial/examples-submenu.webp" alt="Radial Menu Submenu" />
+</Frame>

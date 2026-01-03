@@ -224,7 +224,8 @@
                   "modern-ui/components/input",
                   "modern-ui/components/menu",
                   "modern-ui/components/notify",
-                  "resources/modern-ui/components/progress"
+                  "modern-ui/components/progress",
+                  "modern-ui/components/radial"
                 ]
               }
             ]
