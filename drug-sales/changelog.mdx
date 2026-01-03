@@ -1,0 +1,82 @@
+---
+title: "Changelog"
+icon: "server"
+description: "A chronological log of every release, feature addition, and bug fix"
+---
+
+<Update label="2.2.0" description="Dec 20, 2025">
+  Added tgiann & jaksam inventory support\
+  Config option to revert back to old selling backend\
+  Fixed resource not starting properly on server start up
+</Update>
+
+<Update label="2.1.10" description="Sep 23, 2025">
+  Fixed multiple players selling to a single ped (its now essentially server-synced, once a ped bought drugs, it no longer wants drugs from anyone)\
+  Added "xpAdded" variable to DrugSold function
+</Update>
+
+<Update label="2.1.9" description="Jul 2, 2025">
+  Maintenance release for lation_ui
+</Update>
+
+<Update label="2.1.8" description="Mar 6, 2025">
+  Fixed robbed coke items returning with no metadata
+</Update>
+
+<Update label="2.1.7" description="Feb 20, 2025">
+  Added support for lation_coke\
+  Added check for install folder/.sql file(s)\
+  Update to new version checking API\
+  Update docs url(s) to new path
+</Update>
+
+<Update label="2.1.6" description="Nov 18, 2024">
+  Add ability to add an iconColor field to drugs\
+  Fix robbed items not returning
+</Update>
+
+<Update label="2.1.5" description="Nov 7, 2024">
+  Added metadata support for weed v3 items to sell based on purity\
+  Fixed default rcore_dispatch implementation\
+  Updated config with new item names and new section\
+  Updated GetPlayerInventory function\
+  Reduced the number of calls to GetData function
+</Update>
+
+<Update label="2.1.4" description="Oct 22, 2024">
+  Fixed minor exploit reported today
+</Update>
+
+<Update label="2.1.3" description="Oct 18, 2024">
+  Remove ped freezing during reject\
+  Add meth prop for ls_meth items
+</Update>
+
+<Update label="2.1.2" description="Oct 10, 2024">
+  Fix meth item not maintaining metadata after robbery
+</Update>
+
+<Update label="2.1.1" description="Oct 9, 2024">
+  Fix PayPlayer function
+</Update>
+
+<Update label="2.1.0" description="Oct 9, 2024">
+  Added new config options for lation_meth integration to price meth based on purity\
+  Added new bridge with native support for QBox & ox_core\
+  Added support for Fivemanage & Fivemerr logging systems\
+  Added chance for "silent" police calls to give police more chances to catch sales in progress\
+  Player character is now frozen in place during rejection animation\
+  Fixed stolen items sometimes returning as a different item
+</Update>
+
+<Update label="2.0.2" description="Jun 11, 2024">
+  Fix flawed logic regarding drug quantity minimums
+</Update>
+
+<Update label="2.0.1" description="Jun 11, 2024">
+  Added ability to lock individual drugs by rep level
+</Update>
+
+<Update label="2.0.0" description="Jun 11, 2024">
+  Initial v2 release
+</Update>

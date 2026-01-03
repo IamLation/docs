@@ -1,0 +1,37 @@
+---
+title: "Shared"
+description: "All exports available on the client and server"
+icon: "share-all"
+---
+
+### **GetData**
+
+Retrieves player data. Optionally, you can pass a string to get a specific piece of data.
+
+<Tabs>
+  <Tab title="Client">
+    ```lua
+    exports.lation_selling:GetData(key)
+    ```
+
+    <ParamField path="key" type="string">
+      The specific player data field you want to retrieve (e.g., `"level"`, `"rep"`, etc). If omitted, returns a table with all player data.
+    </ParamField>
+  </Tab>
+  <Tab title="Server">
+    ```lua
+    exports.lation_selling:GetData(source, key)
+    ```
+
+    <ParamField path="source" type="string" required>
+      The source (_player ID_) to retrieve data from.
+    </ParamField>
+    <ParamField path="key" type="string">
+      The specific player data field you want to retrieve (e.g., `"level"`, `"rep"`, etc). If omitted, returns a table with all player data.
+    </ParamField>
+  </Tab>
+</Tabs>
+
+<Note>
+  Looking for an export we don’t have listed here? Contact us and we’ll do what we can!
+</Note>

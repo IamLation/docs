@@ -1,0 +1,2231 @@
+---
+title: "Previews"
+description: "Preview open source files included with this resource"
+icon: "eye"
+---
+
+<CodeGroup>
+
+```lua config.lua expandable
+Config = {}
+
+----------------------------------------------
+--        🛠️ Setup the basics below
+----------------------------------------------
+
+Config.Setup = {
+    -- Use only if needed, directed by support or know what you're doing
+    -- Notice: enabling debug features will significantly increase resmon
+    -- And should always be disabled in production
+    debug = false,
+    -- Set your target system below
+    -- Available options are: 'ox_target', 'qb-target', 'qtarget', 'custom' & 'none'
+    -- 'custom' needs to be added to client/functions.lua
+    -- If 'none' then TextUI is used instead of targeting
+    target = 'none',
+    -- Set your notification system below
+    -- Available options are: 'lation_ui', 'ox_lib', 'esx', 'qb', 'okok', 'sd-notify', 'wasabi_notify' & 'custom'
+    -- 'custom' needs to be added to client/functions.lua
+    notify = 'ox_lib',
+    -- Set your context menu system below
+    -- Available options are: 'lation_ui', 'ox_lib' & 'custom'
+    menu = 'ox_lib',
+    -- Set your dispatch system below
+    -- Available options: cd_dispatch, ps-dispatch, qs-dispatch, core_dispatch,
+    -- rcore_dispatch, aty_dispatch, op-dispatch, origen_police, emergencydispatch & 'custom'
+    -- 'custom' needs to be added manually to client/functions.lua
+    dispatch = 'custom',
+    -- Do you want to be notified via server console if an update is available?
+    -- True if yes, false if no
+    versionCheck = true,
+    -- The below is only used if target = 'none'
+    -- This will be the key used for interactions if no target is set
+    -- More options here: https://docs.fivem.net/docs/game-references/controls/
+    interactKey = 38,
+    -- 'requestWait' option below is how long the client should wait for a model/anim to load
+    -- Do not edit unless you know what you are doing or directed via support member
+    requestWait = 10000,
+    -- If you want to disable specific jobs from selling drugs
+    -- Then put the job name(s) below
+    blacklistJobs = { 'police', 'ambulance' },
+    -- Do you want to enable a dymanic inventory check that verifies the player
+    -- Has at least one of the drugs in their inventory before applying interactions?
+    -- If false, interactions will always be available, even if the player doesn't have
+    -- Any of the drugs/items in their inventory
+    dymanic = true,
+    -- Do you want to use the legacy selling system?
+    -- If false, uses new system: once a ped is sold to, no one else can sell to them (global)
+    -- If true, uses old system: each player can only sell to a ped once (per-player)
+    legacySelling = false
+}
+
+----------------------------------------------
+--      🚔 Set your police options
+----------------------------------------------
+
+Config.Police = {
+    -- Add your police job(s) below
+    jobs = { 'police', 'sheriff' },
+    -- "Risk" is a feature you can enable that will increase the price of
+    -- Drugs based on the number of police online! Do you want to enable this feature?
+    risk = true,
+    -- If risk = true, "percent" is how much the price of drugs increase
+    -- In percentage for EVERY cop online. If percent = 10 and there are
+    -- 3 police online, the price of each drug will increase 30%
+    percent = 5
+}
+
+----------------------------------------------
+--    📈 Customize the reputation system
+----------------------------------------------
+
+Config.Reputation = {
+    -- This is the amount of reputation that must be earned between
+    -- Each level. For example, from level 1 to level 2 you must gain
+    -- 25,000 rep. Same goes for level 2 to level 3 & so on
+    -- To customizer how fast or slow leveling happens, it is best to
+    -- Adjust the "addXP" amount in each zone below
+    levelUp = 25000,
+    -- Below you can customize the benefits of each level
+    -- As well as add more levels (or remove some)
+    -- Construct the entire leveling experience to your liking
+    levels = {
+        [1] = {
+            -- This is the description of the level displayed in the menu
+            description = 'Being new to dealing can be tough',
+            -- What percentage do you want to boost the sale price of drugs for this level?
+            priceBoost = 0,
+            -- What percentage do you want to reduce chance of rejections at this level?
+            reduceReject = 0,
+            -- What percentage do you want to reduce chance of robberies at this level?
+            reduceRobbery = 0,
+        },
+        [2] = {
+            description = 'You\'re getting some loyal clients',
+            priceBoost = 5,
+            reduceReject = 10,
+            reduceRobbery = 0,
+        },
+        [3] = {
+            description = 'Word is spreading about your name finally',
+            priceBoost = 15,
+            reduceReject = 20,
+            reduceRobbery = 10,
+        },
+        [4] = {
+            description = 'Competitors are really starting to worry',
+            priceBoost = 25,
+            reduceReject = 30,
+            reduceRobbery = 20,
+        },
+        [5] = {
+            description = 'Your name is synonymous with quality',
+            priceBoost = 40,
+            reduceReject = 40,
+            reduceRobbery = 30,
+        }
+        -- Add or remove levels as you wish here
+        -- Be sure to follow the format and increment numbers in order
+    }
+}
+
+----------------------------------------------
+--    💃 Customize animations and props
+----------------------------------------------
+
+Config.Animations = {
+    accepted = {
+        dict = 'mp_common',
+        clip = 'givetake1_a',
+        prop = { model = 'hei_prop_heist_cash_pile', pos = vec3(0.13, 0.02, 0.0), rot = vec3(-90.0, 0.0, 0.0) }
+    },
+    rejected = {
+        dict = 'cellphone@',
+        clip = 'cellphone_call_listen_base',
+        duration = 5000,
+        prop = { model = 'prop_npc_phone_02', pos = vec3(0.0, 0.0, 0.0), rot = vec3(0.0, 0.0, 0.0) }
+    },
+    claimItems = {
+        dict = 'pickup_object',
+        clip = 'pickup_low',
+        duration = 1500
+    }
+}
+
+----------------------------------------------
+--    ❄️ Add lation_coke support below
+----------------------------------------------
+
+Config.LationCoke = {
+    -- Do you use lation_coke?
+    -- If enable = true, the selling script will display a price based on the purity of the coke item(s)
+    enable = true,
+    -- What is the item name of your lation_coke coke item(s)?
+    items = { 'ls_cocaine_bag', 'ls_crack_bag' },
+    -- How much should the player be paid per purity?
+    -- For example, a 10% purity and price_per_purity of 2.5 would pay $25
+    -- Under this example, 50% purity would be worth $125 (50 * 2.5)
+    -- And 100% purity would be $250 (100 * 2.5)
+    -- Of course this would be per item, so x5 ls_cocaine_bag with 100% purity would be worth $1,250
+    -- Adjust the price_per_purity value below to suit your needs
+    price_per_purity = 2.5,
+    -- "perfect_bonus" is a bonus added to the price if they are selling
+    -- 100% perfect purity coke. So, using the above example, if price_per_purity
+    -- is 2.5 (meaning $250 for 100% purity cple) this perfect_bonus will add
+    -- A bonus of $100 to the price per item, bringing the total to $350
+    -- If you don't want a perfect purity bonus, set bonus to 0
+    perfect_bonus = 100
+    -- 🗒️ Note: The actual "price" you set below will be overridden by these options if enable = true above
+    -- If enable = false, then it will use your hard-set pricing in the drugs list like any other drug item
+}
+
+----------------------------------------------
+--    🧪 Add lation_meth support below
+----------------------------------------------
+
+Config.LationMeth = {
+    -- Do you use lation_meth?
+    -- If enable = true, the selling script will display a price based on the purity of the meth item
+    enable = true,
+    -- What is the item name of your lation_meth meth item?
+    -- By default, it is "ls_meth"
+    item = 'ls_meth',
+    -- How much should the player be paid per purity?
+    -- For example, a 10% purity and price_per_purity of 2.5 would pay $25
+    -- Under this example, 50% purity would be worth $125 (50 * 2.5)
+    -- And 100% purity would be $250 (100 * 2.5)
+    -- Of course this would be per item, so x5 ls_meth with 100% purity would be worth $1,250
+    -- Adjust the price_per_purity value below to suit your needs
+    price_per_purity = 2.5,
+    -- "perfect_bonus" is a bonus added to the price if they are selling
+    -- 100% perfect purity meth. So, using the above example, if price_per_purity
+    -- is 2.5 (meaning $250 for 100% purity meth) this perfect_bonus will add
+    -- A bonus of $100 to the price per item, bringing the total to $350
+    -- If you don't want a perfect purity bonus, set bonus to 0
+    perfect_bonus = 100
+    -- 🗒️ Note: The actual "price" you set below will be overridden by these options if enable = true above
+    -- If enable = false, then it will use your hard-set pricing in the drugs list like any other drug item
+}
+
+-- 🧪 Don't have our Advanced Meth Crafting yet?!
+-- What are you waiting for - check it out now below:
+-- https://lationscripts.com/product/meth-crafting
+
+----------------------------------------------
+--    🌿 Add lation_weed support below
+----------------------------------------------
+
+Config.LationWeed = {
+    -- Do you use lation_weed?
+    -- If enable = true, the selling script will display a price based on the purity/quality of the weed
+    enable = true,
+    -- What is the item name of your lation_weed weed items?
+    items = {
+        'ls_plain_jane_bag',
+        'ls_banana_kush_bag',
+        'ls_blue_dream_bag',
+        'ls_purple_haze_bag',
+        'ls_orange_crush_bag',
+        'ls_cosmic_kush_bag'
+    },
+    -- How much should the player be paid per purity/quality?
+    -- For example, a 10% purity and price_per_purity of 2.5 would pay $25
+    -- Under this example, 50% purity would be worth $125 (50 * 2.5)
+    -- And 100% purity would be $250 (100 * 2.5)
+    -- Of course this would be per item, so x5 weed bags with 100% purity would be worth $1,250
+    -- Adjust the price_per_purity value below to suit your needs
+    price_per_purity = 2.5,
+    -- "perfect_bonus" is a bonus added to the price if they are selling
+    -- 100% perfect purity weed. So, using the above example, if price_per_purity
+    -- is 2.5 (meaning $250 for 100% purity meth) this perfect_bonus will add
+    -- A bonus of $100 to the price per item, bringing the total to $350
+    -- If you don't want a perfect purity bonus, set bonus to 0
+    perfect_bonus = 100
+    -- 🗒️ Note: The actual "price" you set below will be overridden by these options if enable = true above
+    -- If enable = false, then it will use your hard-set pricing in the drugs list like any other drug item
+}
+
+-- 🌿 Don't have our Advanced Weed Growing yet?!
+-- What are you waiting for - check it out now below:
+-- https://lationscripts.com/product/weed-growing
+
+----------------------------------------------
+--    🗺️ Create unique & engaging zones
+----------------------------------------------
+
+Config.Zones = {
+    [1] = {
+        -- Give this zone a unique name below
+        name = 'Vinewood',
+        -- The center-most part of the zone
+        coords = vec3(284.3999, -86.8160, 70.1332),
+        -- The size (radius) of the zone
+        size = 500,
+        -- Manage the zone specific settings here
+        settings = {
+            -- How much XP (reputation) do you want to add to the player
+            -- For each drug transaction in this zone?
+            addXP = { min = 5, max = 15 },
+            -- What is the minimum player level required to sell drugs here?
+            level = 1,
+            -- If you want to allow drugs be sold ONLY at night, set daytime false
+            -- If you want to allow drugs be sold at ANY time, set daytime to true
+            daytime = true,
+            -- When drugs are sold here, what money/item should the player receive?
+            money = 'black_money',
+            -- QBCore only: does your money item above use metadata?
+            -- If you don't know, then keep it set to true
+            metadata = true,
+            -- Do you want to require police be online to allow selling here?
+            requirePolice = false,
+            -- If requirePolice = true, how many must be online?
+            count = 1,
+            -- Do you want to allow players to get robbed by customers?
+            enableRobbery = true,
+            -- If enableRobbery = true, what is the percentage chance they get robbed?
+            chance = 5,
+            -- Do you want to enable "anonymous" calls from nearby peds to police?
+            -- This is a way to alert police of drug selling activity without spooking the seller
+            anonymousCalls = true,
+            -- If anonymousCalls is true, what percentage chance do you want to call police?
+            -- This is for all drugs sold in this zone
+            callChance = 10,
+            -- Do you want to enable cooldowns between EACH drug sale?
+            cooldown = false,
+            -- If cooldown = true, how long should the cooldown last (in milliseconds)?
+            duration = 15000,
+            -- Do you want to limit the total number of sales that can happen here?
+            -- Once the "cap" has been reached, the player can no longer sell in 
+            -- This zone until a server restart has occured
+            limit = false,
+            -- If limit = true, set the maximum quantity/limit that can be sold here
+            cap = 100
+        },
+        -- Add/remove the drugs that can be sold in this zone
+        drugs = {
+            ['ls_plain_jane_bag'] = { -- The item spawn name
+                -- Name of this drug for menu's, etc
+                label = 'Plain Jane Weed',
+                -- Icon displayed next to this drug in the menu
+                -- For more icons visit: https://fontawesome.com/search?o=r&m=free
+                icon = 'fas fa-cannabis',
+                -- What is the minimum level required to sell this drug here?
+                -- If a player does not have or exceed this level, it won't display in the menu
+                -- Even if they have it in their inventory
+                level = 1,
+                -- The percentage chance cops get called when selling this drug
+                callChance = 5,
+                -- How much x1 of this drug can sell for
+                price = { min = 50, max = 100 },
+                -- The quantity the customer will buy at a time
+                quantity = { min = 1, max = 1 },
+                -- Customize the prop used for the hand-off of this drug
+                object = {
+                    -- Prop/object name
+                    model = 'prop_weed_bottle',
+                    -- Position of the prop
+                    position = vec3(0.13, 0.02, 0.0),
+                    -- Rotation of the prop
+                    rotation = vec3(-90.0, 0.0, 0.0)
+                },
+            },
+            ['ls_banana_kush_bag'] = {
+                label = 'Banana Kush Weed',
+                icon = 'fas fa-cannabis',
+                level = 1,
+                callChance = 10,
+                price = { min = 75, max = 125 },
+                quantity = { min = 1, max = 1 },
+                object = {
+                    model = 'prop_weed_bottle',
+                    position = vec3(0.13, 0.02, 0.0),
+                    rotation = vec3(-90.0, 0.0, 0.0)
+                }
+            },
+            ['ls_blue_dream_bag'] = {
+                label = 'Blue Dream Weed',
+                icon = 'fas fa-cannabis',
+                level = 1,
+                callChance = 15,
+                price = { min = 100, max = 150 },
+                quantity = { min = 1, max = 1 },
+                object = {
+                    model = 'prop_weed_bottle',
+                    position = vec3(0.13, 0.02, 0.0),
+                    rotation = vec3(-90.0, 0.0, 0.0)
+                }
+            },
+            ['ls_purple_haze_bag'] = {
+                label = 'Purple Haze Weed',
+                icon = 'fas fa-cannabis',
+                level = 1,
+                callChance = 15,
+                price = { min = 125, max = 175 },
+                quantity = { min = 1, max = 1 },
+                object = {
+                    model = 'prop_weed_bottle',
+                    position = vec3(0.13, 0.02, 0.0),
+                    rotation = vec3(-90.0, 0.0, 0.0)
+                }
+            },
+            ['ls_orange_crush_bag'] = {
+                label = 'Orange Crush Weed',
+                icon = 'fas fa-cannabis',
+                level = 1,
+                callChance = 20,
+                price = { min = 150, max = 200 },
+                quantity = { min = 1, max = 1 },
+                object = {
+                    model = 'prop_weed_bottle',
+                    position = vec3(0.13, 0.02, 0.0),
+                    rotation = vec3(-90.0, 0.0, 0.0)
+                }
+            },
+            ['ls_cosmic_kush_bag'] = {
+                label = 'Cosmic Kush Weed',
+                icon = 'fas fa-cannabis',
+                level = 1,
+                callChance = 20,
+                price = { min = 175, max = 225 },
+                quantity = { min = 1, max = 1 },
+                object = {
+                    model = 'prop_weed_bottle',
+                    position = vec3(0.13, 0.02, 0.0),
+                    rotation = vec3(-90.0, 0.0, 0.0)
+                }
+            },
+            ['ls_meth'] = {
+                label = 'Crystal Meth',
+                icon = 'fas fa-vial',
+                level = 1,
+                callChance = 15,
+                price = { min = 0, max = 0 },
+                quantity = { min = 1, max = 1 },
+                object = {
+                    model = 'prop_meth_bag_01',
+                    position = vec3(0.1578, 0.0293, -0.016),
+                    rotation = vec3(101.173, 38.909, 1.500)
+                }
+            },
+            ['ls_cocaine_bag'] = {
+                label = 'Cocaine',
+                icon = 'fas fa-snowflake',
+                level = 1,
+                callChance = 15,
+                price = { min = 0, max = 0 },
+                quantity = { min = 1, max = 1 },
+                object = {
+                    model = 'prop_meth_bag_01',
+                    position = vec3(0.1578, 0.0293, -0.016),
+                    rotation = vec3(101.173, 38.909, 1.500)
+                }
+            },
+            ['ls_crack_bag'] = {
+                label = 'Crack',
+                icon = 'fas fa-skull-crossbones',
+                level = 1,
+                callChance = 15,
+                price = { min = 0, max = 0 },
+                quantity = { min = 1, max = 1 },
+                object = {
+                    model = 'prop_meth_bag_01',
+                    position = vec3(0.1578, 0.0293, -0.016),
+                    rotation = vec3(101.173, 38.909, 1.500)
+                }
+            },
+        },
+        blip = {
+            -- Do you want this zone to be visible on the map via blip?
+            enabled = true,
+            -- Do you want a radius blip to show the size of the zone?
+            radius = true,
+            -- Sprite: https://docs.fivem.net/docs/game-references/blips/
+            sprite = 51,
+            -- Color: https://docs.fivem.net/docs/game-references/blips/#blip-colors
+            color = 1,
+            -- Size of the blip
+            scale = 0.8,
+            -- Blip label
+            label = 'Drug Selling Zone'
+        },
+        ignoreModels = { -- Do not allow drug sales to these specific ped models
+            's_f_y_cop_01',
+            's_m_y_cop_01',
+            -- Add more models here if desired
+        }
+    },
+    [2] = {
+        name = 'South Los Santos',
+        coords = vec3(179.9148, -1598.6139, 29.3298),
+        size = 400,
+        settings = {
+            addXP = { min = 15, max = 30 },
+            level = 1,
+            daytime = false,
+            money = 'black_money',
+            metadata = true,
+            requirePolice = false,
+            count = 3,
+            enableRobbery = true,
+            chance = 25,
+            anonymousCalls = true,
+            callChance = 10,
+            cooldown = false,
+            duration = 15000,
+            limit = true,
+            cap = 50
+        },
+        drugs = {
+            ['ls_plain_jane_bag'] = {
+                label = 'Plain Jane Weed',
+                icon = 'fas fa-cannabis',
+                level = 1,
+                callChance = 5,
+                price = { min = 50, max = 100 },
+                quantity = { min = 1, max = 1 },
+                object = {
+                    model = 'prop_weed_bottle',
+                    position = vec3(0.13, 0.02, 0.0),
+                    rotation = vec3(-90.0, 0.0, 0.0)
+                },
+            },
+            ['ls_banana_kush_bag'] = {
+                label = 'Banana Kush Weed',
+                icon = 'fas fa-cannabis',
+                level = 1,
+                callChance = 10,
+                price = { min = 75, max = 125 },
+                quantity = { min = 1, max = 1 },
+                object = {
+                    model = 'prop_weed_bottle',
+                    position = vec3(0.13, 0.02, 0.0),
+                    rotation = vec3(-90.0, 0.0, 0.0)
+                }
+            },
+            ['ls_blue_dream_bag'] = {
+                label = 'Blue Dream Weed',
+                icon = 'fas fa-cannabis',
+                level = 1,
+                callChance = 15,
+                price = { min = 100, max = 150 },
+                quantity = { min = 1, max = 1 },
+                object = {
+                    model = 'prop_weed_bottle',
+                    position = vec3(0.13, 0.02, 0.0),
+                    rotation = vec3(-90.0, 0.0, 0.0)
+                }
+            },
+            ['ls_purple_haze_bag'] = {
+                label = 'Purple Haze Weed',
+                icon = 'fas fa-cannabis',
+                level = 1,
+                callChance = 15,
+                price = { min = 125, max = 175 },
+                quantity = { min = 1, max = 1 },
+                object = {
+                    model = 'prop_weed_bottle',
+                    position = vec3(0.13, 0.02, 0.0),
+                    rotation = vec3(-90.0, 0.0, 0.0)
+                }
+            },
+            ['ls_orange_crush_bag'] = {
+                label = 'Orange Crush Weed',
+                icon = 'fas fa-cannabis',
+                level = 1,
+                callChance = 20,
+                price = { min = 150, max = 200 },
+                quantity = { min = 1, max = 1 },
+                object = {
+                    model = 'prop_weed_bottle',
+                    position = vec3(0.13, 0.02, 0.0),
+                    rotation = vec3(-90.0, 0.0, 0.0)
+                }
+            },
+            ['ls_cosmic_kush_bag'] = {
+                label = 'Cosmic Kush Weed',
+                icon = 'fas fa-cannabis',
+                level = 1,
+                callChance = 20,
+                price = { min = 175, max = 225 },
+                quantity = { min = 1, max = 1 },
+                object = {
+                    model = 'prop_weed_bottle',
+                    position = vec3(0.13, 0.02, 0.0),
+                    rotation = vec3(-90.0, 0.0, 0.0)
+                }
+            },
+            ['ls_meth'] = {
+                label = 'Crystal Meth',
+                icon = 'fas fa-vial',
+                level = 1,
+                callChance = 15,
+                price = { min = 0, max = 0 },
+                quantity = { min = 1, max = 1 },
+                object = {
+                    model = 'prop_meth_bag_01',
+                    position = vec3(0.1578, 0.0293, -0.016),
+                    rotation = vec3(101.173, 38.909, 1.500)
+                }
+            },
+            ['ls_cocaine_bag'] = {
+                label = 'Cocaine',
+                icon = 'fas fa-snowflake',
+                level = 1,
+                callChance = 15,
+                price = { min = 0, max = 0 },
+                quantity = { min = 1, max = 1 },
+                object = {
+                    model = 'prop_meth_bag_01',
+                    position = vec3(0.1578, 0.0293, -0.016),
+                    rotation = vec3(101.173, 38.909, 1.500)
+                }
+            },
+            ['ls_crack_bag'] = {
+                label = 'Crack',
+                icon = 'fas fa-skull-crossbones',
+                level = 1,
+                callChance = 15,
+                price = { min = 0, max = 0 },
+                quantity = { min = 1, max = 1 },
+                object = {
+                    model = 'prop_meth_bag_01',
+                    position = vec3(0.1578, 0.0293, -0.016),
+                    rotation = vec3(101.173, 38.909, 1.500)
+                }
+            },
+        },
+        blip = {
+            enabled = true,
+            radius = true,
+            sprite = 51,
+            color = 1,
+            scale = 0.8,
+            label = 'Drug Selling Zone'
+        },
+        ignoreModels = {
+            's_f_y_cop_01',
+            's_m_y_cop_01',
+        }
+    },
+    [3] = {
+        name = 'Del Perro Pier',
+        coords = vec3(-1708.1877, -1076.6757, 13.0809),
+        size = 250,
+        settings = {
+            addXP = { min = 5, max = 20 },
+            level = 1,
+            daytime = true,
+            money = 'black_money',
+            metadata = true,
+            requirePolice = true,
+            count = 3,
+            enableRobbery = true,
+            chance = 5,
+            anonymousCalls = true,
+            callChance = 10,
+            cooldown = true,
+            duration = 25000,
+            limit = true,
+            cap = 50
+        },
+        drugs = {
+            ['ls_plain_jane_bag'] = {
+                label = 'Plain Jane Weed',
+                icon = 'fas fa-cannabis',
+                level = 1,
+                callChance = 5,
+                price = { min = 50, max = 100 },
+                quantity = { min = 1, max = 1 },
+                object = {
+                    model = 'prop_weed_bottle',
+                    position = vec3(0.13, 0.02, 0.0),
+                    rotation = vec3(-90.0, 0.0, 0.0)
+                },
+            },
+            ['ls_banana_kush_bag'] = {
+                label = 'Banana Kush Weed',
+                icon = 'fas fa-cannabis',
+                level = 1,
+                callChance = 10,
+                price = { min = 75, max = 125 },
+                quantity = { min = 1, max = 1 },
+                object = {
+                    model = 'prop_weed_bottle',
+                    position = vec3(0.13, 0.02, 0.0),
+                    rotation = vec3(-90.0, 0.0, 0.0)
+                }
+            },
+            ['ls_blue_dream_bag'] = {
+                label = 'Blue Dream Weed',
+                icon = 'fas fa-cannabis',
+                level = 1,
+                callChance = 15,
+                price = { min = 100, max = 150 },
+                quantity = { min = 1, max = 1 },
+                object = {
+                    model = 'prop_weed_bottle',
+                    position = vec3(0.13, 0.02, 0.0),
+                    rotation = vec3(-90.0, 0.0, 0.0)
+                }
+            },
+            ['ls_purple_haze_bag'] = {
+                label = 'Purple Haze Weed',
+                icon = 'fas fa-cannabis',
+                level = 1,
+                callChance = 15,
+                price = { min = 125, max = 175 },
+                quantity = { min = 1, max = 1 },
+                object = {
+                    model = 'prop_weed_bottle',
+                    position = vec3(0.13, 0.02, 0.0),
+                    rotation = vec3(-90.0, 0.0, 0.0)
+                }
+            },
+            ['ls_orange_crush_bag'] = {
+                label = 'Orange Crush Weed',
+                icon = 'fas fa-cannabis',
+                level = 1,
+                callChance = 20,
+                price = { min = 150, max = 200 },
+                quantity = { min = 1, max = 1 },
+                object = {
+                    model = 'prop_weed_bottle',
+                    position = vec3(0.13, 0.02, 0.0),
+                    rotation = vec3(-90.0, 0.0, 0.0)
+                }
+            },
+            ['ls_cosmic_kush_bag'] = {
+                label = 'Cosmic Kush Weed',
+                icon = 'fas fa-cannabis',
+                level = 1,
+                callChance = 20,
+                price = { min = 175, max = 225 },
+                quantity = { min = 1, max = 1 },
+                object = {
+                    model = 'prop_weed_bottle',
+                    position = vec3(0.13, 0.02, 0.0),
+                    rotation = vec3(-90.0, 0.0, 0.0)
+                }
+            },
+            ['ls_meth'] = {
+                label = 'Crystal Meth',
+                icon = 'fas fa-vial',
+                level = 1,
+                callChance = 15,
+                price = { min = 0, max = 0 },
+                quantity = { min = 1, max = 1 },
+                object = {
+                    model = 'prop_meth_bag_01',
+                    position = vec3(0.1578, 0.0293, -0.016),
+                    rotation = vec3(101.173, 38.909, 1.500)
+                }
+            },
+            ['ls_cocaine_bag'] = {
+                label = 'Cocaine',
+                icon = 'fas fa-snowflake',
+                level = 1,
+                callChance = 15,
+                price = { min = 0, max = 0 },
+                quantity = { min = 1, max = 1 },
+                object = {
+                    model = 'prop_meth_bag_01',
+                    position = vec3(0.1578, 0.0293, -0.016),
+                    rotation = vec3(101.173, 38.909, 1.500)
+                }
+            },
+            ['ls_crack_bag'] = {
+                label = 'Crack',
+                icon = 'fas fa-skull-crossbones',
+                level = 1,
+                callChance = 15,
+                price = { min = 0, max = 0 },
+                quantity = { min = 1, max = 1 },
+                object = {
+                    model = 'prop_meth_bag_01',
+                    position = vec3(0.1578, 0.0293, -0.016),
+                    rotation = vec3(101.173, 38.909, 1.500)
+                }
+            },
+        },
+        blip = {
+            enabled = true,
+            radius = true,
+            sprite = 51,
+            color = 1,
+            scale = 0.8,
+            label = 'Drug Selling Zone'
+        },
+        ignoreModels = {
+            's_f_y_cop_01',
+            's_m_y_cop_01',
+        }
+    },
+    [4] = {
+        name = 'Vespucci',
+        coords = vec3(-1113.7163, -1317.1970, 5.4447),
+        size = 375,
+        settings = {
+            addXP = { min = 5, max = 15 },
+            level = 1,
+            daytime = true,
+            money = 'black_money',
+            metadata = true,
+            requirePolice = false,
+            count = 3,
+            enableRobbery = true,
+            chance = 10,
+            anonymousCalls = true,
+            callChance = 10,
+            cooldown = false,
+            duration = 15000,
+            limit = false,
+            cap = 50
+        },
+        drugs = {
+            ['ls_plain_jane_bag'] = {
+                label = 'Plain Jane Weed',
+                icon = 'fas fa-cannabis',
+                level = 1,
+                callChance = 5,
+                price = { min = 50, max = 100 },
+                quantity = { min = 1, max = 1 },
+                object = {
+                    model = 'prop_weed_bottle',
+                    position = vec3(0.13, 0.02, 0.0),
+                    rotation = vec3(-90.0, 0.0, 0.0)
+                },
+            },
+            ['ls_banana_kush_bag'] = {
+                label = 'Banana Kush Weed',
+                icon = 'fas fa-cannabis',
+                level = 1,
+                callChance = 10,
+                price = { min = 75, max = 125 },
+                quantity = { min = 1, max = 1 },
+                object = {
+                    model = 'prop_weed_bottle',
+                    position = vec3(0.13, 0.02, 0.0),
+                    rotation = vec3(-90.0, 0.0, 0.0)
+                }
+            },
+            ['ls_blue_dream_bag'] = {
+                label = 'Blue Dream Weed',
+                icon = 'fas fa-cannabis',
+                level = 1,
+                callChance = 15,
+                price = { min = 100, max = 150 },
+                quantity = { min = 1, max = 1 },
+                object = {
+                    model = 'prop_weed_bottle',
+                    position = vec3(0.13, 0.02, 0.0),
+                    rotation = vec3(-90.0, 0.0, 0.0)
+                }
+            },
+            ['ls_purple_haze_bag'] = {
+                label = 'Purple Haze Weed',
+                icon = 'fas fa-cannabis',
+                level = 1,
+                callChance = 15,
+                price = { min = 125, max = 175 },
+                quantity = { min = 1, max = 1 },
+                object = {
+                    model = 'prop_weed_bottle',
+                    position = vec3(0.13, 0.02, 0.0),
+                    rotation = vec3(-90.0, 0.0, 0.0)
+                }
+            },
+            ['ls_orange_crush_bag'] = {
+                label = 'Orange Crush Weed',
+                icon = 'fas fa-cannabis',
+                level = 1,
+                callChance = 20,
+                price = { min = 150, max = 200 },
+                quantity = { min = 1, max = 1 },
+                object = {
+                    model = 'prop_weed_bottle',
+                    position = vec3(0.13, 0.02, 0.0),
+                    rotation = vec3(-90.0, 0.0, 0.0)
+                }
+            },
+            ['ls_cosmic_kush_bag'] = {
+                label = 'Cosmic Kush Weed',
+                icon = 'fas fa-cannabis',
+                level = 1,
+                callChance = 20,
+                price = { min = 175, max = 225 },
+                quantity = { min = 1, max = 1 },
+                object = {
+                    model = 'prop_weed_bottle',
+                    position = vec3(0.13, 0.02, 0.0),
+                    rotation = vec3(-90.0, 0.0, 0.0)
+                }
+            },
+            ['ls_meth'] = {
+                label = 'Crystal Meth',
+                icon = 'fas fa-vial',
+                level = 1,
+                callChance = 15,
+                price = { min = 0, max = 0 },
+                quantity = { min = 1, max = 1 },
+                object = {
+                    model = 'prop_meth_bag_01',
+                    position = vec3(0.1578, 0.0293, -0.016),
+                    rotation = vec3(101.173, 38.909, 1.500)
+                }
+            },
+            ['ls_cocaine_bag'] = {
+                label = 'Cocaine',
+                icon = 'fas fa-snowflake',
+                level = 1,
+                callChance = 15,
+                price = { min = 0, max = 0 },
+                quantity = { min = 1, max = 1 },
+                object = {
+                    model = 'prop_meth_bag_01',
+                    position = vec3(0.1578, 0.0293, -0.016),
+                    rotation = vec3(101.173, 38.909, 1.500)
+                }
+            },
+            ['ls_crack_bag'] = {
+                label = 'Crack',
+                icon = 'fas fa-skull-crossbones',
+                level = 1,
+                callChance = 15,
+                price = { min = 0, max = 0 },
+                quantity = { min = 1, max = 1 },
+                object = {
+                    model = 'prop_meth_bag_01',
+                    position = vec3(0.1578, 0.0293, -0.016),
+                    rotation = vec3(101.173, 38.909, 1.500)
+                }
+            },
+        },
+        blip = {
+            enabled = true,
+            radius = true,
+            sprite = 51,
+            color = 1,
+            scale = 0.8,
+            label = 'Drug Selling Zone'
+        },
+        ignoreModels = {
+            's_f_y_cop_01',
+            's_m_y_cop_01',
+        }
+    },
+    [5] = {
+        name = 'Los Santos International Airport',
+        coords = vec3(-1090.9209, -2617.4668, 13.6986),
+        size = 500,
+        settings = {
+            addXP = { min = 10, max = 20 },
+            level = 1,
+            daytime = true,
+            money = 'black_money',
+            metadata = true,
+            requirePolice = true,
+            count = 3,
+            enableRobbery = true,
+            chance = 5,
+            anonymousCalls = true,
+            callChance = 10,
+            cooldown = false,
+            duration = 15000,
+            limit = false,
+            cap = 50
+        },
+        drugs = {
+            ['ls_plain_jane_bag'] = {
+                label = 'Plain Jane Weed',
+                icon = 'fas fa-cannabis',
+                level = 1,
+                callChance = 5,
+                price = { min = 50, max = 100 },
+                quantity = { min = 1, max = 1 },
+                object = {
+                    model = 'prop_weed_bottle',
+                    position = vec3(0.13, 0.02, 0.0),
+                    rotation = vec3(-90.0, 0.0, 0.0)
+                },
+            },
+            ['ls_banana_kush_bag'] = {
+                label = 'Banana Kush Weed',
+                icon = 'fas fa-cannabis',
+                level = 1,
+                callChance = 10,
+                price = { min = 75, max = 125 },
+                quantity = { min = 1, max = 1 },
+                object = {
+                    model = 'prop_weed_bottle',
+                    position = vec3(0.13, 0.02, 0.0),
+                    rotation = vec3(-90.0, 0.0, 0.0)
+                }
+            },
+            ['ls_blue_dream_bag'] = {
+                label = 'Blue Dream Weed',
+                icon = 'fas fa-cannabis',
+                level = 1,
+                callChance = 15,
+                price = { min = 100, max = 150 },
+                quantity = { min = 1, max = 1 },
+                object = {
+                    model = 'prop_weed_bottle',
+                    position = vec3(0.13, 0.02, 0.0),
+                    rotation = vec3(-90.0, 0.0, 0.0)
+                }
+            },
+            ['ls_purple_haze_bag'] = {
+                label = 'Purple Haze Weed',
+                icon = 'fas fa-cannabis',
+                level = 1,
+                callChance = 15,
+                price = { min = 125, max = 175 },
+                quantity = { min = 1, max = 1 },
+                object = {
+                    model = 'prop_weed_bottle',
+                    position = vec3(0.13, 0.02, 0.0),
+                    rotation = vec3(-90.0, 0.0, 0.0)
+                }
+            },
+            ['ls_orange_crush_bag'] = {
+                label = 'Orange Crush Weed',
+                icon = 'fas fa-cannabis',
+                level = 1,
+                callChance = 20,
+                price = { min = 150, max = 200 },
+                quantity = { min = 1, max = 1 },
+                object = {
+                    model = 'prop_weed_bottle',
+                    position = vec3(0.13, 0.02, 0.0),
+                    rotation = vec3(-90.0, 0.0, 0.0)
+                }
+            },
+            ['ls_cosmic_kush_bag'] = {
+                label = 'Cosmic Kush Weed',
+                icon = 'fas fa-cannabis',
+                level = 1,
+                callChance = 20,
+                price = { min = 175, max = 225 },
+                quantity = { min = 1, max = 1 },
+                object = {
+                    model = 'prop_weed_bottle',
+                    position = vec3(0.13, 0.02, 0.0),
+                    rotation = vec3(-90.0, 0.0, 0.0)
+                }
+            },
+            ['ls_meth'] = {
+                label = 'Crystal Meth',
+                icon = 'fas fa-vial',
+                level = 1,
+                callChance = 15,
+                price = { min = 0, max = 0 },
+                quantity = { min = 1, max = 1 },
+                object = {
+                    model = 'prop_meth_bag_01',
+                    position = vec3(0.1578, 0.0293, -0.016),
+                    rotation = vec3(101.173, 38.909, 1.500)
+                }
+            },
+            ['ls_cocaine_bag'] = {
+                label = 'Cocaine',
+                icon = 'fas fa-snowflake',
+                level = 1,
+                callChance = 15,
+                price = { min = 0, max = 0 },
+                quantity = { min = 1, max = 1 },
+                object = {
+                    model = 'prop_meth_bag_01',
+                    position = vec3(0.1578, 0.0293, -0.016),
+                    rotation = vec3(101.173, 38.909, 1.500)
+                }
+            },
+            ['ls_crack_bag'] = {
+                label = 'Crack',
+                icon = 'fas fa-skull-crossbones',
+                level = 1,
+                callChance = 15,
+                price = { min = 0, max = 0 },
+                quantity = { min = 1, max = 1 },
+                object = {
+                    model = 'prop_meth_bag_01',
+                    position = vec3(0.1578, 0.0293, -0.016),
+                    rotation = vec3(101.173, 38.909, 1.500)
+                }
+            },
+        },
+        blip = {
+            enabled = true,
+            radius = true,
+            sprite = 51,
+            color = 1,
+            scale = 0.8,
+            label = 'Drug Selling Zone'
+        },
+        ignoreModels = {
+            's_f_y_cop_01',
+            's_m_y_cop_01',
+        }
+    },
+    [6] = {
+        name = 'Rockford Hills',
+        coords = vec3(-794.8151, -272.5175, 37.0324),
+        size = 400,
+        settings = {
+            addXP = { min = 10, max = 25 },
+            level = 1,
+            daytime = true,
+            money = 'black_money',
+            metadata = true,
+            requirePolice = false,
+            count = 3,
+            enableRobbery = false,
+            chance = 5,
+            anonymousCalls = true,
+            callChance = 10,
+            cooldown = false,
+            duration = 15000,
+            limit = false,
+            cap = 50
+        },
+        drugs = {
+            ['ls_plain_jane_bag'] = {
+                label = 'Plain Jane Weed',
+                icon = 'fas fa-cannabis',
+                level = 1,
+                callChance = 5,
+                price = { min = 50, max = 100 },
+                quantity = { min = 1, max = 1 },
+                object = {
+                    model = 'prop_weed_bottle',
+                    position = vec3(0.13, 0.02, 0.0),
+                    rotation = vec3(-90.0, 0.0, 0.0)
+                },
+            },
+            ['ls_banana_kush_bag'] = {
+                label = 'Banana Kush Weed',
+                icon = 'fas fa-cannabis',
+                level = 1,
+                callChance = 10,
+                price = { min = 75, max = 125 },
+                quantity = { min = 1, max = 1 },
+                object = {
+                    model = 'prop_weed_bottle',
+                    position = vec3(0.13, 0.02, 0.0),
+                    rotation = vec3(-90.0, 0.0, 0.0)
+                }
+            },
+            ['ls_blue_dream_bag'] = {
+                label = 'Blue Dream Weed',
+                icon = 'fas fa-cannabis',
+                level = 1,
+                callChance = 15,
+                price = { min = 100, max = 150 },
+                quantity = { min = 1, max = 1 },
+                object = {
+                    model = 'prop_weed_bottle',
+                    position = vec3(0.13, 0.02, 0.0),
+                    rotation = vec3(-90.0, 0.0, 0.0)
+                }
+            },
+            ['ls_purple_haze_bag'] = {
+                label = 'Purple Haze Weed',
+                icon = 'fas fa-cannabis',
+                level = 1,
+                callChance = 15,
+                price = { min = 125, max = 175 },
+                quantity = { min = 1, max = 1 },
+                object = {
+                    model = 'prop_weed_bottle',
+                    position = vec3(0.13, 0.02, 0.0),
+                    rotation = vec3(-90.0, 0.0, 0.0)
+                }
+            },
+            ['ls_orange_crush_bag'] = {
+                label = 'Orange Crush Weed',
+                icon = 'fas fa-cannabis',
+                level = 1,
+                callChance = 20,
+                price = { min = 150, max = 200 },
+                quantity = { min = 1, max = 1 },
+                object = {
+                    model = 'prop_weed_bottle',
+                    position = vec3(0.13, 0.02, 0.0),
+                    rotation = vec3(-90.0, 0.0, 0.0)
+                }
+            },
+            ['ls_cosmic_kush_bag'] = {
+                label = 'Cosmic Kush Weed',
+                icon = 'fas fa-cannabis',
+                level = 1,
+                callChance = 20,
+                price = { min = 175, max = 225 },
+                quantity = { min = 1, max = 1 },
+                object = {
+                    model = 'prop_weed_bottle',
+                    position = vec3(0.13, 0.02, 0.0),
+                    rotation = vec3(-90.0, 0.0, 0.0)
+                }
+            },
+            ['ls_meth'] = {
+                label = 'Crystal Meth',
+                icon = 'fas fa-vial',
+                level = 1,
+                callChance = 15,
+                price = { min = 0, max = 0 },
+                quantity = { min = 1, max = 1 },
+                object = {
+                    model = 'prop_meth_bag_01',
+                    position = vec3(0.1578, 0.0293, -0.016),
+                    rotation = vec3(101.173, 38.909, 1.500)
+                }
+            },
+            ['ls_cocaine_bag'] = {
+                label = 'Cocaine',
+                icon = 'fas fa-snowflake',
+                level = 1,
+                callChance = 15,
+                price = { min = 0, max = 0 },
+                quantity = { min = 1, max = 1 },
+                object = {
+                    model = 'prop_meth_bag_01',
+                    position = vec3(0.1578, 0.0293, -0.016),
+                    rotation = vec3(101.173, 38.909, 1.500)
+                }
+            },
+            ['ls_crack_bag'] = {
+                label = 'Crack',
+                icon = 'fas fa-skull-crossbones',
+                level = 1,
+                callChance = 15,
+                price = { min = 0, max = 0 },
+                quantity = { min = 1, max = 1 },
+                object = {
+                    model = 'prop_meth_bag_01',
+                    position = vec3(0.1578, 0.0293, -0.016),
+                    rotation = vec3(101.173, 38.909, 1.500)
+                }
+            },
+        },
+        blip = {
+            enabled = true,
+            radius = true,
+            sprite = 51,
+            color = 1,
+            scale = 0.8,
+            label = 'Drug Selling Zone'
+        },
+        ignoreModels = {
+            's_f_y_cop_01',
+            's_m_y_cop_01',
+        }
+    }
+}
+```
+
+
+```lua logs.lua expandable
+Logs = {}
+
+-- What logging service do you want to use?
+-- Available options: 'fivemanage', 'fivemerr', 'discord' & 'none'
+-- It is highly recommended to use a proper logging service such as Fivemanage or Fivemerr
+Logs.Service = 'discord'
+
+-- Do you want to include screenshots with your logs?
+-- This is only applicable to Fivemanage and Fivemerr
+Logs.Screenshots = false
+
+-- You can enable (true) or disable (false) specific player events to log here
+Logs.Events = {
+    -- 'selling' is for logging when a drug sale has completed
+    selling = false,
+    -- 'robbed' is when a player has been robbed by a ped
+    robbed = false,
+    -- 'claimed' is when a player has re-collected the robbed items
+    claimed = false,
+    -- 'leveled' is when a player has leveled up
+    leveled = false
+}
+
+-- If Logs.Service = 'discord', you can customize the webhook data here
+-- If not using Discord, this section can be ignored
+Logs.Discord = {
+    -- The name of the webhook
+    name = 'Drug Selling Logs',
+    -- The webhook link
+    link = '',
+    -- The webhook profile image
+    image = 'https://i.imgur.com/ILTkWBh.png',
+    -- The webhook footer image
+    footer = 'https://i.imgur.com/ILTkWBh.png'
+}
+```
+
+</CodeGroup>
+
+<CodeGroup>
+
+```lua bridge/client.lua expandable
+-- Initialize global variables to store framework & inventory
+Framework, Inventory = nil, nil
+
+-- Initialize global player variables
+PlayerLoaded, PlayerData = nil, {}
+
+-- Get framework
+local function InitializeFramework()
+    if GetResourceState('es_extended') == 'started' then
+        ESX = exports['es_extended']:getSharedObject()
+        Framework = 'esx'
+
+        RegisterNetEvent('esx:playerLoaded', function(xPlayer)
+            PlayerData = xPlayer
+            PlayerLoaded = true
+            TriggerEvent('lation_selling:onPlayerLoaded')
+        end)
+
+        RegisterNetEvent('esx:onPlayerLogout', function()
+            table.wipe(PlayerData)
+            PlayerLoaded = false
+        end)
+
+        AddEventHandler('onResourceStart', function(resourceName)
+            if GetCurrentResourceName() ~= resourceName then return end
+            PlayerData = GetPlayerData()
+            PlayerLoaded = true
+            TriggerEvent('lation_selling:onPlayerLoaded')
+        end)
+
+    elseif GetResourceState('qbx_core') == 'started' then
+        Framework = 'qbx'
+
+        AddEventHandler('QBCore:Client:OnPlayerLoaded', function()
+            PlayerData = GetPlayerData()
+            PlayerLoaded = true
+            TriggerEvent('lation_selling:onPlayerLoaded')
+        end)
+
+        RegisterNetEvent('qbx_core:client:playerLoggedOut', function()
+            table.wipe(PlayerData)
+            PlayerLoaded = false
+        end)
+
+        AddEventHandler('onResourceStart', function(resourceName)
+            if GetCurrentResourceName() ~= resourceName then return end
+            PlayerData = GetPlayerData()
+            PlayerLoaded = true
+            TriggerEvent('lation_selling:onPlayerLoaded')
+        end)
+    elseif GetResourceState('qb-core') == 'started' then
+        QBCore = exports['qb-core']:GetCoreObject()
+        Framework = 'qb'
+
+        AddEventHandler('QBCore:Client:OnPlayerLoaded', function()
+            PlayerData = GetPlayerData()
+            PlayerLoaded = true
+            TriggerEvent('lation_selling:onPlayerLoaded')
+        end)
+
+        RegisterNetEvent('QBCore:Client:OnPlayerUnload', function()
+            table.wipe(PlayerData)
+            PlayerLoaded = false
+        end)
+
+        AddEventHandler('onResourceStart', function(resourceName)
+            if GetCurrentResourceName() ~= resourceName then return end
+            PlayerData = GetPlayerData()
+            PlayerLoaded = true
+            TriggerEvent('lation_selling:onPlayerLoaded')
+        end)
+    elseif GetResourceState('ox_core') == 'started' then
+        Ox = require '@ox_core.lib.init'
+        Framework = 'ox'
+
+        AddEventHandler('ox:playerLoaded', function()
+            PlayerData = GetPlayerData()
+            PlayerLoaded = true
+            TriggerEvent('lation_selling:onPlayerLoaded')
+        end)
+
+        AddEventHandler('ox:playerLogout', function()
+            table.wipe(PlayerData)
+            PlayerLoaded = false
+        end)
+
+        AddEventHandler('onResourceStart', function(resourceName)
+            if GetCurrentResourceName() ~= resourceName then return end
+            PlayerData = GetPlayerData()
+            PlayerLoaded = true
+            TriggerEvent('lation_selling:onPlayerLoaded')
+        end)
+    else
+        -- Add custom framework here
+    end
+end
+
+-- Get inventory
+local function InitializeInventory()
+    if GetResourceState('ox_inventory') == 'started' then
+        Inventory = 'ox_inventory'
+    elseif GetResourceState('qb-inventory') == 'started' then
+        Inventory = 'qb-inventory'
+    elseif GetResourceState('qs-inventory') == 'started' then
+        Inventory = 'qs-inventory'
+    elseif GetResourceState('ps-inventory') == 'started' then
+        Inventory = 'ps-inventory'
+    elseif GetResourceState('origen_inventory') == 'started' then
+        Inventory = 'origen_inventory'
+    elseif GetResourceState('codem-inventory') == 'started' then
+        Inventory = 'codem-inventory'
+    elseif GetResourceState('tgiann-inventory') == 'started' then
+        Inventory = 'tgiann-inventory'
+    elseif GetResourceState('jaksam_inventory') == 'started' then
+        Inventory = 'jaksam_inventory'
+    else
+        -- Add custom inventory here
+    end
+end
+
+-- Returns player data
+function GetPlayerData()
+    if Framework == 'esx' then
+        return ESX.GetPlayerData()
+    elseif Framework == 'qb' then
+        return QBCore.Functions.GetPlayerData()
+    elseif Framework == 'qbx' then
+        return exports.qbx_core:GetPlayerData()
+    elseif Framework == 'ox' then
+        return Ox.GetPlayer()
+    else
+        -- Add custom framework here
+    end
+end
+
+-- Returns players current inventory data
+--- @return any
+function GetPlayerInventory()
+    if Inventory then
+        if Inventory == 'ox_inventory' then
+            return exports[Inventory]:GetPlayerItems()
+        elseif Inventory == 'qb-inventory' then
+            return GetPlayerData().items
+        elseif Inventory == 'qs-inventory' then
+            return exports[Inventory]:getUserInventory()
+        elseif Inventory == 'ps-inventory' then
+            return GetPlayerData().items
+        elseif Inventory == 'origen_inventory' then
+            return exports[Inventory]:GetInventory()
+        elseif Inventory == 'codem-inventory' then
+            return exports[Inventory]:GetClientPlayerInventory()
+        elseif Inventory == 'tgiann-inventory' then
+            return exports[Inventory]:GetItemList()
+        elseif Inventory == 'jaksam_inventory' then
+            return exports[Inventory]:getStaticItemsList()
+        end
+    else
+        if Framework == 'esx' then
+            return GetPlayerData().inventory
+        elseif Framework == 'qb' then
+            return GetPlayerData().items
+        elseif Framework == 'qbx' then
+            return print('Are you really not using ox_inventory? Contact support and say: "I\'m special"')
+        elseif Framework == 'ox' then
+            return print('It is confirmed your insane. Please contact support for mental health evaluation.')
+        end
+    end
+end
+
+-- Returns player job
+function GetPlayerJob()
+    local player = GetPlayerData()
+    if not player then return end
+    if Framework == 'esx' then
+        return player?.job?.name
+    elseif Framework == 'qb' then
+        return player.job.name
+    elseif Framework == 'qbx' then
+        return player.job.name
+    elseif Framework == 'ox' then
+        -- TODO
+    else
+        -- Add custom framework here
+    end
+end
+
+-- Initialize defaults
+InitializeFramework()
+InitializeInventory()
+```
+
+
+```lua bridge/server.lua expandable
+-- Initialize global variables to store framework & inventory
+Framework, Inventory = nil, nil
+
+-- Get framework
+local function InitializeFramework()
+    if GetResourceState('es_extended') == 'started' then
+        ESX = exports['es_extended']:getSharedObject()
+        Framework = 'esx'
+    elseif GetResourceState('qbx_core') == 'started' then
+        Framework = 'qbx'
+    elseif GetResourceState('qb-core') == 'started' then
+        QBCore = exports['qb-core']:GetCoreObject()
+        Framework = 'qb'
+    elseif GetResourceState('ox_core') == 'started' then
+        Ox = require '@ox_core.lib.init'
+        Framework = 'ox'
+    else
+        -- Add custom framework here
+    end
+end
+
+-- Get inventory
+local function InitializeInventory()
+    if GetResourceState('ox_inventory') == 'started' then
+        Inventory = 'ox_inventory'
+    elseif GetResourceState('qb-inventory') == 'started' then
+        Inventory = 'qb-inventory'
+    elseif GetResourceState('qs-inventory') == 'started' then
+        Inventory = 'qs-inventory'
+    elseif GetResourceState('ps-inventory') == 'started' then
+        Inventory = 'ps-inventory'
+    elseif GetResourceState('origen_inventory') == 'started' then
+        Inventory = 'origen_inventory'
+    elseif GetResourceState('codem-inventory') == 'started' then
+        Inventory = 'codem-inventory'
+    elseif GetResourceState('tgiann-inventory') == 'started' then
+        Inventory = 'tgiann-inventory'
+    elseif GetResourceState('jaksam_inventory') == 'started' then
+        Inventory = 'jaksam_inventory'
+    else
+        -- Add custom inventory here
+    end
+end
+
+-- Get player from source
+--- @param source number Player ID
+function GetPlayer(source)
+    if not source then return end
+    if Framework == 'esx' then
+        return ESX.GetPlayerFromId(source)
+    elseif Framework == 'qb' then
+        return QBCore.Functions.GetPlayer(source)
+    elseif Framework == 'qbx' then
+        return exports.qbx_core:GetPlayer(source)
+    elseif Framework == 'ox' then
+        return Ox.GetPlayer(source)
+    else
+        -- Add custom framework here
+    end
+end
+
+-- Function to get a player identifier by source
+--- @param source number Player ID
+function GetIdentifier(source)
+    local player = GetPlayer(source)
+    if not player then return end
+    if Framework == 'esx' then
+        return player.identifier
+    elseif Framework == 'qb' or Framework == 'qbx' then
+        return player.PlayerData.citizenid
+    elseif Framework == 'ox' then
+        return player.charId
+    else
+        -- Add custom framework here
+    end
+end
+
+-- Function to get a player's name
+--- @param source number Player ID
+--- @return string
+function GetName(source)
+    local player = GetPlayer(source)
+    if not player then return 'Unknown' end
+    if Framework == 'esx' then
+        return player.getName()
+    elseif Framework == 'qb' or Framework == 'qbx' then
+        return player.PlayerData.charinfo.firstname .. ' ' .. player.PlayerData.charinfo.lastname
+    elseif Framework == 'ox' then
+        return player.get('firstName') .. ' ' .. player.get('lastName')
+    else
+        -- Add custom framework here
+    end
+    return 'Unknown'
+end
+
+-- Returns number of specified item in players inventory
+--- @param source number Player ID
+--- @param item string Item to search
+--- @return number
+function GetItemCount(source, item)
+    if not source or not item then return 0 end
+    local player = GetPlayer(source)
+    if not player then return 0 end
+    if Inventory then
+        if Inventory == 'ox_inventory' then
+            return exports[Inventory]:Search(source, 'count', item) or 0
+        elseif Inventory == 'core_inventory' then
+            return exports[Inventory]:getItemCount(source, item)
+        elseif Inventory == 'jaksam_inventory' then
+            return exports[Inventory]:getTotalItemAmount(source, item) or 0
+        else
+            local itemData = exports[Inventory]:GetItemByName(source, item)
+            if not itemData then return 0 end
+            return itemData.amount or itemData.count or 0
+        end
+    else
+        if Framework == 'esx' then
+            local itemData = player.getInventoryItem(item)
+            if not itemData then return 0 end
+            return itemData.count or itemData.amount or 0
+        elseif Framework == 'qb' then
+            local itemData = player.Functions.GetItemByName(item)
+            if not itemData then return 0 end
+            return itemData.amount or itemData.count or 0
+        else
+            -- Add custom framework here
+        end
+    end
+    return 0
+end
+
+-- Adds an item to players inventory
+--- @param source number Player ID
+--- @param item string Item to add
+--- @param count number Quantity to add
+--- @param metadata any|table Optional metadata
+function AddItem(source, item, count, metadata)
+    if count <= 0 then return end
+    local player = GetPlayer(source)
+    if not player then return end
+    if Inventory then
+        if Inventory == 'ox_inventory' then
+            exports[Inventory]:AddItem(source, item, count, metadata)
+        elseif Inventory == 'core_inventory' or Inventory == 'jaksam_inventory' then
+            exports[Inventory]:addItem(source, item, count, metadata)
+        else
+            exports[Inventory]:AddItem(source, item, count, nil, metadata)
+        end
+    else
+        if Framework == 'esx' then
+            player.addInventoryItem(item, count)
+        elseif Framework == 'qb' then
+            player.Functions.AddItem(item, count, nil, metadata)
+        else
+            -- Add custom framework here
+        end
+    end
+end
+
+-- Removes an item from players inventory
+--- @param source number Player ID
+--- @param item string Item to remove
+--- @param count number Quantity to remove
+function RemoveItem(source, item, count)
+    local player = GetPlayer(source)
+    if not player then return end
+    if Inventory then
+        if Inventory == 'core_inventory' or Inventory == 'jaksam_inventory' then
+            exports[Inventory]:removeItem(source, item, count)
+        else
+            exports[Inventory]:RemoveItem(source, item, count)
+        end
+    else
+        if Framework == 'esx' then
+            player.removeInventoryItem(item, count)
+        elseif Framework == 'qb' then
+            player.Functions.RemoveItem(item, count)
+        else
+            -- Add custom framework here
+        end
+    end
+end
+
+-- Returns correct framework money type if needed
+--- @param type string Money type
+--- @return string
+local function ConvertMoneyType(type)
+    if type == 'money' and (Framework == 'qb' or Framework == 'qbx') then
+        type = 'cash'
+    elseif type == 'cash' and (Framework == 'esx' or Framework == 'ox') then
+        type = 'money'
+    else
+        -- Add custom framework here
+    end
+    return type
+end
+
+-- Add money to players account
+--- @param source number Player ID
+--- @param type string Account to add to
+--- @param amount number Amount to add
+function AddMoney(source, type, amount)
+    local player = GetPlayer(source)
+    if not player then return end
+    if Framework == 'esx' then
+        player.addAccountMoney(ConvertMoneyType(type), amount)
+    elseif Framework == 'qb' or Framework == 'qbx' then
+        player.Functions.AddMoney(ConvertMoneyType(type), amount)
+    elseif Framework == 'ox' then
+        if type == 'cash' or type == 'money' then
+            exports.ox_inventory:AddItem(source, ConvertMoneyType(type), amount)
+        else
+            local accountId = Ox.GetCharacterAccount(source).id
+            Ox.DepositMoney(source, accountId, amount)
+        end
+    else
+        -- Add custom framework here
+    end
+end
+
+-- Initialize defaults
+InitializeFramework()
+InitializeInventory()
+```
+
+</CodeGroup>
+
+<CodeGroup>
+
+```lua client/functions.lua expandable
+-- You can change the textUI script here
+-- Options: 'lation_ui', 'ox_lib', 'jg-textui', 'okokTextUI', 'qbcore' & 'custom'
+local textui = 'ox_lib'
+
+-- Function to show a notification
+--- @param message string
+--- @param type string
+function ShowNotification(message, type)
+    if Config.Setup.notify == 'lation_ui' then
+        exports.lation_ui:notify({ title = 'Drugs', message = message, type = type, icon = 'fas fa-capsules' })
+    elseif Config.Setup.notify == 'ox_lib' then
+        lib.notify({ title = 'Drugs', description = message, type = type, position = 'top', icon = 'fas fa-capsules' })
+    elseif Config.Setup.notify == 'esx' then
+        ESX.ShowNotification(message)
+    elseif Config.Setup.notify == 'qb' then
+        QBCore.Functions.Notify(message, type)
+    elseif Config.Setup.notify == 'okok' then
+        exports['okokNotify']:Alert('Drugs', message, 5000, type, false)
+    elseif Config.Setup.notify == 'sd-notify' then
+        exports['sd-notify']:Notify('Drugs', message, type)
+    elseif Config.Setup.notify == 'wasabi_notify' then
+        exports.wasabi_notify:notify('Drugs', message, 5000, type, false, 'fas fa-capsules')
+    elseif Config.Setup.notify == 'custom' then
+        -- Add custom notification export/event here
+    end
+end
+
+-- Event handler to display server notifications
+--- @param message string
+--- @param type string
+RegisterNetEvent('lation_selling:Notify', function(message, type)
+    ShowNotification(message, type)
+end)
+
+-- Empty function that checks if a drug sale can continue or not
+-- Must return true to proceed, or return false to cancel
+--- @param zoneId number Zone ID
+function CanSell(zoneId)
+    if IsPedInAnyVehicle(cache.ped, true) then
+        ShowNotification(Strings.Notify.noVehicle, 'error')
+        return false
+    end
+    return true
+end
+
+-- Display TextUI
+--- @param text string 
+--- @param icon string
+function ShowTextUI(text, icon)
+    if textui == 'lation_ui' then
+        local isOpen, _ = exports.lation_ui:isOpen()
+        if isOpen then return end
+        exports.lation_ui:showText({
+            description = text,
+            icon = icon
+        })
+    elseif textui == 'ox_lib' then
+        local isOpen, _ = lib.isTextUIOpen()
+        if isOpen then return end
+        lib.showTextUI(text, {
+            position = 'left-center',
+            icon = icon
+        })
+    elseif textui == 'jg-textui' then
+        exports['jg-textui']:DrawText(text)
+    elseif textui == 'okokTextUI' then
+        exports['okokTextUI']:Open(text, 'lightblue ', 'left', false)
+    elseif textui == 'qbcore' then
+        exports['qb-core']:DrawText(text, 'left')
+    else
+        -- Add custom textUI here
+    end
+end
+
+-- Hide TextUI
+--- @param label string
+function HideTextUI(label)
+    if textui == 'lation_ui' then
+        local isOpen, text = exports.lation_ui:isOpen()
+        if isOpen and text == label then
+            exports.lation_ui:hideText()
+        end
+    elseif textui == 'ox_lib' then
+        local isOpen, text = lib.isTextUIOpen()
+        if isOpen and text == label then
+            lib.hideTextUI()
+        end
+    elseif textui == 'jg-textui' then
+        exports['jg-textui']:HideText()
+    elseif textui == 'okokTextUI' then
+        exports['okokTextUI']:Close()
+    elseif textui == 'qbcore' then
+        exports['qb-core']:HideText()
+    else
+        -- Add custom textUI here
+    end
+end
+
+-- Register menu
+--- @param data table
+function RegisterMenu(data)
+    if Config.Setup.menu == 'lation_ui' then
+        exports.lation_ui:registerMenu(data)
+    elseif Config.Setup.menu == 'ox_lib' then
+        lib.registerContext(data)
+    elseif Config.Setup.menu == 'custom' then
+        -- Add 'custom' menu system here
+    end
+end
+
+-- Show menu
+--- @param menuId string
+function ShowMenu(menuId)
+    if Config.Setup.menu == 'lation_ui' then
+        exports.lation_ui:showMenu(menuId)
+    elseif Config.Setup.menu == 'ox_lib' then
+        lib.showContext(menuId)
+    elseif Config.Setup.menu == 'custom' then
+        -- Add 'custom' menu system here
+    end
+end
+
+-- Function used for police dispatch systems
+-- Can get coords & street name with data.coords & data.street if needed
+--- @param data table
+function PoliceDispatch(data)
+    if not data then print('Failed to retrieve dispatch data, cannot proceed.') return end
+    if Config.Setup.dispatch == 'cd_dispatch' then
+        local playerData = exports['cd_dispatch']:GetPlayerInfo()
+        if not playerData then
+            print('cd_dispatch failed to return playerData, cannot proceed.')
+            return
+        end
+        TriggerServerEvent('cd_dispatch:AddNotification', {
+            job_table = Config.Police.jobs,
+            coords = playerData.coords,
+            title = '10-420 | Drug Sale',
+            message = 'A citizen has reported a potential drug sale on ' ..playerData.street,
+            flash = 0,
+            unique_id = playerData.unique_id,
+            sound = 1,
+            blip = {
+                sprite = 51,
+                scale = 1.0,
+                colour = 1,
+                flashes = false,
+                text = '10-420 | Drug Sale',
+                time = 5,
+                radius = 0,
+            }
+        })
+    elseif Config.Setup.dispatch == 'ps-dispatch' then
+        local alert = {
+            coords = data.coords,
+            message = 'A citizen has reported a potential drug sale on ' ..data.street,
+            dispatchCode = '10-420',
+            description = 'Drug Sale',
+            radius = 0,
+            sprite = 51,
+            color = 1,
+            scale = 1.0,
+            length = 3
+        }
+        exports["ps-dispatch"]:CustomAlert(alert)
+    elseif Config.Setup.dispatch == 'qs-dispatch' then
+        local playerData = exports['qs-dispatch']:GetPlayerInfo()
+        if not playerData then
+            print('qs-dispatch failed to return playerData, cannot proceed.')
+            return
+        end
+        exports['qs-dispatch']:getSSURL(function(image)
+            TriggerServerEvent('qs-dispatch:server:CreateDispatchCall', {
+                job = Config.Police.jobs,
+                callLocation = playerData.coords,
+                callCode = { code = '10-420', snippet = 'Drug Sale' },
+                message = 'A citizen has reported a potential drug sale on ' ..playerData.street_1,
+                flashes = false,
+                image = image or nil,
+                blip = {
+                    sprite = 51,
+                    scale = 1.0,
+                    colour = 1,
+                    flashes = false,
+                    text = '10-420 | Drug Sale',
+                    time = (30 * 1000),
+                }
+            })
+        end)
+    elseif Config.Setup.dispatch == 'core_dispatch' then
+        local gender = IsPedMale(cache.ped) and 'male' or 'female'
+        TriggerServerEvent('core_dispatch:addCall', '10-911', 'Potential Drug Sale',
+        {{icon = 'fa-venus-mars', info = gender}},
+        {data.coords.x, data.coords.y, data.coords.z},
+        'police', 30000, 51, 1, false)
+    elseif Config.Setup.dispatch == 'rcore_dispatch' then
+        local playerData = exports['rcore_dispatch']:GetPlayerData()
+        local alert = {
+            code = '10-420 | Drug Sale',
+            default_priority = 'low',
+            coords = playerData.coords,
+            job = Config.Police.jobs,
+            text = 'A citizen has reported a potential drug sale on ' ..playerData.street_1,
+            type = 'alerts',
+            blip_time = 30,
+            blip = {
+                sprite = 51,
+                colour = 1,
+                scale = 1.0,
+                text = '10-420 | Drug Sale',
+                flashes = false,
+                radius = 0,
+            }
+        }
+        TriggerServerEvent('rcore_dispatch:server:sendAlert', alert)
+    elseif Config.Setup.dispatch == 'aty_dispatch' then
+        TriggerEvent('aty_dispatch:SendDispatch', 'Potential Drug Sale', '10-420', 51, Config.Police.jobs)
+    elseif Config.Setup.dispatch == 'op-dispatch' then
+        local job = 'police'
+        local text = 'A citizen has reported a potential drug sale on ' ..data.street
+        local coords = data.coords
+        local id = cache.serverId
+        local title = '10-420 | Drug Sale'
+        local panic = false
+        TriggerServerEvent('Opto_dispatch:Server:SendAlert', job, title, text, coords, panic, id)
+    elseif Config.Setup.dispatch == 'origen_police' then
+        local alert = {
+            coords = data.coords,
+            title = '10-420 | Drug Sale',
+            type = 'DRUGS',
+            message = 'A citizen has reported a potential drug sale on ' ..data.street,
+            job = 'police',
+        }
+        TriggerServerEvent("SendAlert:police", alert)
+    elseif Config.Setup.dispatch == 'emergencydispatch' then
+        TriggerServerEvent('emergencydispatch:emergencycall:new', Config.Police.jobs, '10-420 | Potential Drug Sale', data.coords, true)
+    elseif Config.Setup.dispatch == 'custom' then
+        -- Add your custom dispatch system here
+    else
+        print('No dispatch system was identified - please update your Config.Setup.dispatch')
+    end
+end
+
+-- Add target to global peds
+--- @param data table
+function AddTargetGlobal(data)
+    if Config.Setup.target == 'ox_target' then
+        exports.ox_target:addGlobalPed(data)
+    elseif Config.Setup.target == 'qb-target' then
+        exports['qb-target']:AddGlobalPed({options = data})
+    elseif Config.Setup.target == 'qtarget' then
+        exports.qtarget:Ped({options = data})
+    else
+        -- Add support for a custom target system here
+    end
+end
+
+-- Add target to entity
+--- @param entity number
+--- @param data table
+function AddTargetEntity(entity, data)
+    if Config.Setup.target == 'ox_target' then
+        exports.ox_target:addLocalEntity(entity, data)
+    elseif Config.Setup.target == 'qb-target' then
+        exports['qb-target']:AddTargetEntity(entity, {options = data, distance = 2.0})
+    elseif Config.Setup.target == 'qtarget' then
+        exports.qtarget:AddTargetEntity(entity, {options = data, distance = 2.0})
+    else
+        -- Add support for a custom target system here
+    end
+end
+
+-- Remove target from global peds
+--- @param data string | nil
+function RemoveTargetGlobal(data)
+    if Config.Setup.target == 'ox_target' then
+        exports.ox_target:removeGlobalPed(data)
+    elseif Config.Setup.target == 'qb-target' then
+        exports['qb-target']:RemoveGlobalPed(nil)
+    elseif Config.Setup.target == 'qtarget' then
+        exports.qtarget:RemovePed(nil)
+    else
+        -- Add support for a custom target system here
+    end
+end
+
+-- Remove target from entity
+--- @param entity number
+--- @param data table|string|nil
+function RemoveTargetEntity(entity, data)
+    if Config.Setup.target == 'ox_target' then
+        exports.ox_target:removeLocalEntity(entity, data)
+    elseif Config.Setup.target == 'qb-target' then
+        exports['qb-target']:RemoveTargetEntity(entity, nil)
+    elseif Config.Setup.target == 'qtarget' then
+        exports.qtarget:RemoveTargetEntity(entity, data)
+    else
+        -- Add support for a custom target system here
+    end
+end
+
+-- Function used to set specific events to entities when selling
+--- @param entity number
+function SetEntityEvents(entity)
+    ClearPedTasksImmediately(entity)
+    TaskTurnPedToFaceEntity(cache.ped, entity, -1)
+    TaskTurnPedToFaceEntity(entity, cache.ped, -1)
+    SetBlockingOfNonTemporaryEvents(entity, true)
+    SetEntityInvincible(entity, true)
+end
+
+-- Function used to clear specific events applied above after selling
+--- @param entity number
+function ClearEntityEvents(entity)
+    SetBlockingOfNonTemporaryEvents(entity, false)
+    SetEntityInvincible(entity, false)
+    ClearPedTasks(cache.ped)
+    ClearPedTasks(entity)
+end
+
+-- Function used to print events if Config.Debug is enabled
+--- @param string string Event message
+function EventLog(string)
+    if not string or not Config.Setup.debug then return end
+    print(string)
+end
+```
+
+
+```lua server/functions.lua expandable
+-- Check to see if fm-logs or fmsdk is started
+local fmlogs = GetResourceState('fm-logs') == 'started'
+local fmsdk = GetResourceState('fmsdk') == 'started'
+
+-- Empty function that is triggered on drug sales
+-- Can be used with XP systems, gang scripts, etc
+--- @param source number Player ID
+--- @param zoneId number Zone ID
+--- @param item string Drug/item name
+--- @param quantity number Quantity sold
+--- @param value number Total money paid to player
+--- @param xpAdded number Amount of XP added to player
+function DrugSold(source, zoneId, item, quantity, value, xpAdded)
+    -- Below is an example implementation of how you could use this function
+    -- In this example, we'll check if the player is a gang member and if so
+    -- Add reputation/notoriety to their gang upon a drug sale
+    -- First, let's check if they are in a gang:
+    local inGang = true
+    -- If we were using something like t1ger_gangsystem we would replace
+    -- "true" with the proper export, aka: exports['t1ger_gangsystem']:GetPlayerGangId(source)
+    if inGang then
+        -- inGang returned true or something greater than 0, so now we work within 
+        -- This if-then statement. So if inGang then..
+        -- Let's only add reputation/notoriety if they are selling a specific item..
+        if item == 'special_drug' then
+            -- Now we know this player is in a gang, and is selling this special drug
+            -- So now let's add some reputation/notoriety to their gang!
+            local addNotoriety = 100
+            -- But, maybe we should change how much notoriety is added based
+            -- On how many of this special drug they sold.. so let's do it!
+            local totalToAdd = math.floor(addNotoriety * quantity)
+            -- Here we just multiply the addNotoriety by the total quantity sold
+            -- So if they sold x3 special_drug then they would get 300 notoriety
+            -- Now we would place our export/event below to add it!
+            -- exports['t1ger_gangsystem']:PlusGangNotoriety(inGang, totalToAdd)
+        end
+    end
+    -- If a player was not in a gang then the code would do nothing!
+    -- This is a simple example to demonstrate one of the many, many
+    -- Options you have with a function like this, enjoy <3
+end
+
+-- Used to pay the player upon successful drug sale
+--- @param source number Player ID
+--- @param zoneId number Zone ID
+--- @param amount number Amount of money
+function PayPlayer(source, zoneId, amount)
+    if not source or not zoneId or not amount then return end
+    local player = GetPlayer(source)
+    if not player then return end
+    local zone = Config.Zones[zoneId]
+    if not zone then return end
+    local money, metadata = zone.settings.money, zone.settings.metadata
+    if Framework == 'esx' then
+        if money == 'black_money' or money == 'money' or money == 'bank' then
+            player.addAccountMoney(money, amount)
+        else
+            AddItem(source, money, amount)
+        end
+    elseif Framework == 'qb' then
+        if money == 'markedbills' or money == 'cashrolls' or money == 'bands' then
+            if metadata then
+                local hasBag = GetItemCount(source, money)
+                if hasBag and hasBag > 0 then
+                    local currentValue = player.Functions.GetItemByName(money).info.worth
+                    local newValue = amount
+                    local updatedValue = { worth = math.ceil(currentValue + newValue) }
+                    player.Functions.RemoveItem(money, 1)
+                    player.Functions.AddItem(money, 1, false, updatedValue)
+                else
+                    local data = { worth = amount }
+                    player.Functions.AddItem(money, 1, false, data)
+                end
+            else
+                player.Functions.AddItem(money, amount)
+            end
+        elseif money == 'cash' or money == 'bank' then
+            AddMoney(source, money, amount)
+        else
+            AddItem(source, money, amount)
+        end
+    elseif Framework == 'qbx' then
+        AddItem(source, money, amount)
+    elseif Framework == 'ox' then
+        AddItem(source, money, amount)
+    else
+        -- Add support for a custom framework here
+    end
+end
+
+-- Returns number of players with police job(s)
+--- @return number
+function GetPoliceCount()
+    local count, jobs = 0, {}
+    for _, job in pairs(Config.Police.jobs) do
+        jobs[job] = true
+    end
+    if Framework == 'esx' then
+        for _, player in pairs(ESX.GetExtendedPlayers()) do
+            if jobs[player.getJob().name] then
+                count += 1
+            end
+        end
+    elseif Framework == 'qb' then
+        for _, playerId in pairs(QBCore.Functions.GetPlayers()) do
+            local player = QBCore.Functions.GetPlayer(playerId)
+            if jobs[player.PlayerData.job.name] and player.PlayerData.job.onduty then
+                count += 1
+            end
+        end
+    elseif Framework == 'qbx' then
+        for job, _ in pairs(jobs) do
+            count = count + exports.qbx_core:GetDutyCountJob(job)
+        end
+    elseif Framework == 'ox' then
+        for _, player in pairs(Ox.GetPlayers()) do
+            if jobs[player.getGroupByType('job')] then
+                count += 1
+            end
+        end
+    else
+        -- Add custom framework here
+    end
+    return count
+end
+
+-- Returns an items metadata
+--- @param source number Player ID
+--- @param item string Item name
+function GetMetadata(source, item)
+    if not source or not item then return end
+    local player = GetPlayer(source)
+    if not player then return end
+    if Inventory == 'ox_inventory' then
+        local data = exports[Inventory]:Search(source, 'slots', item)
+        if not data or #data == 0 then return end
+        return data[1].metadata
+    elseif Inventory == 'jaksam_inventory' then
+        local data = exports[Inventory]:getItemByName(source, item)
+        if not data then return end
+        return data.metadata
+    else
+        local data = exports[Inventory]:GetItemByName(source, item)
+        if not data then return end
+        return data.info
+    end
+end
+
+-- Log events if applicable
+--- @param message string Message contents
+--- @param type string Log type
+function EventLog(message, type)
+    if not message or not Config.Setup.debug then return end
+    if Logs.Service == 'fivemanage' then
+        if not fmsdk then return end
+        exports.fmsdk:LogMessage(type or 'info', message)
+    elseif Logs.Service == 'fivemerr' then
+        if not fmlogs then return end
+        exports['fm-logs']:createLog({
+            LogType = 'Resource',
+            Resource = 'lation_selling',
+            Level = type or 'info',
+            Message = message,
+        })
+    else
+        print(message)
+    end
+end
+
+-- Log player events if applicable
+--- @param source number Player ID
+--- @param title string Log title
+--- @param message string Message contents
+function PlayerLog(source, title, message)
+    if Logs.Service == 'fivemanage' then
+        if not fmsdk then return end
+        if Logs.Screenshots then
+            exports.fmsdk:takeServerImage(source, {
+                name = title,
+                description = message,
+            })
+        else
+            exports.fmsdk:LogMessage('info', message)
+        end
+    elseif Logs.Service == 'fivemerr' then
+        if not fmlogs then return end
+        exports['fm-logs']:createLog({
+            LogType = 'Player',
+            Message = message,
+            Resource = 'lation_selling',
+            Source = source,
+        }, { Screenshot = Logs.Screenshots })
+    elseif Logs.Service == 'discord' then
+        local embed = {
+            {
+                ["color"] = 16711680,
+                ["title"] = "**".. title .."**",
+                ["description"] = message,
+                ["footer"] = {
+                    ["text"] = os.date("%a %b %d, %I:%M%p"),
+                    ["icon_url"] = Logs.Discord.footer
+                }
+            }
+        }
+        PerformHttpRequest(Logs.Discord.link, function()
+        end, 'POST', json.encode({username = Logs.Discord.name, embeds = embed, avatar_url = Logs.Discord.image}), {['Content-Type'] = 'application/json'})
+    end
+end
+```
+
+</CodeGroup>

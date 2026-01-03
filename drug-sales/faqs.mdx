@@ -1,0 +1,35 @@
+---
+title: "FAQs"
+icon: "comment-question"
+description: "Solutions to frequently asked questions"
+---
+
+<AccordionGroup>
+  <Accordion title="My drugs are selling for the incorrect price">
+    If your drugs are selling for \$2 or some price that you are not expecting, this is because of our built-in purity pricing feature. Our individual drug scripts such as weed, meth & coke use purity by default for determining the sale price. Due to the use of metadata on these items, **they cannot be spawned**. If you spawned in these items, that is the issue! However, you have a couple options to choose from:
+
+    - You can disable purity pricing by visiting the `Config.LationWeed`, `Config.LationMeth` and/or `Config.LationCoke` sections in the `config.lua` of the selling script and set the `enable` option to `false`. This will disable purity pricing completely and rely on your specific prices set in the zones drugs settings.
+    - Secondly, you could go through the correct production process of these drugs so that they are produced correctly and will contain the correct metadata and you will see the price of this drug change based on the purity value assigned.
+    - Lastly (_and the most drastic option_) is you could write a temporary development command such as the one shown below and spawn the items manually with metadata in-tact:
+
+      <Note>
+        Paste this command in `lation_selling/server/functions.lua` at the end of the file.
+      </Note>
+      ```lua
+      -- Replace DRUG and DRUGITEM with your required drug name and item name.
+      RegisterCommand('giveDRUG', function(source, args)
+          AddItem(source, 'DRUGITEM', args[1] and tonumber(args[1]) or 1, {purity = 100})
+      end, false)
+      ```
+
+      <Danger>
+        Do not forget to remove this command when done testing!
+      </Danger>
+  </Accordion>
+  <Accordion title="I want to enable full map selling">
+    To accomplish this, first you must remove (_or comment out_) all zones except for 1. Next you must update the `coords` section for that 1 remaining zone to be roughly in the center of the map. Lastly, change the zone `size` to 5000.
+  </Accordion>
+  <Accordion title="My question or issue isn't listed here">
+    Sorry about that! Please reach out to us on [**Discord**](https://discord.gg/9EbY4nM5uu) or via email at [**support@lationscripts.com**](mailto:support@lationscripts.com) regarding your issue.
+  </Accordion>
+</AccordionGroup>

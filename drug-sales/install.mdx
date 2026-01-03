@@ -1,0 +1,34 @@
+---
+title: "Installation"
+description: "Step by step instructions to install this resource"
+icon: "gear"
+---
+
+<Steps>
+  <Step title="Install (or update) dependencies" stepNumber={1}>
+    <Warning>
+      Verify all dependencies below are started _before_ this script in your `server.cfg`.
+    </Warning>
+    <Columns cols={2}>
+      <Card title="oxmysql" icon="arrow-up-right-from-square" href="https://github.com/CommunityOx/oxmysql/releases/latest">
+        Download oxmysql
+      </Card>
+      <Card title="ox_lib" icon="arrow-up-right-from-square" href="https://github.com/CommunityOx/ox_lib/releases/latest">
+        Download ox_lib
+      </Card>
+    </Columns>
+  </Step>
+  <Step title="Create a new subfolder" stepNumber={2}>
+    <Info>
+      This is an optional step, but is _highly recommended_.
+    </Info>
+    If you haven't already, create a new subfolder named `[lation]` in your server's root resources directory. Unzip (_extract_) this script into the newly created `[lation]` subfolder.
+  </Step>
+  <Step title="Update server.cfg & perform a full restart" stepNumber={3}>
+    Once all other steps are completed, open your `server.cfg` & add `ensure [lation]` to the very **bottom** of your resource start list. Finally, perform a full server restart. Failure to perform a full restart after installation will cause errors.
+  </Step>
+</Steps>
+
+<Danger>
+  Upon completion, do not delete the `install` folder or any `.sql` files or you will experience errors.
+</Danger>

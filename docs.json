@@ -190,6 +190,25 @@
               "scuba-diving/changelog",
               "scuba-diving/previews"
             ]
+          },
+          {
+            "group": "Drug Sales",
+            "icon": "pills",
+            "pages": [
+              "drug-sales/install",
+              {
+                "group": "Exports",
+                "icon": "code",
+                "pages": [
+                  "drug-sales/exports/shared",
+                  "drug-sales/exports/client",
+                  "drug-sales/exports/server"
+                ]
+              },
+              "drug-sales/faqs",
+              "drug-sales/changelog",
+              "drug-sales/previews"
+            ]
           }
         ]
       }
