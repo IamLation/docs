@@ -198,7 +198,7 @@ Callouts are styled information boxes that can be added to alert dialogs to emph
     ```
 
     <Frame>
-      ![Destructive alert example](https://img.lationscripts.com/docs/ui/alert-dialog/destructive-example.webp)
+      ![Destructive alert example](/resources/modern-ui/components/alert-dialog/destructive-example.webp)
     </Frame>
   </Tab>
   <Tab title="With Callouts">
@@ -239,7 +239,7 @@ Callouts are styled information boxes that can be added to alert dialogs to emph
     ```
 
     <Frame>
-      ![Alert with callouts](https://img.lationscripts.com/docs/ui/alert-dialog/callouts-example.webp)
+      ![Alert with callouts](/resources/modern-ui/components/alert-dialog/callouts-example.webp)
     </Frame>
   </Tab>
   <Tab title="Information Only">
@@ -284,58 +284,3 @@ Callouts are styled information boxes that can be added to alert dialogs to emph
     ```
   </Tab>
 </Tabs>
-
-## Best Practices
-
-<CardGroup cols={2}>
-  <Card title="Use Appropriate Types" icon="palette">
-    Match the dialog type to the action severity. Use `'error'` for destructive actions, `'warning'` for caution, and `'info'` for general information.
-  </Card>
-  <Card title="Clear Labels" icon="tag">
-    Use descriptive button labels that clearly indicate the action. Instead of "Yes/No", use "Delete/Cancel" or "Confirm/Go Back".
-  </Card>
-  <Card title="Markdown Support" icon="markdown">
-    Leverage markdown in header and content for better formatting, such as bold text, lists, and emphasis.
-  </Card>
-  <Card title="Callouts for Context" icon="bell">
-    Use callouts to provide additional context or warnings without cluttering the main message.
-  </Card>
-</CardGroup>
-
-<Tip>
-  For better UX, always provide clear consequences of actions in the dialog content, especially for destructive operations.
-</Tip>
-
-## Troubleshooting
-
-<AccordionGroup>
-  <Accordion title="Dialog not showing" icon="bug">
-    **Possible causes:**
-
-    - Another dialog is already open
-    - Missing required `header` or `content` field
-    - Script resource not started
-
-    **Solution:** Use `closeAlert()` to close any existing dialogs before opening a new one.
-  </Accordion>
-  <Accordion title="Callouts not displaying correctly" icon="triangle-exclamation">
-    **Possible causes:**
-
-    - Missing required `description` field in callout
-    - Invalid callout `type` value
-
-    **Solution:** Ensure each callout has a `description` and uses a valid type: `'info'`, `'success'`, `'warning'`, or `'error'`.
-  </Accordion>
-  <Accordion title="Icons not appearing" icon="icons">
-    **Possible causes:**
-
-    - Invalid FontAwesome class name
-    - FontAwesome library not loaded
-
-    **Solution:** Verify the icon class at [FontAwesome Icons](https://fontawesome.com/icons) and ensure it follows the format `'fas fa-icon-name'`.
-  </Accordion>
-</AccordionGroup>
-
-<Warning>
-  Always handle the return value appropriately. Dialogs return `'cancel'` when closed via ESC key or clicking outside the dialog area.
-</Warning>
