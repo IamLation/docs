@@ -1,7 +1,7 @@
 ---
-title: 'Timeline'
-description: 'Dynamic timeline for tracking mission progress and task completion'
-icon: 'timeline'
+title: "Timeline"
+description: "Dynamic timeline for tracking mission progress and task completion"
+icon: "timeline"
 ---
 
 ## Quick Start
@@ -29,11 +29,13 @@ exports.lation_ui:showTimeline({
     ```
 
     **Parameters:**
+
     - `data` (table) - Timeline configuration object (see [Options](#options))
 
-    <Warning>Only one timeline can be active at a time. Showing a new timeline will automatically hide any existing timeline.</Warning>
+    <Warning>
+      Only one timeline can be active at a time. Showing a new timeline will automatically hide any existing timeline.
+    </Warning>
   </Accordion>
-
   <Accordion title="hideTimeline" icon="eye-slash">
     Hide a specific timeline.
 
@@ -42,32 +44,35 @@ exports.lation_ui:showTimeline({
     ```
 
     **Parameters:**
+
     - `id` (string) - Unique identifier of the timeline to hide
 
-    <Note>Timeline state is not preserved when hidden. You must pass the full configuration when showing again.</Note>
+    <Note>
+      Timeline state is not preserved when hidden. You must pass the full configuration when showing again.
+    </Note>
   </Accordion>
-
   <Accordion title="updateTimelineTask" icon="rotate">
     Update one or multiple task statuses.
 
     ```lua
     -- Single task update
     exports.lation_ui:updateTimelineTask(timelineId, taskId, status)
-
+    
     -- Multiple tasks update (recommended for sequential progression)
     exports.lation_ui:updateTimelineTask(timelineId, tasksArray)
     ```
 
     **Parameters (Single Task):**
+
     - `timelineId` (string) - Unique identifier of the timeline
     - `taskId` (string) - Unique identifier of the task to update
     - `status` (string) - New status: `'pending'`, `'active'`, `'completed'`, `'failed'`
 
     **Parameters (Multiple Tasks):**
+
     - `timelineId` (string) - Unique identifier of the timeline
     - `tasksArray` (table) - Array of task objects with `id` and `status` properties
   </Accordion>
-
   <Accordion title="addTimelineTask" icon="plus">
     Add a new task to an existing timeline.
 
@@ -76,10 +81,10 @@ exports.lation_ui:showTimeline({
     ```
 
     **Parameters:**
+
     - `timelineId` (string) - Unique identifier of the timeline
     - `task` (table) - Task object (see [Tasks](#tasks))
   </Accordion>
-
   <Accordion title="updateTimeline" icon="pen">
     Update timeline properties (title, description, icon, etc.).
 
@@ -88,10 +93,10 @@ exports.lation_ui:showTimeline({
     ```
 
     **Parameters:**
+
     - `timelineId` (string) - Unique identifier of the timeline
     - `updates` (table) - Object containing properties to update (see [Options](#options))
   </Accordion>
-
   <Accordion title="getActiveTimeline" icon="question">
     Get the ID of the currently active timeline.
 
@@ -100,6 +105,7 @@ exports.lation_ui:showTimeline({
     ```
 
     **Returns:**
+
     - `timelineId` (string | nil) - The ID of the active timeline, or nil if none is active
   </Accordion>
 </AccordionGroup>
@@ -120,9 +126,9 @@ exports.lation_ui:showTimeline({
   Timeline description (supports markdown)
 </ParamField>
 
-<ParamField path="position" type="string" default="right-center">
+<ParamField path="position" default="right-center" type="string">
   Timeline position on screen
-  
+
   Available options: `'top-left'`, `'top-center'`, `'top-right'`, `'left-center'`, `'center'`, `'right-center'`, `'bottom-left'`, `'bottom-center'`, `'bottom-right'`
 </ParamField>
 
@@ -130,13 +136,13 @@ exports.lation_ui:showTimeline({
   FontAwesome icon class
 </ParamField>
 
-<ParamField path="iconColor" type="string" default="#71717A">
+<ParamField path="iconColor" default="#71717A" type="string">
   Icon color (hex or [CSS color name](https://htmlcolorcodes.com/color-names/))
 </ParamField>
 
 <ParamField path="iconAnimation" type="string">
   Icon animation type
-  
+
   Available options: `'spin'`, `'spinPulse'`, `'spinReverse'`, `'pulse'`, `'beat'`, `'fade'`, `'beatFade'`, `'bounce'`, `'shake'`
 </ParamField>
 
@@ -144,7 +150,7 @@ exports.lation_ui:showTimeline({
   Array of task objects (see [Tasks](#tasks))
 </ParamField>
 
-<ParamField path="opacity" type="number" default="1.0">
+<ParamField path="opacity" default="1.0" type="number">
   Background opacity (0.0-1.0)
 </ParamField>
 
@@ -166,30 +172,121 @@ Each task object in the `tasks` array supports:
 
 <ParamField path="status" type="string" required>
   Task status
-  
+
   Available options: `'pending'`, `'active'`, `'completed'`, `'failed'`
 </ParamField>
 
 <ParamField path="icon" type="string">
   FontAwesome icon class
-  
-  <Note>Overrides default status icon. See [Task Status Icons](#task-status-icons) for defaults.</Note>
+
+  <Note>
+    Overrides default status icon. See [Task Status Icons](#task-status-icons) for defaults.
+  </Note>
 </ParamField>
 
 <ParamField path="iconColor" type="string">
   Icon color (hex or [CSS color name](https://htmlcolorcodes.com/color-names/))
-  
-  <Note>Automatically determined by task status if not specified</Note>
+
+  <Note>
+    Automatically determined by task status if not specified
+  </Note>
 </ParamField>
 
 <ParamField path="iconAnimation" type="string">
   Icon animation type
-  
-  <Warning>Custom task icons do not auto-animate unless `iconAnimation` is explicitly set</Warning>
+
+  <Warning>
+    Custom task icons do not auto-animate unless `iconAnimation` is explicitly set
+  </Warning>
 </ParamField>
+
+## Examples
+
+<CodeGroup>
+
+```lua Basic Timeline
+-- Show a timeline with mission tasks
+exports.lation_ui:showTimeline({
+    id = 'heist_mission',
+    title = 'Bank Heist',
+    description = 'Complete all objectives to finish the heist',
+    position = 'right-center',
+    icon = 'fas fa-mask',
+    iconColor = '#EF4444',
+    opacity = 0.95,
+    tasks = {
+        { 
+            id = 'gear', 
+            label = 'Acquire equipment', 
+            description = 'Get supplies from the warehouse',
+            status = 'completed'
+        },
+        { 
+            id = 'hack', 
+            label = 'Hack security system', 
+            description = 'Disable cameras and alarms',
+            status = 'active'
+        },
+        { 
+            id = 'vault', 
+            label = 'Access the vault', 
+            status = 'pending'
+        },
+        { 
+            id = 'escape', 
+            label = 'Escape the area', 
+            status = 'pending'
+        }
+    }
+})
+```
+
+
+```lua Update Single Task
+-- Update one task when objective is completed
+exports.lation_ui:updateTimelineTask('heist_mission', 'hack', 'completed')
+```
+
+
+```lua Update Multiple Tasks
+-- Update multiple tasks at once (recommended for sequential progression)
+exports.lation_ui:updateTimelineTask('heist_mission', {
+    { id = 'hack', status = 'completed' },
+    { id = 'vault', status = 'active' }
+})
+```
+
+
+```lua Add Task
+-- Add a new task dynamically
+exports.lation_ui:addTimelineTask('heist_mission', {
+    id = 'bonus',
+    label = 'Bonus objective',
+    description = 'Collect additional loot',
+    status = 'pending',
+    icon = 'fas fa-star',
+    iconColor = '#F59E0B'
+})
+```
+
+
+```lua Update Timeline
+-- Update timeline properties (e.g., completion message)
+exports.lation_ui:updateTimeline('heist_mission', {
+    description = 'Heist Complete! +$50,000'
+})
+```
+
+
+```lua Hide Timeline
+-- Hide timeline when mission ends
+exports.lation_ui:hideTimeline('heist_mission')
+```
+
+</CodeGroup>
 
 ## Preview
 
 <Frame>
-  <img src="/resources/modern-ui/components/timeline/example.webp" alt="Timeline Preview" />
+  ![Timeline Preview](/resources/modern-ui/components/timeline/example.webp)
 </Frame>
