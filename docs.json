@@ -223,10 +223,16 @@
                   "modern-ui/components/alert",
                   "modern-ui/components/input",
                   "modern-ui/components/menu",
+                  {
+                    "group": "Minigames",
+                    "icon": "folder",
+                    "pages": [
+                      "modern-ui/components/minigames/skill-check"
+                    ]
+                  },
                   "modern-ui/components/notify",
                   "modern-ui/components/progress",
                   "modern-ui/components/radial",
-                  "modern-ui/components/skill-check",
                   "modern-ui/components/text-ui",
                   "modern-ui/components/timeline"
                 ]
