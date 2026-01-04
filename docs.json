@@ -226,8 +226,9 @@
                   "modern-ui/components/notify",
                   "modern-ui/components/progress",
                   "modern-ui/components/radial",
-                  "resources/modern-ui/components/skill-check",
-                  "resources/modern-ui/components/text-ui"
+                  "modern-ui/components/skill-check",
+                  "modern-ui/components/text-ui",
+                  "modern-ui/components/timeline"
                 ]
               }
             ]
