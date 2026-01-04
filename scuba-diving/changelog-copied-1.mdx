@@ -4,6 +4,122 @@ icon: "server"
 description: "A chronological log of every release, feature addition, and bug fix"
 ---
 
+<Update label="1.3.0" description="Dec 14, 2025">
+  NEW timeline component (details coming soon to docs/store)\
+  iconAnimation support to notifications\
+  titleColor option to notifications\
+  NEW size option for skillcheck (compact variant with no background, etc)\
+  cancel true/false option to input dialog\
+  Disable inventory (ox/qb) when progress active\
+  More markdown support (header rendering more specifically)\
+  Fixed multiple progress bars executing simultaneously\
+  Improved textui efficiency if being called every frame
+</Update>
+
+<Update label="1.2.1" description="Oct 20, 2025">
+  Default radial menu key added to config\
+  Menu bleeding out of view on offcenter positions
+</Update>
+
+<Update label="1.2.0" description="Oct 14, 2025">
+  Added radial menu (see docs for info)\
+  Added closeInput & closeAlert exports
+</Update>
+
+<Update label="1.1.0" description="Oct 10, 2025">
+  Improved menu scaling on higher resolutions\
+  Optional "id" param added to notifications (when provided will only show once when spammed/update the same notification)\
+  Ability to play sounds on notifications (with new config options for global sound settings)\
+  Progress bar now displays each users proper keymapped selection for cancel button\
+  Fixed menu bleeding out of viewport with large menus with lots of linebreaks\
+  Menu text left-align when no icon is provided
+</Update>
+
+<Update label="1.0.10" description="Aug 28, 2025">
+  Fixed input dialog "toggle/checkbox" type not returning proper value\
+  Progress bar "label" now optional\
+  Passing invalid notify "types" no longer errors, fallback to default\
+  Slightly increase context menu high for offcenter position(s)
+</Update>
+
+<Update label="1.0.9" description="Aug 17, 2025">
+  Fixed input dialog hitting enter error\
+  Fixed input dialog focus on first input if applicable\
+  Fixed input dialog missing some locale strings\
+  Added bgColor & txtColor options on TextUI
+</Update>
+
+<Update label="1.0.8" description="Aug 7, 2025">
+  Fix numbers returning string in number type for input dialog\
+  Fix context menu not displaying when no options are defined
+</Update>
+
+<Update label="1.0.7" description="Aug 6, 2025">
+  Refactor all input dialog components
+</Update>
+
+<Update label="1.0.6" description="Jul 31, 2025">
+  New input dialog type: date\
+  New input dialog type: date-range\
+  Auto-focus on first input dialog field if applicable when opened\
+  All Font Awesome icons now work in all formats\
+  Update locales
+</Update>
+
+<Update label="1.0.5" description="Jul 14, 2025">
+  Added convar(s) for default positioning overrides (notify, menu & textui - see docs)\
+  Enter key for dialogs will confirm/submit\
+  Markdown support available in notifications\
+  Image support in markdown function\
+  New "callouts" element available in alert dialogs (see docs)\
+  A "disable" variable for option(s) in select/multi-select input types\
+  Label now optional in select/multi-select input types\
+  Now accepts icon names without prefix (such as 'box' instead of 'fas fa-box')
+</Update>
+
+<Update label="1.0.4" description="Jul 9, 2025">
+  Added new text UI "options" with multi-label/icon/keybind support (see docs for info)\
+  Added new "info" type for alert & input dialogs (blue button)\
+  Added the "warning" type for input dialog\
+  Added optional multi-menu registration in one registerMenu call\
+  Added 10 new locales\
+  Fixed alert dialog not scrolling with lots of content\
+  Fixed input dialog not accepting 0 as a value (number/slider)\
+  Fixed iconColor causing custom image icon turning black\
+  Removed web/build folder from .gitignore for good\
+  Rewrote utility files\
+  Reorganized client folder structure\
+  Removed auto keybind extraction in text UI - just use keybind prop(s)
+</Update>
+
+<Update label="1.0.3" description="Jul 7, 2025">
+  Added "inform" as an alias for "info" for better ox_lib compatibility\
+  Added default input type to "input" to inputs with no type specified (thats a mouthful)\
+  Now use same notification position naming as ox_lib (bottom-center -\> bottom, top-center -\> top)\
+  Now use same textui position naming as ox_lib (center-right -\> right-center)\
+  Now set default textui position to right-center
+</Update>
+
+<Update label="1.0.2" description="Jul 4, 2025">
+  Added new ox_lib compat layer (thank you @kostaz - more info on docs about this coming soon)\
+  Added a "warning" type to alert dialog\
+  Added new "error" type as an alias for "destructive" type on alert dialog\
+  Added new context menu positioning options (see docs)\
+  Added new alias "top" for "top-center" notify position (ox_lib compatibility)\
+  Fixed missing documentation for onExit menu function\
+  Fixed missing locale for progress bar\
+  Fixed input dialog "slider" type improper handling of negative values\
+  Fixed naming conflict in keymapping
+</Update>
+
+<Update label="1.0.1" description="Jul 3, 2025">
+  Added default config file (for version checker)\
+  Added new size "xl" to alert dialog\
+  Added markdown support to alert dialog\
+  Fixed missing closing animation on context menu\
+  Version checker was commented out (oops)
+</Update>
+
 <Update label="1.0.0" description="Jun 25, 2025">
   Initial release
 </Update>
