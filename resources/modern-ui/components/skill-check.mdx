@@ -1,0 +1,143 @@
+---
+title: "Skill Check"
+description: "Interactive skill check mini-game with configurable difficulty"
+icon: "bullseye"
+---
+
+## Quick Start
+
+```lua
+local success = exports.lation_ui:skillCheck('Lockpick', 'easy', 'E')
+
+if success then
+    print('Success')
+else
+    print('Failed')
+end
+```
+
+## Functions
+
+<AccordionGroup>
+  <Accordion title="skillCheck" icon="bullseye">
+    Start an interactive skill check mini-game.
+
+    ```lua
+    local success = exports.lation_ui:skillCheck(title, difficulty, inputs, size)
+    ```
+
+    **Parameters:**
+
+    - `title` (string, required) - Title for the skill check
+    - `difficulty` (string | table, required) - Difficulty level or array of difficulties (see [Difficulty Levels](#difficulty-levels))
+    - `inputs` (string | table, optional) - Single input key or array of input keys (default: `'E'`)
+    - `size` (string, optional) - Size variant: `'normal'` or `'compact'` (default: `'normal'`)
+
+    **Returns:**
+
+    - `success` (boolean) - `true` if all skill checks completed successfully, `false` if failed or cancelled
+  </Accordion>
+  <Accordion title="cancelSkillCheck" icon="xmark">
+    Cancel the currently active skill check.
+
+    ```lua
+    exports.lation_ui:cancelSkillCheck()
+    ```
+  </Accordion>
+  <Accordion title="skillCheckActive" icon="circle-question">
+    Check if a skill check is currently active.
+
+    ```lua
+    local isActive = exports.lation_ui:skillCheckActive()
+    ```
+
+    **Returns:**
+
+    - `isActive` (boolean) - `true` if a skill check is active, `false` otherwise
+  </Accordion>
+</AccordionGroup>
+
+## Configuration
+
+### Options
+
+<ParamField path="title" type="string" required>
+  Title displayed for the skill check
+</ParamField>
+
+<ParamField path="difficulty" type="string | table" required>
+  Difficulty level or array of difficulty levels
+
+  See [Difficulty Levels](#difficulty-levels) for available options
+</ParamField>
+
+<ParamField path="inputs" default="'E'" type="string | table">
+  Single input key or array of input keys
+
+  Can be a single key (e.g., `'E'`) or multiple keys for sequential checks (e.g., `{'W', 'A', 'S', 'D'}`)
+</ParamField>
+
+<ParamField path="size" default="'normal'" type="string">
+  Size variant of the skill check UI
+
+  Available options:
+
+  - `'normal'` - Full UI with instructions
+  - `'compact'` - Minimal UI (just circle and key)
+</ParamField>
+
+### Difficulty Levels
+
+<Tabs>
+  <Tab title="Preset Difficulties">
+    Use predefined difficulty levels for quick setup.
+
+    <ParamField path="easy" type="string">
+      Large target area, slow speed
+    </ParamField>
+    <ParamField path="medium" type="string">
+      Medium target area, medium speed
+    </ParamField>
+    <ParamField path="hard" type="string">
+      Small target area, fast speed
+    </ParamField>
+    **Example:**
+
+    ```lua
+    -- Single difficulty
+    local success = exports.lation_ui:skillCheck('Lockpick', 'easy', 'E')
+    
+    -- Multiple difficulties (sequential)
+    local success = exports.lation_ui:skillCheck('Lockpick', {'easy', 'medium', 'hard'}, {'E', 'E', 'E'})
+    ```
+  </Tab>
+  <Tab title="Custom Difficulty">
+    Create custom difficulty configurations with precise control.
+
+    <ParamField path="areaSize" type="number">
+      Size of the target area (smaller = harder)
+    </ParamField>
+    <ParamField path="speedMultiplier" type="number">
+      Speed multiplier for the indicator (higher = faster)
+    </ParamField>
+    **Example:**
+
+    ```lua
+    -- Custom difficulty object
+    local success = exports.lation_ui:skillCheck('Lockpick', { areaSize = 20, speedMultiplier = 1.5 }, 'E')
+    
+    -- Array of custom difficulties
+    local success = exports.lation_ui:skillCheck('Lockpick', {
+        { areaSize = 30, speedMultiplier = 1.0 },
+        { areaSize = 20, speedMultiplier = 1.5 },
+        { areaSize = 10, speedMultiplier = 2.0 }
+    }, {'E', 'E', 'E'})
+    ```
+  </Tab>
+</Tabs>
+
+## Preview
+
+<Frame>
+  ![Skill Check Preview](/resources/modern-ui/components/skill-check/example.webp)
+</Frame>
