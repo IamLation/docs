@@ -90,7 +90,7 @@ exports.lation_ui:showText({
 </ParamField>
 
 <ParamField path="options" type="table">
-  Array of options for multi-option display (see [Option Item Structure](#option-item-structure))
+  Array of option items for multi-option display (see [Items](#items))
 </ParamField>
 
 <ParamField path="bgColor" type="string" default="#1E1F24">
@@ -101,9 +101,9 @@ exports.lation_ui:showText({
   Text color (hex or [CSS color name](https://htmlcolorcodes.com/color-names/))
 </ParamField>
 
-### Option Item Structure
+### Items
 
-When using the `options` parameter, each option item supports:
+When using the `options` parameter, each item in the array supports:
 
 <ParamField path="label" type="string" required>
   Option label text (supports markdown)
@@ -129,29 +129,12 @@ When using the `options` parameter, each option item supports:
   Keybind text for this option
 </ParamField>
 
-### Markdown Support
-
-Text UI supports markdown formatting in `description` and `label` fields:
-
-- **Bold text**: `**text**`
-- *Italic text*: `*text*`
-- `Code text`: `` `text` ``
-- Line breaks: `\n`
-
-**Example:**
-
-```lua
-exports.lation_ui:showText({
-    description = 'This is a *simple* message with **formatting** and `code`'
-})
-```
-
 ## Preview
 
 <Frame>
-  <img src="/resources/modern-ui/components/text-ui/text-ui-example.webp" alt="Text UI Example" />
+  <img src="/resources/modern-ui/components/text-ui/example.webp" alt="Text UI Example" />
 </Frame>
 
 <Frame>
-  <img src="/resources/modern-ui/components/text-ui/text-ui-options-example.webp" alt="Text UI Multi-Option Example" />
+  <img src="/resources/modern-ui/components/text-ui/advanced-example.webp" alt="Text UI Multi-Option Example" />
 </Frame>
