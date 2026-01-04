@@ -12,20 +12,18 @@ icon: "gear"
       Do not place this resource in a `[subfolder]` - it should be placed directly in the root.
     </Warning>
   </Step>
-  <Step title="Update server.cfg">
-    Open your `server.cfg` and add `ensure lation_ui` before _all_ other resources; including your framework!
+  <Step title="Update server.cfg" stepNumber={2}>
+    Open your `server.cfg` and add `ensure lation_ui` before _all_ other resources; including your framework & `ox_lib` itself!
 
     ```
     ensure lation_ui
+    ensure ox_lib
     ensure qbx_core
     ensure [standalone]
     .. etc
     ```
   </Step>
-  <Step title="Restart server">
-    Finally, perform a full server restart. Failure to perform a full restart after installation will cause errors.
-  </Step>
-  <Step title="Use our ox_lib">
+  <Step title="Use our ox_lib" stepNumber={3}>
     <Check>
       This is an optional but highly recommened step!
     </Check>
@@ -39,5 +37,8 @@ icon: "gear"
     <Card title="ox_lib" icon="download" href="https://github.com/IamLation/ox_lib/releases/latest" cta="Download Now">
       
     </Card>
+  </Step>
+  <Step title="Restart server">
+    Finally, perform a full server restart. Failure to perform a full restart after installation will cause errors.
   </Step>
 </Steps>
