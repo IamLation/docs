@@ -283,5 +283,13 @@
   },
   "background": {
     "decoration": "gradient"
+  },
+  "integrations": {
+    "clarity": {
+      "projectId": "jq2n8ca9e0"
+    },
+    "ga4": {
+      "measurementId": "G-BM4JQ49MZP"
+    }
   }
 }
