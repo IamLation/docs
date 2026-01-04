@@ -1,0 +1,157 @@
+---
+title: 'Text UI'
+description: 'Contextual text displays with markdown support, icons, and keybind indicators'
+icon: 'text'
+---
+
+## Quick Start
+
+```lua
+exports.lation_ui:showText({
+    description = 'Press to interact with this object',
+    keybind = 'E',
+    icon = 'fas fa-hand-paper'
+})
+```
+
+## Functions
+
+<AccordionGroup>
+  <Accordion title="showText" icon="eye">
+    Display a text UI element to the player.
+
+    ```lua
+    exports.lation_ui:showText(data)
+    ```
+
+    **Parameters:**
+    - `data` (table) - Text UI configuration object (see [Options](#options))
+  </Accordion>
+
+  <Accordion title="hideText" icon="eye-slash">
+    Hide the currently displayed text UI.
+
+    ```lua
+    exports.lation_ui:hideText()
+    ```
+  </Accordion>
+
+  <Accordion title="isOpen" icon="circle-question">
+    Check if a text UI is currently open.
+
+    ```lua
+    local isOpen, displayText = exports.lation_ui:isOpen()
+    ```
+
+    **Returns:**
+    - `isOpen` (boolean) - `true` if text UI is open, `false` otherwise
+    - `displayText` (string | nil) - The currently displayed text, or nil if not open
+  </Accordion>
+</AccordionGroup>
+
+## Configuration
+
+### Options
+
+<ParamField path="title" type="string">
+  Text UI title
+  
+  <Note>Either `title`, `description`, or `options` is required</Note>
+</ParamField>
+
+<ParamField path="description" type="string">
+  Main text content (supports markdown)
+  
+  <Note>Either `title`, `description`, or `options` is required</Note>
+</ParamField>
+
+<ParamField path="position" type="string" default="right-center">
+  Text UI position on screen
+  
+  Available options: `'top-left'`, `'top-center'`, `'top-right'`, `'left-center'`, `'center'`, `'right-center'`, `'bottom-left'`, `'bottom-center'`, `'bottom-right'`
+</ParamField>
+
+<ParamField path="icon" type="string">
+  FontAwesome icon class
+</ParamField>
+
+<ParamField path="iconColor" type="string" default="#71717A">
+  Icon color (hex or [CSS color name](https://htmlcolorcodes.com/color-names/))
+</ParamField>
+
+<ParamField path="iconAnimation" type="string">
+  Icon animation type
+  
+  Available options: `'spin'`, `'spinPulse'`, `'spinReverse'`, `'pulse'`, `'beat'`, `'fade'`, `'beatFade'`, `'bounce'`, `'shake'`
+</ParamField>
+
+<ParamField path="keybind" type="string">
+  Keybind text to display
+</ParamField>
+
+<ParamField path="options" type="table">
+  Array of options for multi-option display (see [Option Item Structure](#option-item-structure))
+</ParamField>
+
+<ParamField path="bgColor" type="string" default="#1E1F24">
+  Background color (hex or [CSS color name](https://htmlcolorcodes.com/color-names/))
+</ParamField>
+
+<ParamField path="txtColor" type="string" default="#E4E4E7">
+  Text color (hex or [CSS color name](https://htmlcolorcodes.com/color-names/))
+</ParamField>
+
+### Option Item Structure
+
+When using the `options` parameter, each option item supports:
+
+<ParamField path="label" type="string" required>
+  Option label text (supports markdown)
+</ParamField>
+
+<ParamField path="icon" type="string">
+  FontAwesome icon class
+</ParamField>
+
+<ParamField path="iconColor" type="string">
+  Icon color (hex or [CSS color name](https://htmlcolorcodes.com/color-names/))
+  
+  <Note>Inherits from main icon color if not specified</Note>
+</ParamField>
+
+<ParamField path="iconAnimation" type="string">
+  Icon animation type
+  
+  Available options: `'spin'`, `'spinPulse'`, `'spinReverse'`, `'pulse'`, `'beat'`, `'fade'`, `'beatFade'`, `'bounce'`, `'shake'`
+</ParamField>
+
+<ParamField path="keybind" type="string">
+  Keybind text for this option
+</ParamField>
+
+### Markdown Support
+
+Text UI supports markdown formatting in `description` and `label` fields:
+
+- **Bold text**: `**text**`
+- *Italic text*: `*text*`
+- `Code text`: `` `text` ``
+- Line breaks: `\n`
+
+**Example:**
+
+```lua
+exports.lation_ui:showText({
+    description = 'This is a *simple* message with **formatting** and `code`'
+})
+```
+
+## Preview
+
+<Frame>
+  <img src="/resources/modern-ui/components/text-ui/text-ui-example.webp" alt="Text UI Example" />
+</Frame>
+
+<Frame>
+  <img src="/resources/modern-ui/components/text-ui/text-ui-options-example.webp" alt="Text UI Multi-Option Example" />
+</Frame>
