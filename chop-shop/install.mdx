@@ -28,10 +28,39 @@ icon: "gear"
       <Tab title="ox_inventory">
         - Copy items from `/install/items/ox_inventory.txt` into `ox_inventory/data/items.lua`
         - Copy images from `/install/images` into `ox_inventory/web/images`
+
+        ```lua expandable
+        ['ls_auto_parts'] = {
+            label = 'Auto Parts',
+            weight = 5,
+        },
+        
+        ['ls_torch'] = {
+            label = 'Torch',
+            weight = 275,
+        },
+        
+        ['ls_lug_wrench'] = {
+            label = 'Lug Wrench',
+            weight = 225,
+        },
+        
+        ['ls_vehicle_finder'] = {
+            label = 'Vehicle Finder',
+            weight = 175,
+        },
+        ```
       </Tab>
       <Tab title="qb-inventory">
         - Copy items from `/install/items/qb-inventory.txt` into `qb-core/shared/items.lua`
         - Copy images from `/install/images` into `qb-inventory/html/images`
+
+        ```lua expandable
+        ls_auto_parts = { name = 'ls_auto_parts', label = 'Auto Parts', weight = 5, type = 'item', image = 'ls_auto_parts.png', unique = false, useable = false, shouldClose = true, combinable = nil, description = nil },
+        ls_torch = { name = 'ls_torch', label = 'Torch', weight = 275, type = 'item', image = 'ls_torch.png', unique = false, useable = false, shouldClose = true, combinable = nil, description = nil },
+        ls_lug_wrench = { name = 'ls_lug_wrench', label = 'Lug Wrench', weight = 225, type = 'item', image = 'ls_lug_wrench.png', unique = false, useable = false, shouldClose = true, combinable = nil, description = nil },
+        ls_vehicle_finder = { name = 'ls_vehicle_finder', label = 'Vehicle Finder', weight = 175, type = 'item', image = 'ls_vehicle_finder.png', unique = false, useable = true, shouldClose = true, combinable = nil, description = nil },
+        ```
       </Tab>
       <Tab title="other">
         <Info>
