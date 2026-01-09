@@ -39,6 +39,7 @@
         "icon": "code",
         "pages": [
           "index",
+          "escrow-errors",
           {
             "group": "Weed",
             "icon": "seedling",

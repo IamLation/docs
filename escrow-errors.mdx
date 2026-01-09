@@ -1,0 +1,32 @@
+---
+title: "Escrow Errors"
+icon: "circle-info"
+description: "Solutions to common FiveM escrow errors"
+---
+
+<AccordionGroup>
+  <Accordion title="Error parsing script.. syntax error near <\1>">
+    ```
+    [script:resource-name] Error parsing script @resource-name/server/script-file.lua in resource resource-name: @resource-name/server/script-file.lua:1: syntax error near '<\1>'
+    [    c-scripting-core] Failed to load script server/script-file.lua.
+    ```
+
+    This is a common error when using the FileZilla FTP client. It frequently corrupts the escrowed files and therefore results in the resource being unusable. The only proper solution to this is using [WinSCP](https://winscp.net/eng/index.php). Download, install & re-upload your resource using that!
+
+    If the above isn't the right solution for you, also verify you are on the latest recommended server artifacts - you can download them [here](https://runtime.fivem.net/artifacts/fivem/build_server_windows/master/)!
+  </Accordion>
+  <Accordion title="You lack the required entitlement">
+    ```
+    You lack the required entitlement to use <resource-name>
+    ```
+
+    All our resources use the FiveM escrow system, which means the resource(s) you purchase from us are linked to your specific FiveM account (_the one you were logged into during purchase_). In order for our resource(s) to work properly, the resource(s) must be used in a server with a server key owned by the same FiveM account. If you are certain the server key is owned by the same account the resources are also owned by, then just restart your server! If not, you do have the option of a one-time transfer to transfer the script to the correct account.
+  </Accordion>
+  <Accordion title="Failed to verify protected resource">
+    ```
+    [svadhesive] Failed to verify protected resource <resource-name>
+    ```
+
+    The first thing to do is; make sure you have done a complete server restart! When installing a recently purchased resource for the first timel, you must restart the server. If restarting does not resolve it, it may be related to your FTP client. If you are using FileZilla, that is another likely reason why this might be happening. If that's you, you need to switch to a more reliable FTP client such as [WinSCP](https://winscp.net/eng/index.php). Download, install & re-upload your resource using WinSCP!
+  </Accordion>
+</AccordionGroup>
