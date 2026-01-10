@@ -31,10 +31,26 @@ icon: "gear"
       <Tab title="ox_inventory">
         - Copy items from `/install/items/ox_inventory.txt` into `ox_inventory/data/items.lua`
         - Copy images from `/install/images` into `ox_inventory/web/images`
+
+        ```lua expandable
+        ['warehouse_key'] = {
+        	label = 'Warehouse Key',
+        	weight = 25,
+        },
+        
+        ['uncounted_money'] = {
+        	label = 'Uncounted Money',
+        },
+        ```
       </Tab>
       <Tab title="qb-inventory">
         - Copy items from `/install/items/qb-inventory.txt` into `qb-core/shared/items.lua`
         - Copy images from `/install/images` into `qb-inventory/html/images`
+
+        ```lua expandable
+        uncounted_money = { name = 'uncounted_money', label = 'Uncounted Money', weight = 1, type = 'item', image = 'uncounted_money.png', unique = false, useable = false, shouldClose = true, combinable = nil, description = nil },
+        warehouse_key = { name = 'warehouse_key', label = 'Warehouse Key', weight = 20, type = 'item', image = 'warehouse_key.png', unique = false, useable = false, shouldClose = true, combinable = nil, description = nil },
+        ```
       </Tab>
       <Tab title="other">
         <Info>

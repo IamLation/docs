@@ -39,6 +39,7 @@
         "icon": "code",
         "pages": [
           "index",
+          "escrow-errors",
           {
             "group": "Weed",
             "icon": "seedling",
@@ -238,7 +239,7 @@
                   "modern-ui/components/timeline"
                 ]
               },
-              "scuba-diving/changelog-copied-1"
+              "modern-ui/changelog"
             ]
           }
         ]
