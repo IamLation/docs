@@ -216,6 +216,7 @@
             "pages": [
               "modern-ui/install",
               "modern-ui/convars",
+              "modern-ui/faqs",
               {
                 "group": "Components",
                 "icon": "folder",

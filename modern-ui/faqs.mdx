@@ -1,0 +1,25 @@
+---
+title: "FAQs"
+icon: "comment-question"
+description: "Solutions to frequently asked questions"
+---
+
+<AccordionGroup>
+  <Accordion title="qbx_garages progress bar colours not displaying with lation_ui">
+    This issue can occur when converting **qbx_garages** to use **lation_ui**, causing the engine, body, or fuel progress bar colours to not display correctly.
+
+    Replace lines **6–10** in `qbx_garages/client/main.lua` with the following:
+
+    ```lua
+    local ProgressColor = {
+        GREEN = 'green',
+        YELLOW = 'yellow',
+        RED = 'red'
+    }
+    ```
+  </Accordion>
+
+  <Accordion title="My question or issue isn't listed here">
+    Sorry about that! Please reach out to us on [**Discord**](https://discord.gg/9EbY4nM5uu) or via email at [**support@lationscripts.com**](mailto:support@lationscripts.com) regarding your issue.
+  </Accordion>
+</AccordionGroup>
